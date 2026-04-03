@@ -1,7 +1,7 @@
 {
-  "name": "django-oscar",
+  "name": "dukani",
   "version": "4.1.0",
-  "description": "A domain-driven e-commerce framework for Django",
+  "description": "Dukani - Curated Volumes & Fine Footwear",
   "main": "index.js",
   "dependencies": {
   },
@@ -35,6 +35,5 @@
     "watch": "gulp watch",
     "eslint": "./node_modules/.bin/eslint src/oscar/static_src/oscar/js/oscar/"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/django-oscar/django-oscar#readme"
+  "license": "MIT"
 }
