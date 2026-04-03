@@ -4,45 +4,107 @@
 {% load reviews_tags %}
 
 {% block product %}
-    <article class="product_pod">
+    <div class="card h-100 product_pod luxury-card border-0 bg-transparent transition-all">
         {% block product_image %}
-            <div class="image_container w-100">
+            <div class="image_container overflow-hidden position-relative p-0 bg-white">
                 {% with image=product.primary_image %}
-                    {% oscar_thumbnail image.original "x155" upscale=False as thumb %}
-                    <a href="{{ product.get_absolute_url }}">
-                        <img src="{{ thumb.url }}" alt="{{ product.get_title }}" class="img-thumbnail w-auto mx-auto my-0">
+                    {% oscar_thumbnail image.original "x355" upscale=False as thumb %}
+                    <a href="{{ product.get_absolute_url }}" class="d-block text-center mb-4">
+                        <img src="{{ thumb.url }}" alt="{{ product.get_title }}" class="img-fluid product-img transition-transform">
                     </a>
                 {% endwith %}
             </div>
         {% endblock %}
 
-        {% block product_review %}
-            {% iffeature "reviews" %}
-                <p class="star-rating {{ product.rating|as_stars }}">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </p>
-            {% endiffeature %}
-        {% endblock %}
+        <div class="card-body d-flex flex-column p-0 text-center">
+            {% block product_title %}
+                <h5 class="product-title-luxury mb-2">
+                    <a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}" class="text-charcoal text-decoration-none">
+                        {{ product.get_title|truncatechars:45 }}
+                    </a>
+                </h5>
+            {% endblock %}
 
-        {% block product_title %}
-            <h3 class="mt-3">
-                <a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">
-                    {{ product.get_title|truncatewords:4 }}
-                </a>
-            </h3>
-        {% endblock %}
-
-        {% block product_price %}
-            <div class="product_price w-100">
-                {% include "oscar/catalogue/partials/stock_record.html" %}
-                {% if not product.is_parent and not product.has_options %}
-                    {% include "oscar/catalogue/partials/add_to_basket_form_compact.html" %}
-                {% endif %}
+            <div class="mt-auto">
+                {% block product_price %}
+                    <div class="price-luxury mb-4">
+                        {% include "oscar/catalogue/partials/stock_record.html" %}
+                    </div>
+                    {% if not product.is_parent and not product.has_options %}
+                        <div class="add-to-basket-luxury">
+                            {% include "oscar/catalogue/partials/add_to_basket_form_compact.html" %}
+                        </div>
+                    {% else %}
+                        <a href="{{ product.get_absolute_url }}" class="btn btn-outline-black btn-block text-uppercase">{% trans "Discover" %}</a>
+                    {% endif %}
+                {% endblock %}
             </div>
-        {% endblock %}
-    </article>
+        </div>
+    </div>
+
+    <style>
+        .luxury-card {
+            border-radius: 0;
+        }
+        .luxury-card:hover .product-title-luxury a {
+            color: var(--cartier-gold) !important;
+            transition: color 0.3s ease;
+        }
+        .luxury-card:hover .transition-transform {
+            transform: scale(1.03);
+        }
+        .product-img {
+            height: 280px;
+            object-fit: contain;
+            width: 100%;
+        }
+        .product-title-luxury {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            letter-spacing: 0.05em;
+            font-weight: 400;
+            height: auto;
+            min-height: 3rem;
+        }
+        .price-luxury {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            color: #666;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+        .btn-outline-black {
+            border: 1px solid var(--cartier-black);
+            color: var(--cartier-black);
+            border-radius: 0;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            font-weight: 600;
+            padding: 12px;
+            transition: all 0.4s ease;
+        }
+        .btn-outline-black:hover {
+            background-color: var(--cartier-black);
+            color: white;
+        }
+        .transition-all {
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        /* Overriding default basket button for pristine look */
+        .add-to-basket-luxury .btn-primary {
+            background-color: transparent !important;
+            border: 1px solid var(--cartier-black) !important;
+            color: var(--cartier-black) !important;
+            border-radius: 0 !important;
+            text-transform: uppercase !important;
+            font-size: 0.7rem !important;
+            letter-spacing: 0.2em !important;
+            padding: 12px 20px !important;
+            width: 100% !important;
+        }
+        .add-to-basket-luxury .btn-primary:hover {
+            background-color: var(--cartier-black) !important;
+            color: white !important;
+        }
+    </style>
 {% endblock %}

@@ -10,43 +10,81 @@
     {{ category.get_meta_description }}
 {% endblock %}
 
-{% block header%}
-    <div class="page-header">
-        {% if user.is_staff %}
-            <a class="float-right d-none d-md-block" href="{% url 'dashboard:catalogue-category-update' pk=category.id %}">
-              <small><i class="fas fa-pencil-alt"></i> {% trans "Edit this category" %}</small></a>
-        {% endif %}
-        <h1>{% block headertext %}{{ category.name }}{% endblock %}</h1>
-    </div>
-{% endblock %}
-
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ homepage_url }}">{% trans "Home" %}</a></li>
-            {% for category in category.get_ancestors %}
-                <li class="breadcrumb-item"><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+        <ol class="breadcrumb luxury-breadcrumbs bg-transparent p-0 mb-4">
+            <li class="breadcrumb-item"><a href="{{ homepage_url }}" class="text-muted text-uppercase tracking-wider small">{% trans "Home" %}</a></li>
+            {% for ancestor in category.get_ancestors %}
+                <li class="breadcrumb-item"><a href="{{ ancestor.get_absolute_url }}" class="text-muted text-uppercase tracking-wider small">{{ ancestor.name }}</a></li>
             {% endfor %}
-            <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+            <li class="breadcrumb-item active text-gold text-uppercase tracking-wider small" aria-current="page">{{ category.name }}</li>
         </ol>
     </nav>
 {% endblock breadcrumbs %}
 
 {% block content %}
-    {% if category.description %}
-        <div class="row">
-            <div class="col-sm-9"><p>{{ category.description|safe }}</p></div>
+    <div class="category-header-luxury mb-5">
+        <div class="row align-items-center">
+            <div class="col-md-{% if category.image %}8{% else %}12{% endif %}">
+                <div class="d-flex justify-content-between align-items-baseline mb-3">
+                    <h1 class="font-serif display-4 mb-0" style="font-size: 3rem;">{{ category.name }}</h1>
+                    {% if user.is_staff %}
+                        <a href="{% url 'dashboard:catalogue-category-update' pk=category.id %}" class="text-gold small text-uppercase">
+                            <i class="fas fa-pencil-alt"></i> {% trans "Edit" %}
+                        </a>
+                    {% endif %}
+                </div>
+                
+                {% if category.description %}
+                    <div class="category-description-luxury lead text-muted font-weight-light mb-4">
+                        {{ category.description|safe }}
+                    </div>
+                {% endif %}
+            </div>
+            
             {% if category.image %}
-                <div class="col-sm-3"><img src="{{ category.image.url }}" alt="{{ category.name }}" class="img-fluid" /></div>
+                <div class="col-md-4">
+                    <div class="category-image-luxury overflow-hidden rounded-0 shadow-sm border border-gold-subtle p-2">
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}" class="img-fluid w-100" />
+                    </div>
+                </div>
             {% endif %}
         </div>
-    {% endif %}
+    </div>
 
     {{ block.super }}
 
     {% if category.long_description %}
-        <div class="row">
-            <div class="col-sm-9"><p>{{ category.long_description|safe }}</p></div>
+        <div class="category-long-description-luxury mt-5 pt-5 border-top border-gold-subtle">
+            <h4 class="text-uppercase tracking-widest text-gold small mb-4">{% trans "More Details" %}</h4>
+            <div class="font-weight-light">
+                {{ category.long_description|safe }}
+            </div>
         </div>
     {% endif %}
+
+    <style>
+        .category-header-luxury {
+            position: relative;
+        }
+        .category-description-luxury {
+            font-family: 'Montserrat', sans-serif;
+            border-left: 1px solid var(--cartier-gold);
+            padding-left: 30px;
+            letter-spacing: 0.05em;
+        }
+        .category-image-luxury {
+            border: none !important;
+            padding: 0 !important;
+        }
+        .category-image-luxury img {
+            transition: transform 1.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .category-image-luxury:hover img {
+            transform: scale(1.03);
+        }
+        .category-long-description-luxury {
+            border-color: rgba(179, 153, 93, 0.1) !important;
+        }
+    </style>
 {% endblock %}

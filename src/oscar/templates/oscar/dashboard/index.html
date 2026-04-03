@@ -17,163 +17,180 @@
 {% endblock %}
 
 {% block dashboard_content %}
-
-<div class="table-header">
-    <i class="fas fa-signal"></i> {% trans "Your Store Statistics" %}
-</div>
-
-<div class="content-block">
-    <div class="row">
-        <aside class="col-md-3 order-graph-details">
-            <label><span><i class="fas fa-shopping-cart"></i>{{ total_orders_last_day }}</span>{% trans "Total Orders" %}</label>
-            <label><span><i class="fas fa-hand-point-right"></i>{{ total_customers_last_day }}</span>{% trans "New Customers" %}</label>
-            <label><span><i class="fas fa-users"></i>{{ total_customers }}</span>{% trans "Total Customers" %}</label>
-            <label><span><i class="fas fa-briefcase"></i>{{ total_products }}</span>{% trans "Total Products" %}</label>
-        </aside>
-        <div class="col-md-9">
-            <div id="order_graph">
-                <div class="bar-caption"><h2>{% trans "Latest Orders (last 24 hours)" %}</h2></div>
-                <div class="bar-y-axis">
-                    <ul>
-                    {% for y_value in hourly_report_dict.y_range %}
-                        <li><span>{{ y_value|currency }}</span></li>
-                    {% endfor %}
-                    </ul>
+<div class="row mb-5">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card luxury-card-stat shadow-sm h-100 py-3 border-0">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2 text-center text-md-left">
+                        <div class="text-xs font-weight-bold text-gold text-uppercase tracking-widest mb-1">{% trans "Orders (24h)" %}</div>
+                        <div class="h3 mb-0 font-weight-light text-charcoal">{{ total_orders_last_day }}</div>
+                    </div>
+                    <div class="col-auto d-none d-md-block">
+                        <i class="fas fa-shopping-bag fa-2x text-gold-faded-full"></i>
+                    </div>
                 </div>
-                <dl class="bar-chart">
-                    {% for item in hourly_report_dict.order_total_hourly %}
-                        <dd class="bar-layer">
-                            <em>{{ item.end_time|time }}</em>
-                            <span style="height: {{ item.percentage }}%;" >
-                                <p{% if item.percentage == 0 %} style="display: none;"{% endif %}>{{ item.total_incl_tax|currency }}</p>
-                            </span>
-                        </dd>
-                    {% endfor %}
-                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card luxury-card-stat shadow-sm h-100 py-3 border-0">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2 text-center text-md-left">
+                        <div class="text-xs font-weight-bold text-gold text-uppercase tracking-widest mb-1">{% trans "Revenue (24h)" %}</div>
+                        <div class="h3 mb-0 font-weight-light text-charcoal">{{ total_revenue_last_day|currency }}</div>
+                    </div>
+                    <div class="col-auto d-none d-md-block">
+                        <i class="fas fa-coins fa-2x text-gold-faded-full"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card luxury-card-stat shadow-sm h-100 py-3 border-0">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2 text-center text-md-left">
+                        <div class="text-xs font-weight-bold text-gold text-uppercase tracking-widest mb-1">{% trans "Customers" %}</div>
+                        <div class="h3 mb-0 font-weight-light text-charcoal">{{ total_customers }}</div>
+                    </div>
+                    <div class="col-auto d-none d-md-block">
+                        <i class="fas fa-user-tie fa-2x text-gold-faded-full"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card luxury-card-stat shadow-sm h-100 py-3 border-0">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2 text-center text-md-left">
+                        <div class="text-xs font-weight-bold text-gold text-uppercase tracking-widest mb-1">{% trans "Catalogue" %}</div>
+                        <div class="h3 mb-0 font-weight-light text-charcoal">{{ total_products }}</div>
+                    </div>
+                    <div class="col-auto d-none d-md-block">
+                        <i class="fas fa-gem fa-2x text-gold-faded-full"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
 <div class="row">
-    <div class="col-md-4">
-        <table class="table table-striped table-bordered table-hover">
-            <caption><i class="fas fa-shopping-cart"></i> {% trans "Orders - Last 24 Hours" %}</caption>
-            <tr>
-                <th class="col-md-10">{% trans "Total orders" %}</th>
-                <td class="col-md-2" >{{ total_orders_last_day }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "Total lines" %}</th>
-                <td class="col-md-2" >{{ total_lines_last_day }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "Total revenue" %}</th>
-                <td class="col-md-2" >{{ total_revenue_last_day|currency }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "Average order costs" %}</th>
-                <td class="col-md-2" >{{ average_order_costs|currency }}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="col-md-4">
-        <table class="table table-striped table-bordered table-hover">
-            <caption>
-                <a href="{% url 'dashboard:order-list' %}" class="btn btn-secondary float-right">
-                    <i class="fas fa-shopping-cart"></i> {% trans "Manage" %}
-                </a>
-                <i class="fas fa-shopping-cart"></i> {% trans "Orders - All Time" %}
-            </caption>
-            <tr>
-                <th class="col-md-10">{% trans "Total orders" %}</th>
-                <td class="col-md-2" >{{ total_orders }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "Total lines" %}</th>
-                <td class="col-md-2" >{{ total_lines }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "Total revenue" %}</th>
-                <td class="col-md-2" >{{ total_revenue|currency }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "Total <em>open</em> baskets" %}</th>
-                <td class="col-md-2" >{{ total_open_baskets }}</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="col-md-4">
-        <table class="table table-striped table-bordered table-hover">
-            <caption><i class="fas fa-users"></i> {% trans "Customers" %}</caption>
-            <tr>
-                <th class="col-md-10">{% trans "Total customers" %}</th>
-                <td class="col-md-2" >{{ total_customers }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "New customers" %}</th>
-                <td class="col-md-2" >{{ total_customers_last_day }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "Total <em>open</em> baskets" %}</th>
-                <td class="col-md-2" >{{ total_open_baskets_last_day }}</td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <table class="table table-striped table-bordered table-hover">
-            <caption>
-                <div class="btn-toolbar float-right">
-                    <div class="btn-group">
-                        <a href="{% url 'dashboard:catalogue-product-list' %}" class="btn btn-secondary">
-                            <i class="fas fa-sitemap"></i> {% trans "Manage" %}
-                        </a>
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm mb-4 border-0 rounded-0 overflow-hidden">
+            <div class="card-header py-3 bg-white border-bottom border-gold-low">
+                <h6 class="m-0 font-weight-bold text-gold text-uppercase tracking-wider">{% trans "Sales Performance (Last 24h)" %}</h6>
+            </div>
+            <div class="card-body">
+                <div id="order_graph" class="pt-3">
+                    <div class="bar-y-axis">
+                        <ul class="list-unstyled small text-muted">
+                        {% for y_value in hourly_report_dict.y_range %}
+                            <li class="mb-4"><span>{{ y_value|currency }}</span></li>
+                        {% endfor %}
+                        </ul>
                     </div>
-                    <div class="btn-group ml-2">
-                        <a href="{% url 'dashboard:stock-alert-list' %}" class="btn btn-secondary">
-                            <i class="fas fa-sitemap"></i> {% trans "View Stock Alerts" %}
-                        </a>
-                    </div>
+                    <dl class="bar-chart d-flex align-items-end justify-content-between mb-0" style="height: 350px;">
+                        {% for item in hourly_report_dict.order_total_hourly %}
+                            <dd class="bar-layer flex-grow-1 text-center mb-0 px-2">
+                                <div class="bg-gold transition-all hover-up" style="height: {{ item.percentage }}%; min-height: 2px;"
+                                     data-toggle="tooltip" title="{{ item.total_incl_tax|currency }}">
+                                </div>
+                                <em class="small d-block mt-3 text-muted font-weight-light">{{ item.end_time|time }}</em>
+                            </dd>
+                        {% endfor %}
+                    </dl>
                 </div>
-                <i class="fas fa-sitemap"></i> {% trans "Catalogue and stock" %}
-            </caption>
-            <tr>
-                <th class="col-md-10">{% trans "Total products" %}</th>
-                    <td class="col-md-2" >{{ total_products }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "<em>Open</em> stock alerts" %}</th>
-                    <td class="col-md-2" >{{ total_open_stock_alerts }}</td>
-            </tr>
-            <tr>
-                <th class="col-md-10">{% trans "<em>Closed</em> stock alerts" %}</th>
-                    <td class="col-md-2" >{{ total_closed_stock_alerts }}</td>
-            </tr>
-        </table>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6">
-        {% if user.is_staff %}
-        <table class="table table-striped table-bordered table-hover">
-            <caption><i class="fas fa-gift"></i> {% trans "Offers, vouchers" %}</caption>
-            {% for offer_map in offer_maps %}
-            <tr>
-                <th class="col-md-10">{% blocktrans with offer_type=offer_map.offer_type %}Active <em>{{ offer_type }}</em> Offers{% endblocktrans %}</th>
-                <td class="col-md-2" >{{ offer_map.count }}</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <th class="col-md-10">{% trans "Active <em>Vouchers</em>" %}</th>
-                <td class="col-md-2" >{{ total_vouchers }}</td>
-            </tr>
-        </table>
-        {% endif %}
+
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm mb-4 border-0 rounded-0 overflow-hidden">
+            <div class="card-header py-3 bg-white border-bottom border-gold-low">
+                <h6 class="m-0 font-weight-bold text-gold text-uppercase tracking-wider">{% trans "At a Glance" %}</h6>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush luxury-list">
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="small text-uppercase tracking-wider text-muted">{% trans "All-time Orders" %}</span>
+                        <span class="h6 mb-0">{{ total_orders }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="small text-uppercase tracking-wider text-muted">{% trans "Global Revenue" %}</span>
+                        <span class="h6 mb-0 text-gold font-weight-bold">{{ total_revenue|currency }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="small text-uppercase tracking-wider text-muted">{% trans "Avg. Order Value" %}</span>
+                        <span class="h6 mb-0">{{ average_order_costs|currency }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                        <span class="small text-uppercase tracking-wider text-muted">{% trans "Critical Stock Alerts" %}</span>
+                        <span class="badge badge-gold-outline px-3 py-2">{{ total_open_stock_alerts }}</span>
+                    </li>
+                </ul>
+                <div class="p-4 text-center bg-light-faded border-top">
+                    <a href="{% url 'dashboard:order-list' %}" class="btn btn-luxury-dark btn-sm mr-2">{% trans "All Orders" %}</a>
+                    <a href="{% url 'dashboard:catalogue-product-list' %}" class="btn btn-luxury-outline btn-sm">{% trans "Inventory" %}</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<style>
+    .luxury-card-stat {
+        border-top: 1px solid var(--cartier-gold) !important;
+        background-color: var(--cartier-white);
+        border-radius: 0;
+        transition: all 0.4s ease;
+    }
+    .luxury-card-stat:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important; }
+    .text-gold-faded-full { color: rgba(179, 153, 93, 0.15); }
+    .bg-gold { background-color: var(--cartier-gold); }
+    .hover-up:hover { filter: brightness(1.05); }
+    .luxury-list .list-group-item { border-bottom: 1px solid #eee; background: transparent; }
+    .badge-gold-outline { 
+        border: 1px solid var(--cartier-gold); 
+        color: var(--cartier-gold); 
+        background: transparent;
+        border-radius: 0;
+        font-weight: 400;
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+    }
+    .btn-luxury-dark {
+        background-color: var(--cartier-black);
+        color: white;
+        border-radius: 0;
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        padding: 10px 25px;
+        font-weight: 600;
+    }
+    .btn-luxury-dark:hover { background-color: var(--cartier-gold); color: white; }
+    .btn-luxury-outline {
+        border: 1px solid #ddd;
+        color: #999;
+        border-radius: 0;
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        padding: 10px 25px;
+    }
+    .btn-luxury-outline:hover { border-color: var(--cartier-black); color: var(--cartier-black); }
+    .bg-light-faded { background-color: #fafafa; }
+    .bar-y-axis { position: absolute; left: 20px; z-index: 10; }
+    .bar-chart { margin-left: 60px; border-bottom: 1px solid #eee; }
+</style>
 {% endblock %}

@@ -7,9 +7,9 @@
 
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ homepage_url }}">{% trans "Home" %}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{% trans "Basket" %}</li>
+        <ol class="breadcrumb luxury-breadcrumbs bg-transparent p-0 mb-5 justify-content-center">
+            <li class="breadcrumb-item"><a href="{{ homepage_url }}" class="text-muted text-uppercase tracking-wider small">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active text-gold text-uppercase tracking-wider small" aria-current="page">{% trans "Archive" %}</li>
         </ol>
     </nav>
 {% endblock %}
@@ -17,13 +17,23 @@
 {# Hide mini-basket so we don't have two baskets to keep in sync #}
 {% block mini_basket %}{% endblock %}
 
-{% block headertext %}
-    {% trans "Basket" %}
-{% endblock %}
-
 {% block content %}
+    <div class="text-center mb-5">
+        <h1 class="font-serif display-4 mb-3 text-black text-uppercase tracking-widest">{% trans "Your Archive" %}</h1>
+        <div class="gold-divider mx-auto"></div>
+    </div>
     {# Use a partial template so that AJAX can be used to re-render basket #}
     {% include 'oscar/basket/partials/basket_content.html' %}
+    
+    <style>
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .text-gold { color: var(--cartier-gold) !important; }
+        .gold-divider {
+            width: 60px;
+            height: 1px;
+            background-color: var(--cartier-gold);
+        }
+    </style>
 {% endblock content %}
 
 {% block onbodyload %}

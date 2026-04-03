@@ -1,1 +1,8 @@
-<div class="col-sm-6 h1"><a href="{{ homepage_url }}">{% block brand_title %}{{ shop_name }}{% endblock %}</a><small> {{ shop_tagline }}</small></div>
+<div class="brand-logo-navbar mr-4">
+    <a href="{{ homepage_url }}" class="text-decoration-none d-flex align-items-baseline">
+        <span class="text-black text-uppercase mb-0 tracking-widest font-weight-bold" style="font-family: 'Montserrat', sans-serif; font-size: 1.4rem;">
+            {{ shop_name }}
+        </span>
+        <span class="text-gold text-uppercase tracking-wider ml-2 d-none d-lg-inline" style="font-size: 0.6rem; letter-spacing: 0.2em;"> | {{ shop_tagline }}</span>
+    </a>
+</div>

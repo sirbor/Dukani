@@ -13,6 +13,30 @@ ProductAlert = get_model("customer", "ProductAlert")
 ProductAlertForm = get_class("customer.forms", "ProductAlertForm")
 
 
+class HomeView(DetailView):
+    """
+    Dedicated homepage view that displays featured products, newest products,
+    and top-level categories.
+    """
+
+    template_name = "oscar/home.html"
+
+    def get_object(self, queryset=None):
+        return None
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # Use Rating as a proxy for "Featured" since is_featured field was removed to fix crash
+        ctx["featured_products"] = Product.objects.filter(is_public=True).order_by(
+            "-rating", "-date_created"
+        )[:4]
+        ctx["newest_products"] = Product.objects.filter(is_public=True).order_by(
+            "-date_created"
+        )[:4]
+        ctx["top_categories"] = Category.objects.filter(depth=1, is_public=True)[:6]
+        return ctx
+
+
 class ProductDetailView(DetailView):
     context_object_name = "product"
     model = Product

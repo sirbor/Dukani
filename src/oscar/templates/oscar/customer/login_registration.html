@@ -7,37 +7,44 @@
 
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">{% trans 'Login or register' %}</li>
+        <ol class="breadcrumb luxury-breadcrumbs bg-transparent p-0 mb-5 justify-content-center">
+            <li class="breadcrumb-item"><a href="{{ homepage_url }}" class="text-muted text-uppercase tracking-wider small">{% trans "Home" %}</a></li>
+            <li class="breadcrumb-item active text-gold text-uppercase tracking-wider small" aria-current="page">{% trans "Identification" %}</li>
         </ol>
     </nav>
 {% endblock %}
 
-{% block header %}{% endblock %}
-
 {% block content %}
-
-    <div class="row">
-        <div class="col-sm-6 login_form">
-            <form id="login_form" action="{{ request.get_full_path }}" method="post" class="card card-body bg-light" >
-                <h2>{% trans 'Log In' %}</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-5 login_form mb-5">
+            <div class="text-center mb-4">
+                <h2 class="font-serif text-black h3 text-uppercase tracking-widest">{% trans "Client Sign In" %}</h2>
+                <div class="gold-divider mx-auto mt-3"></div>
+            </div>
+            <form id="login_form" action="{{ request.get_full_path }}" method="post" class="p-4 bg-white border border-gold-subtle">
                 {% csrf_token %}
                 {% include "oscar/partials/form_fields.html" with form=login_form %}
-                <p><a href="{% url 'password-reset' %}">{% trans "I've forgotten my password" %}</a></p>
-                <button name="login_submit" type="submit" value="Log In" class="btn btn-lg btn-primary" data-loading-text="{% trans "Logging in..." %}">{% trans 'Log In' %}</button>
+                <p class="text-center mt-3"><a href="{% url 'password-reset' %}" class="small text-muted text-uppercase tracking-wider">{% trans "Forgot your password?" %}</a></p>
+                <button name="login_submit" type="submit" value="Log In" class="btn btn-black btn-block mt-4" data-loading-text="{% trans 'Signing in...' %}">{% trans "Sign In" %}</button>
             </form>
         </div>
-        <div class="col-sm-6 register_form">
-            <form id="register_form" action="{{ request.get_full_path }}" method="post" class="card card-body bg-light">
-                <h2>{% trans 'Register' %}</h2>
+
+        <div class="col-md-5 register_form mb-5">
+            <div class="text-center mb-4">
+                <h2 class="font-serif text-black h3 text-uppercase tracking-widest">{% trans "Create Archive" %}</h2>
+                <div class="gold-divider mx-auto mt-3"></div>
+            </div>
+            <form id="register_form" action="{{ request.get_full_path }}" method="post" class="p-4 bg-white border border-gold-subtle">
                 {% csrf_token %}
                 {% include "oscar/partials/form_fields.html" with form=registration_form %}
-                <button name="registration_submit" type="submit" value="Register" class="btn btn-lg btn-primary" data-loading-text="{% trans 'Registering...' %}">{% trans 'Register' %}</button>
+                <button name="registration_submit" type="submit" value="Register" class="btn btn-outline-gold btn-block mt-4" data-loading-text="{% trans 'Registering...' %}">{% trans "Create Archive" %}</button>
             </form>
         </div>
     </div>
 
+    <style>
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .gold-divider { width: 40px; height: 1px; background-color: var(--cartier-gold); }
+        .border-gold-subtle { border-color: rgba(179, 153, 93, 0.15) !important; }
+    </style>
 {% endblock content %}

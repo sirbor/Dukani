@@ -5,23 +5,165 @@
     <link rel="stylesheet" type="text/css" href="{% static "oscar/css/styles.css" %}" />
 {% endblock %}
 
+{% block extrastyles %}
+    {{ block.super }}
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+{% endblock %}
+
 {% block layout %}
-    {# Top-horizontal bar with account, notifictions, dashboard links #}
+    {# Top-horizontal bar with account, notifications, dashboard links #}
     {% include "oscar/partials/nav_accounts.html" %}
 
-    {# Site logo/title, mini-basket, browse dropdown and searchbox #}
-    <header class="header container">
-        <div class="page_inner">
-            <div class="row justify-content-between">
-                {% include "oscar/partials/brand.html" %}
-                {# Mini-basket wrapped in a block so some templates can now display it #}
-                {% block mini_basket %}{% include "oscar/partials/mini_basket.html" %}{% endblock %}
-            </div>
-        </div>
-        {% block navigation %}
-            {% include "oscar/partials/nav_primary.html" %}
-        {% endblock %}
-    </header>
+    {% block navigation %}
+        {% include "oscar/partials/nav_primary.html" %}
+    {% endblock %}
+
+    <style>
+        :root {
+            --cartier-gold: #B3995D;
+            --cartier-dark-gold: #8E7944;
+            --cartier-black: #000000;
+            --cartier-white: #ffffff;
+            --cartier-gray: #f4f4f4;
+            --cartier-text: #1a1a1a;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cartier-white);
+            color: var(--cartier-text);
+            -webkit-font-smoothing: antialiased;
+            padding-top: 0;
+        }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .text-gold { color: var(--cartier-gold) !important; }
+        .bg-gold { background-color: var(--cartier-gold) !important; }
+        .tracking-ultra { letter-spacing: 0.4em; }
+        .tracking-widest { letter-spacing: 0.25em; }
+        
+        /* Global Button Overrides */
+        .btn-primary, .btn-black {
+            background-color: var(--cartier-black);
+            border: 1px solid var(--cartier-black);
+            color: var(--cartier-white);
+            border-radius: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 0.75rem;
+            padding: 14px 30px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            font-weight: 600;
+        }
+        .btn-primary:hover, .btn-black:hover {
+            background-color: var(--cartier-white);
+            color: var(--cartier-black);
+            border-color: var(--cartier-black);
+        }
+        
+        .btn-outline-gold {
+            border: 1px solid var(--cartier-gold);
+            color: var(--cartier-gold);
+            background-color: transparent;
+            border-radius: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 0.75rem;
+            padding: 12px 25px;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-gold:hover {
+            background-color: var(--cartier-gold);
+            color: var(--cartier-white);
+        }
+        
+        /* Pristine Page Headers */
+        .page-header {
+            border: none;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            color: var(--cartier-black);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 1.5rem;
+        }
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            right: 25%;
+            height: 1px;
+            background-color: var(--cartier-gold);
+        }
+        
+        /* Form Control Refinement */
+        .form-control {
+            border-radius: 0;
+            border: 1px solid #ddd;
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: var(--cartier-black);
+        }
+
+        /* Global Blue Overrides to Cartier Gold/Black */
+        .btn-primary, .btn-info {
+            background-color: var(--cartier-black) !important;
+            border-color: var(--cartier-black) !important;
+            color: var(--cartier-white) !important;
+        }
+        .btn-primary:hover, .btn-info:hover {
+            background-color: var(--cartier-gold) !important;
+            border-color: var(--cartier-gold) !important;
+            color: var(--cartier-white) !important;
+        }
+        .text-primary, .text-info {
+            color: var(--cartier-gold) !important;
+        }
+        .bg-primary, .bg-info {
+            background-color: var(--cartier-gold) !important;
+            color: var(--cartier-white) !important;
+        }
+        .badge-primary, .badge-info {
+            background-color: var(--cartier-gold) !important;
+            color: var(--cartier-white) !important;
+            border-radius: 0;
+        }
+
+        /* Global Link Overrides to Remove Default Blue */
+        a, .btn-link {
+            color: var(--cartier-black) !important;
+            transition: color 0.3s ease;
+            text-decoration: none !important;
+        }
+        a:hover, .btn-link:hover {
+            color: var(--cartier-gold) !important;
+        }
+        
+        /* Force Gold/Black on all possible blue elements */
+        .text-primary, .text-info, .text-azure, .text-blue {
+            color: var(--cartier-gold) !important;
+        }
+        .bg-primary, .bg-info, .bg-azure, .bg-blue {
+            background-color: var(--cartier-gold) !important;
+            color: var(--cartier-white) !important;
+        }
+        
+        .alert-info, .alert-primary {
+            background-color: var(--cartier-gray) !important;
+            border-color: var(--cartier-gold) !important;
+            color: var(--cartier-black) !important;
+            border-radius: 0;
+        }
+    </style>
 
     {# Main content of page - other layout templates may override this block #}
     {% block content_wrapper %}

@@ -20,6 +20,7 @@ class CatalogueOnlyConfig(OscarConfig):
         super().ready()
 
         self.detail_view = get_class("catalogue.views", "ProductDetailView")
+        self.home_view = get_class("catalogue.views", "HomeView")
         self.catalogue_view = get_class("catalogue.views", "CatalogueView")
         self.category_view = get_class("catalogue.views", "ProductCategoryView")
         self.range_view = get_class("offer.views", "RangeDetailView")

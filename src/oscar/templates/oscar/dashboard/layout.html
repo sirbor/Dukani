@@ -11,9 +11,302 @@
 
 {% block extrastyles %}
     {{ block.super }}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static "oscar/js/select2/select2.min.css" %}" />
     <link rel="stylesheet" href="{% static "oscar/css/select2-bootstrap.min.css" %}" />
     <link rel="stylesheet" href="{% static "oscar/js/bootstrap4-datetimepicker/tempusdominus-bootstrap-4.min.css" %}" />
+    <style>
+        :root {
+            --cartier-gold: #B3995D;
+            --cartier-gold-faded: rgba(179, 153, 93, 0.05);
+            --cartier-black: #000000;
+            --cartier-white: #ffffff;
+            --cartier-gray: #fafafa;
+            --cartier-border: #eeeeee;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cartier-white);
+            color: var(--cartier-black);
+        }
+        .bg-white { background-color: var(--cartier-white) !important; }
+        .bg-pristine { background-color: var(--cartier-gray); min-height: 100vh; }
+        .text-gold { color: var(--cartier-gold) !important; }
+        .border-gold-thin { border-color: var(--cartier-gold) !important; border-width: 1px !important; }
+        .border-bottom-pristine { border-bottom: 1px solid var(--cartier-border); }
+        .tracking-wider { letter-spacing: 0.15em; }
+        .tracking-widest { letter-spacing: 0.25em; }
+        
+        .navbar {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--cartier-border);
+        }
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+        
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            background-color: var(--cartier-white);
+            border-right: 1px solid var(--cartier-border);
+        }
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 70px);
+            padding-top: 2rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .sidebar .nav-link {
+            padding: 0.8rem 2rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #666;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .sidebar .nav-link:hover {
+            color: var(--cartier-black);
+            background-color: var(--cartier-gray);
+        }
+        .sidebar .nav-link.active {
+            color: var(--cartier-gold);
+            background-color: var(--cartier-gold-faded);
+            border-right: 2px solid var(--cartier-gold);
+        }
+        
+        .avatar-circle {
+            width: 35px;
+            height: 35px;
+            background-color: var(--cartier-black);
+            color: white;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        /* Main Content Refinement */
+        main {
+            background-color: var(--cartier-gray);
+            padding: 3rem 4rem !important;
+        }
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+        .breadcrumb-item a {
+            color: #999;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-decoration: none;
+        }
+        
+        .h3.text-uppercase {
+            font-weight: 300;
+            border-bottom: 1px solid var(--cartier-gold);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Modern Pristine Tables */
+        .table {
+            background-color: var(--cartier-white);
+            border: none;
+            margin-top: 2rem;
+        }
+        .table thead th {
+            background-color: var(--cartier-white);
+            border-bottom: 1px solid var(--cartier-gold);
+            border-top: none;
+            color: var(--cartier-black);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+            padding: 1.5rem 1rem;
+        }
+        .table td {
+            border-bottom: 1px solid var(--cartier-border);
+            padding: 1.2rem 1rem;
+            vertical-align: middle;
+            font-size: 0.85rem;
+            color: #444;
+        }
+        .table tr:hover td {
+            background-color: var(--cartier-gray);
+        }
+        
+        /* Dashboard Container Refinement */
+        .table-header {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        .table-header h2, .table-header h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--cartier-gold);
+            font-weight: 600;
+            margin: 0;
+        }
+        .table-header h2 i, .table-header h3 i {
+            display: none;
+        }
+        
+        .card.card-body {
+            border: 1px solid var(--cartier-border);
+            border-radius: 0;
+            box-shadow: none;
+            padding: 2rem;
+            background-color: var(--cartier-white);
+        }
+        
+        /* Pagination Styling */
+        .pagination .page-link {
+            border: none;
+            color: #999;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            background: transparent;
+            padding: 0.5rem 1rem;
+        }
+        .pagination .page-item.active .page-link {
+            color: var(--cartier-black);
+            background: transparent;
+            border-bottom: 1px solid var(--cartier-gold);
+            font-weight: 700;
+        }
+        .pagination .page-item.disabled .page-link {
+            background: transparent;
+            opacity: 0.4;
+        }
+        
+        /* Global Button Refinement for Dashboard */
+        .btn-info, .btn-secondary, .btn-success, .btn-danger {
+            border-radius: 0;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            padding: 8px 15px;
+            font-weight: 600;
+        }
+        .btn-info { background-color: var(--cartier-gold); border-color: var(--cartier-gold); color: white; }
+        .btn-info:hover { background-color: var(--cartier-dark-gold); border-color: var(--cartier-dark-gold); }
+        
+        /* Overriding Bulky Elements */
+        .bg-light {
+            background-color: var(--cartier-white) !important;
+        }
+        
+        .badge {
+            border-radius: 0;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            padding: 5px 10px;
+            font-weight: 400;
+        }
+        .badge-success { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .badge-danger { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
+        .badge-info { background-color: var(--cartier-gold-faded); color: var(--cartier-gold); border: 1px solid var(--cartier-gold); }
+        
+        .dropdown-menu {
+            border-radius: 0;
+            border: 1px solid var(--cartier-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 0;
+        }
+        .dropdown-item {
+            padding: 12px 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .dropdown-item:hover {
+            background-color: var(--cartier-gray);
+            color: var(--cartier-gold);
+            padding-left: 1.5rem;
+        }
+        
+        /* Form Label and Group Refinement */
+        .form-group label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #999;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Specific Table Link styling */
+        .table td a {
+            color: var(--cartier-black);
+            font-weight: 600;
+            text-decoration: underline;
+            text-decoration-color: var(--cartier-gold);
+            text-underline-offset: 4px;
+        }
+        .table td a:hover {
+            color: var(--cartier-gold);
+        }
+
+        /* Dashboard Global Blue Overrides */
+        .btn-primary, .btn-info {
+            background-color: var(--cartier-black) !important;
+            border-color: var(--cartier-black) !important;
+            color: var(--cartier-white) !important;
+        }
+        .btn-primary:hover, .btn-info:hover {
+            background-color: var(--cartier-gold) !important;
+            border-color: var(--cartier-gold) !important;
+            color: var(--cartier-white) !important;
+        }
+        .text-primary, .text-info, .text-azure, .text-blue {
+            color: var(--cartier-gold) !important;
+        }
+        .bg-primary, .bg-info, .bg-azure, .bg-blue {
+            background-color: var(--cartier-gold) !important;
+            color: var(--cartier-white) !important;
+        }
+
+        /* Global Link Overrides to Remove Default Blue */
+        a, .btn-link {
+            color: var(--cartier-black) !important;
+            transition: color 0.3s ease;
+            text-decoration: none !important;
+        }
+        a:hover, .btn-link:hover {
+            color: var(--cartier-gold) !important;
+        }
+
+        .alert-info, .alert-primary {
+            background-color: var(--cartier-white) !important;
+            border-left: 4px solid var(--cartier-gold) !important;
+            color: var(--cartier-black) !important;
+            border-radius: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+    </style>
 {% endblock %}
 
 {% block title %}
@@ -22,99 +315,111 @@
 
 {% block layout %}
     {% block navbar %}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-accounts">
-            <a class="navbar-brand" href="#">{{ shop_name }}</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#top_nav_bar" aria-controls="top_nav_bar" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-none">
+            <a class="navbar-brand px-3 text-black tracking-ultra text-uppercase" href="{% url 'dashboard:index' %}" style="font-family: 'Montserrat', sans-serif;">{{ shop_name }}</a>
+            <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#top_nav_bar" aria-controls="top_nav_bar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="top_nav_bar">
-                <ul class="navbar-nav mr-auto"></ul>
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ml-auto px-3 align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#">
-                            {% trans "Welcome" %} <em>{{ user.get_full_name|default:request.user.email }}</em>
-                        </a>
+                        <a class="nav-link text-muted small text-uppercase tracking-widest" href="{{ homepage_url }}">{% trans "Boutique" %}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ homepage_url }}"><i class="fas fa-home"></i> {% trans "Return to site" %}</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'customer:summary' %}"><i class="fas fa-user"></i> {% trans "Account" %}</a>
-                  </li>
-                  <form id="logout_form" method="post" action="{% url 'dashboard:logout' %}">
-                    {% csrf_token %}
-                    <button class="btn btn-link nav-link" type="submit">
-                        <i class="fas fa-sign-out-alt"></i> {% trans "Log out" %}
-                    </button>
-                  </form>
+                    <li class="nav-item dropdown ml-4">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="avatar-circle mr-2">{{ user.email|slice:":1"|upper }}</div>
+                            <span class="small text-uppercase tracking-wider font-weight-bold text-dark">{{ user.get_full_name|default:user.email }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow-sm border-0 rounded-0" aria-labelledby="userDropdown">
+                            <a class="dropdown-item small text-uppercase tracking-wider py-3" href="{% url 'customer:summary' %}">{% trans "Account" %}</a>
+                            <div class="dropdown-divider m-0"></div>
+                            <form method="post" action="{% url 'dashboard:logout' %}">
+                                {% csrf_token %}
+                                <button class="dropdown-item small text-uppercase tracking-wider py-3 text-danger" type="submit">{% trans "Sign Out" %}</button>
+                            </form>
+                        </div>
+                    </li>
                 </ul>
-          </div>
+            </div>
         </nav>
     {% endblock navbar %}
 
-    {% block dashboard_nav %}
-        {% dashboard_navigation user as nav_items %}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-primary">
-            <button class="navbar-toggler float-right" type="button" data-toggle="collapse" data-target="#bottom_nav_bar" aria-controls="bottom_nav_bar" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <div class="collapse navbar-collapse" id="bottom_nav_bar">
-                <ul class="navbar-nav">
-                    {% for item in nav_items %}
-                        <li class="nav-item {% if item.has_children %}dropdown{% endif %}">
-                            <a class="nav-link {% if item.has_children %}dropdown-toggle{% endif %}"
-                               href="{% if item.is_heading %}#{% else %}{{ item.url }}{% endif %}"
-                               {% if item.has_children %}id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"{% endif %}
-                            >
-                                {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
-                                {{ item.label }}
-                            </a>
-
-                            {% if item.has_children %}
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    {% for subitem in item.children %}
-                                        <a class="dropdown-item" href="{{ subitem.url }}">
-                                            {% if subitem.icon %}<i class="{{ subitem.icon }}"></i>{% endif %}
-                                            {{ subitem.label }}
+    <div class="container-fluid pt-5 mt-4">
+        <div class="row">
+            {# Sidebar Navigation #}
+            <nav class="col-md-2 d-none d-md-block sidebar min-vh-100 p-0 shadow-none">
+                <div class="sidebar-sticky">
+                    {% block dashboard_nav %}
+                        {% dashboard_navigation user as nav_items %}
+                        <ul class="nav flex-column sidebar-nav-luxury">
+                            {% for item in nav_items %}
+                                <li class="nav-item mb-1">
+                                    {% if item.has_children %}
+                                        <a class="nav-link d-flex justify-content-between align-items-center {% if not item.active %}collapsed{% endif %}"
+                                           href="#submenu-{{ forloop.index }}" data-toggle="collapse" role="button"
+                                           aria-expanded="{{ item.active|yesno:'true,false' }}" aria-controls="submenu-{{ forloop.index }}">
+                                            <span>
+                                                {{ item.label }}
+                                            </span>
+                                            <i class="fas fa-chevron-down x-small text-muted"></i>
                                         </a>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </nav>
-    {% endblock %}
-
-    <div class="container-fluid">
-        {% block breadcrumbs %}
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">
-                        <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
-                    </li>
-                </ol>
+                                        <div class="collapse {% if item.active %}show{% endif %} bg-white" id="submenu-{{ forloop.index }}">
+                                            <ul class="nav flex-column ml-3 py-2 border-left border-gold-thin">
+                                                {% for subitem in item.children %}
+                                                    <li class="nav-item">
+                                                        <a class="nav-link py-2 small {% if subitem.active %}text-gold font-weight-bold{% else %}text-muted{% endif %}" href="{{ subitem.url }}">
+                                                            {{ subitem.label }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    {% else %}
+                                        <a class="nav-link {% if item.active %}active{% endif %}" href="{{ item.url }}">
+                                            <span>
+                                                {{ item.label }}
+                                            </span>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endblock %}
+                </div>
             </nav>
-        {% endblock %}
 
-        <div class="content">
-            {% include 'oscar/dashboard/partials/alert_messages.html' %}
-            {% block header %}
-            <div class="page-header">
-                <h1>{% block headertext %}{% endblock %}</h1>
-            </div>
-            {% endblock %}
-            <div class="page-content">
-                {% block content %}
-                    {% block dashboard_content %}{% endblock dashboard_content %}
-                {% endblock content %}
-            </div>
+            {# Main Content #}
+            <main role="main" class="col-md-10 ml-sm-auto col-lg-10 bg-pristine">
+                {% block breadcrumbs %}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Administration" %}</a></li>
+                            {% block extra_breadcrumbs %}{% endblock %}
+                        </ol>
+                    </nav>
+                {% endblock %}
+
+                <div class="content">
+                    {% include 'oscar/dashboard/partials/alert_messages.html' %}
+                    {% block header %}
+                        <div class="d-flex justify-content-between align-items-baseline mb-5">
+                            <h1 class="h3 text-uppercase tracking-widest mb-0">{% block headertext %}{% endblock %}</h1>
+                            <div class="btn-toolbar">
+                                {% block header_actions %}{% endblock %}
+                            </div>
+                        </div>
+                    {% endblock %}
+
+                    <div class="page-content">
+                        {% block content %}
+                            {% block dashboard_content %}{% endblock dashboard_content %}
+                        {% endblock content %}
+                    </div>
+                </div>
+            </main>
         </div>
-    </div><!-- /container -->
-
+    </div>
 {% endblock %}
 
 {# Local scripts #}

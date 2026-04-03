@@ -1,0 +1,187 @@
+{% extends "oscar/layout.html" %}
+{% load i18n %}
+{% load product_tags %}
+{% load category_tags %}
+{% load static %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+    {% trans "DUKANI | Curated Volumes & Fine Footwear" %}
+{% endblock %}
+
+{% block content_wrapper %}
+    <div class="hero-luxury position-relative overflow-hidden mb-5 border-bottom border-gold-low">
+        <div class="hero-overlay d-flex align-items-center justify-content-center text-center p-5">
+            <div class="container">
+                <h2 class="text-gold text-uppercase tracking-widest mb-2" style="font-family: 'Montserrat', sans-serif; font-weight: 300;">{{ shop_name }}</h2>
+                <h1 class="display-3 mb-4 text-charcoal font-serif">{% trans "The Archive of Thought" %}</h1>
+                <p class="lead text-muted mb-5 max-w-600 mx-auto" style="font-family: 'Montserrat', sans-serif; font-weight: 300;">
+                    {% trans "Discover a meticulously curated collection of timeless literature and rare editions, chosen for the discerning reader." %}
+                </p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{% url 'catalogue:index' %}" class="btn btn-gold btn-lg px-5 text-uppercase">{% trans "Explore Archive" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if featured_products %}
+            <div class="featured-products py-5 mb-5 bg-white">
+                <div class="text-center mb-5">
+                    <span class="text-gold text-uppercase tracking-widest small">{% trans "Curated Selection" %}</span>
+                    <h2 class="display-4 font-serif mt-2 text-charcoal">{% trans "Signature Volumes" %}</h2>
+                    <div class="gold-divider mx-auto mt-3"></div>
+                </div>
+                <div class="row">
+                    {% for product in featured_products %}
+                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                            {% render_product product %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if top_categories %}
+            <div class="top-categories bg-light-gold py-5 mb-5 rounded-luxury overflow-hidden shadow-sm border border-gold-subtle">
+                <div class="text-center mb-5">
+                    <h2 class="font-serif text-charcoal">{% trans "Literary Categories" %}</h2>
+                </div>
+                <div class="row px-4">
+                    {% for category in top_categories %}
+                        <div class="col-sm-6 col-md-4 mb-4">
+                            <div class="card h-100 category-card-luxury border-0 shadow-none bg-transparent">
+                                <div class="category-img-container overflow-hidden rounded-luxury mb-3 shadow-sm bg-white">
+                                    {% if category.image %}
+                                        <img src="{{ category.image.url }}" class="img-fluid transition-transform" alt="{{ category.name }}">
+                                    {% else %}
+                                        <div class="bg-white d-flex align-items-center justify-content-center h-200">
+                                            <i class="fas fa-book-open text-gold-faded-full fa-3x"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body p-0 text-center">
+                                    <h5 class="card-title text-uppercase tracking-wider font-weight-normal mb-2 text-charcoal">
+                                        {% if category.name == "Clothing" %}{% trans "Shoes" %}{% else %}{{ category.name }}{% endif %}
+                                    </h5>
+                                    <a href="{{ category.get_absolute_url }}" class="text-gold text-decoration-none small text-uppercase font-weight-bold">{% trans "Browse Collection" %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <style>
+        :root {
+            --cartier-gold: #B3995D;
+            --cartier-black: #000000;
+            --cartier-gray: #fafafa;
+            --cartier-light-gold: #FDFBF2;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--cartier-black);
+            background-color: #fff;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .text-gold {
+            color: var(--cartier-gold) !important;
+        }
+        .tracking-ultra {
+            letter-spacing: 0.4em;
+        }
+        .tracking-widest {
+            letter-spacing: 0.25em;
+        }
+        .hero-luxury {
+            background-color: #fff;
+            min-height: 70vh;
+        }
+        .hero-overlay {
+            background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 100%), url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            height: 100%;
+            min-height: 70vh;
+        }
+        .btn-gold {
+            background-color: var(--cartier-black);
+            color: white;
+            border: none;
+            border-radius: 0;
+            padding: 15px 40px;
+            letter-spacing: 0.2em;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .btn-gold:hover {
+            background-color: var(--cartier-gold);
+            color: white;
+            transform: translateY(-2px);
+        }
+        .gold-divider {
+            width: 60px;
+            height: 1px;
+            background-color: var(--cartier-gold);
+        }
+        .text-gold-faded-full {
+            color: rgba(179, 153, 93, 0.2);
+        }
+        .border-gold-low {
+            border-color: rgba(179, 153, 93, 0.2) !important;
+        }
+        .category-img-container {
+            height: 350px;
+            position: relative;
+            background-color: #fff;
+        }
+        .category-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .category-card-luxury:hover img {
+            transform: scale(1.05);
+        }
+        .border-gold-subtle {
+            border-color: rgba(179, 153, 93, 0.1) !important;
+        }
+        .luxury-sidebar h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            color: var(--cartier-gold);
+            font-weight: 600;
+        }
+        .luxury-nav .nav-link {
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--cartier-black) !important;
+        }
+        .luxury-nav .nav-link:hover {
+            color: var(--cartier-gold) !important;
+            padding-left: 5px;
+        }
+        
+        /* Local Link Override for homepage consistency */
+        a {
+            color: var(--cartier-black) !important;
+            text-decoration: none !important;
+        }
+        a:hover {
+            color: var(--cartier-gold) !important;
+        }
+    </style>
+{% endblock content_wrapper %}
