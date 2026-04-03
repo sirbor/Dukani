@@ -1,6 +1,6 @@
 # Core Django & Oscar
 django>=4.2,<5.3
-django-oscar==3.2.2  # Matches the project's current version
+django-oscar==4.1  # Matches the project's current version
 pillow>=6.0
 django-extra-views>=0.13,<0.17
 django-haystack>=3.0b1
