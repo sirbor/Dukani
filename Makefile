@@ -76,15 +76,15 @@ coverage: venv ## Generate coverage report
 	$(PYTEST) --cov=oscar --cov-report=term-missing
 
 lint:
-	@black --check --exclude "migrations/*" src/oscar/
-	@black --check --exclude "migrations/*" tests/
-	@pylint setup.py src/oscar/
-	@pylint setup.py tests/
+	@black --check --target-version py312 --exclude "migrations/*" src/oscar/
+	@black --check --target-version py312 --exclude "migrations/*" tests/
+	@PYTHONPATH=.:sandbox pylint setup.py src/oscar/
+	@PYTHONPATH=.:sandbox pylint setup.py tests/
 
 
 black:
-	@black --exclude "migrations/*" src/oscar/
-	@black --exclude "migrations/*" tests/
+	@black --target-version py312 --exclude "migrations/*" src/oscar/
+	@black --target-version py312 --exclude "migrations/*" tests/
 
 test_migrations: install-migrations-testing-requirements ## Tests migrations
 	cd sandbox && ./test_migrations.sh
