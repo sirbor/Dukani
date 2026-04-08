@@ -51,6 +51,8 @@ dependencies = [
     "django-tables2>=2.3,<=2.7",
     # Used for manipulating form field attributes in templates (eg: add a css class)
     "django-widget-tweaks>=1.4.1",
+    # M-Pesa / External payments
+    "requests>=2.31",
 ]
 
 [project.optional-dependencies]
