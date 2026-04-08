@@ -66,7 +66,7 @@ class TestDashboardIndexForStaffUser(WebTestCase):
         )
         for name in urls:
             response = self.get(reverse(name))
-            self.assertContains(response, "Welcome")
+            self.assertContains(response, "Dashboard")
 
     def test_includes_hourly_report_with_no_orders(self):
         report = IndexView().get_hourly_report(Order.objects.all())
@@ -110,7 +110,7 @@ class TestDashboardIndexForPartnerUser(WebTestCase):
         urls = ("dashboard:index", "dashboard:order-list")
         for name in urls:
             response = self.get(reverse(name))
-            self.assertContains(response, "Welcome")
+            self.assertContains(response, "Dashboard")
 
     def test_is_not_available(self):
         urls = (

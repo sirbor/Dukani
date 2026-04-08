@@ -36,7 +36,7 @@
 
             <li class="nav-item step-item {% if step == 3 %}active{% elif step > 3 %}visited{% else %}disabled{% endif %}">
                 {% if step > 3 %}
-                    <a href="{% url 'checkout:order-review' %}" class="nav-link">
+                    <a href="{% url 'checkout:preview' %}" class="nav-link">
                         <span class="step-num">3</span>
                         <span class="step-label">{% trans "Review" %}</span>
                     </a>

@@ -60,9 +60,10 @@ class TestCategoryDashboard(WebTestCase):
         )
 
     def test_handles_invalid_form_gracefully(self):
-        dashboard_index = self.app.get(reverse("dashboard:index"), user=self.staff)
-        category_index = dashboard_index.click("Categories")
-        category_add = category_index.click("Create new category")
+        category_index = self.app.get(
+            reverse("dashboard:catalogue-category-list"), user=self.staff
+        )
+        category_add = category_index.click("New category")
         response = category_add.forms["create_update_category_form"].submit()
         self.assertEqual(200, response.status_code)
 

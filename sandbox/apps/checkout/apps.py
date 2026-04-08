@@ -11,24 +11,11 @@ class CheckoutConfig(OscarCheckoutConfig):
 
     def ready(self):
         super().ready()
-        from .views import OrderReviewView
+        from .views import PaymentMethodView, PaymentDetailsView
 
-        self.order_review_view = OrderReviewView
+        self.payment_method_view = PaymentMethodView
+        self.payment_details_view = PaymentDetailsView
+
 
     def get_urls(self):
-        urls = super().get_urls()
-        review_route = path(
-            "order-review/",
-            self.order_review_view.as_view(),
-            name="order-review",
-        )
-        out = []
-        inserted = False
-        for u in urls:
-            if not inserted and getattr(u, "name", None) == "payment-method":
-                out.append(review_route)
-                inserted = True
-            out.append(u)
-        if not inserted:
-            out.insert(0, review_route)
-        return self.post_process_urls(out)
+        return super().get_urls()

@@ -79,6 +79,7 @@
 
             <div class="d-flex flex-column flex-sm-row align-items-stretch justify-content-between mt-5 pt-4 checkout-payment-footer">
                 <a href="{% url 'checkout:shipping-method' %}" class="btn checkout-btn-ghost order-sm-0">{% trans "Back" %}</a>
+                <a id="view_preview" href="{% url 'checkout:preview' %}" class="btn btn-checkout-primary order-sm-1 ml-sm-auto">{% trans "Continue to review" %}</a>
             </div>
         {% endblock payment_details_content %}
     </div>

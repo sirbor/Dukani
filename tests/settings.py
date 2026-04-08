@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "django_tables2",
     # Storefront branding (templatetag `storefront_tags`, context processor); matches sandbox.
     "apps.storefront_settings.apps.StorefrontSettingsConfig",
+    "apps.gateway_payments.apps.GatewayPaymentsConfig",
     # Contains models we need for testing
     "tests._site.model_tests_app",
     "tests._site.myauth",
@@ -91,17 +92,10 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             location("_site/templates"),
+            location("../sandbox/templates"),
         ],
+        "APP_DIRS": True,
         "OPTIONS": {
-            "loaders": [
-                (
-                    "django.template.loaders.cached.Loader",
-                    [
-                        "django.template.loaders.filesystem.Loader",
-                        "django.template.loaders.app_directories.Loader",
-                    ],
-                ),
-            ],
             "context_processors": [
                 "django.contrib.auth.context_processors.auth",
                 "django.template.context_processors.request",

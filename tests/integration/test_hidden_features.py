@@ -14,12 +14,13 @@ class TestHiddenFeatures(WebTestCase):
 
     def test_reviews_enabled(self):
         product_detail_page = self.get(self.product.get_absolute_url())
-        self.assertContains(product_detail_page, "Number of reviews")
+        # Storefront product detail uses “Client Reviews” (not legacy “Number of reviews”).
+        self.assertContains(product_detail_page, "Client Reviews")
 
     def test_reviews_disabled(self):
         with self.settings(OSCAR_HIDDEN_FEATURES=["reviews"]):
             product_detail_page = self.get(self.product.get_absolute_url())
-            self.assertNotContains(product_detail_page, "Number of reviews")
+            self.assertNotContains(product_detail_page, "Client Reviews")
 
     def test_wishlists_enabled(self):
         account_page = self.get(reverse("customer:profile-view"))

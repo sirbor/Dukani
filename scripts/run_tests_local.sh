@@ -52,6 +52,9 @@ else
   unset DATABASE_USER DATABASE_PASSWORD DATABASE_HOST DATABASE_PORT || true
 fi
 
+# Add sandbox to PYTHONPATH so that 'apps.storefront_settings' etc. can be found.
+export PYTHONPATH="${PYTHONPATH:-}:${ROOT}/sandbox"
+
 # Single process avoids SQLite locking; default collection path is tests/ when none is given
 # (passing only pytest options like -k still targets tests/).
 if [[ $# -eq 0 ]] || [[ "${1:-}" =~ ^- ]]; then

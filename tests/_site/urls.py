@@ -15,6 +15,7 @@ urlpatterns = [
 ]
 
 urlpatterns += i18n_patterns(
+    path("checkout/payments/", include("apps.gateway_payments.urls")),
     path("test/", TestView),
 )
 

@@ -108,6 +108,10 @@ class TestMovingACategory(TestCase):
 
 
 class TestCategoryFactory(TestCase):
+    def setUp(self):
+        cache.clear()
+        Category.objects.all().delete()
+
     def test_can_create_single_level_category(self):
         trail = "Books"
         category = create_from_breadcrumbs(trail)
@@ -167,11 +171,11 @@ class TestCategoryFactory(TestCase):
         self.assertEqual(c1.full_slug, "t/a")
         self.assertEqual(c1.full_name, "T > A")
 
-        child = Category.objects.get(name="F")
+        child = c1.get_descendants().get(name="F")
         self.assertEqual(child.full_slug, "t/a/e/f")
         self.assertEqual(child.full_name, "T > A > E > F")
 
-        child = Category.objects.get(name="D")
+        child = c1.get_descendants().get(name="D")
         self.assertEqual(child.full_slug, "t/a/b/d")
         self.assertEqual(child.full_name, "T > A > B > D")
 

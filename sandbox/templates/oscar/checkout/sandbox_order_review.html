@@ -30,14 +30,18 @@
     <div class="checkout-preview-actions mt-4 pt-2">
         <div class="row align-items-stretch align-items-md-center justify-content-between checkout-order-review-actions">
             <div class="col-12 col-md-auto mb-3 mb-md-0">
-                <a href="{% url 'checkout:shipping-method' %}" class="btn checkout-btn-ghost btn-block">
+                <a id="view_preview" href="{% url 'checkout:shipping-method' %}" class="btn checkout-btn-ghost btn-block">
                     {% trans "Back" %}
                 </a>
             </div>
             <div class="col-12 col-md-5 col-lg-4">
-                <a href="{% url 'checkout:payment-method' %}" class="btn btn-lg btn-block checkout-btn-place-order">
-                    {% trans "Continue to payment" %}
-                </a>
+                <form method="post" action="{% url 'checkout:preview' %}" id="place_order_form">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="place_order" />
+                    <button type="submit" class="btn btn-lg btn-block checkout-btn-place-order">
+                        {% trans "Place order" %}
+                    </button>
+                </form>
             </div>
         </div>
     </div>

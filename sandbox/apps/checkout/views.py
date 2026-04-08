@@ -1,11 +1,9 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView
 
-from oscar.apps.checkout.session import CheckoutSessionMixin
 from oscar.apps.checkout.views import (
     IndexView,
-    PaymentDetailsView,
-    PaymentMethodView,
+    PaymentDetailsView as OscarPaymentDetailsView,
+    PaymentMethodView as OscarPaymentMethodView,
     ShippingAddressView,
     ThankYouView,
     UserAddressDeleteView,
@@ -15,25 +13,27 @@ from oscar.apps.checkout.views import ShippingMethodView as OscarShippingMethodV
 
 
 class ShippingMethodView(OscarShippingMethodView):
-    """After choosing shipping, require order review before payment."""
+    """After choosing shipping, go to payment method."""
 
-    success_url = reverse_lazy("checkout:order-review")
+    success_url = reverse_lazy("checkout:payment-method")
 
 
-class OrderReviewView(CheckoutSessionMixin, TemplateView):
+class PaymentMethodView(OscarPaymentMethodView):
+    """After choosing payment method, go to payment-details."""
+
+    success_url = reverse_lazy("checkout:payment-details")
+
+
+class PaymentDetailsView(OscarPaymentDetailsView):
     """
-    Pre-payment summary (lines, shipping, totals). External gateways place
-    the Oscar order after payment, so Oscar's /preview/ step is never shown;
-    this page restores an explicit review step in the checkout journey.
+    Pre-payment summary (lines, shipping, totals).
     """
 
-    template_name = "oscar/checkout/order_review.html"
-    pre_conditions = PaymentDetailsView.pre_conditions
+    template_name_preview = "oscar/checkout/sandbox_order_review.html"
 
 
 __all__ = [
     "IndexView",
-    "OrderReviewView",
     "PaymentDetailsView",
     "PaymentMethodView",
     "ShippingAddressView",

@@ -481,6 +481,16 @@ class TestPlaceOrderWithVoucher(TestCase):
 
 
 class TestConcurrentOrderPlacement(TransactionTestCase):
+    def setUp(self):
+        super().setUp()
+        from django.db import connection
+
+        if connection.vendor == "sqlite":
+            self.skipTest(
+                "SQLite serializes database access; concurrent placement raises "
+                "OperationalError instead of application-level ValueError."
+            )
+
     def test_single_usage(self):
         user = AnonymousUser()
         creator = OrderCreator()

@@ -53,7 +53,7 @@
             {% include "oscar/dashboard/partials/advanced_search_modal.html" with form=form style='horizontal' %}
 
             {% if search_filters %}
-            <div class="mt-3 pt-3 border-top">
+            <div class="mt-3 pt-3 border-top search-filter-list">
                 <label class="small text-muted text-uppercase tracking-widest mr-2">Filters:</label>
                 {% for filter in search_filters %}
                 <span class="badge badge-info mr-1">{{ filter }}</span>
