@@ -12,9 +12,7 @@ Category = get_model("catalogue", "category")
 
 def category_by_slug_candidates(slugs, names):
     for s in slugs:
-        cat = (
-            Category.objects.filter(slug=s, is_public=True).order_by("depth").first()
-        )
+        cat = Category.objects.filter(slug=s, is_public=True).order_by("depth").first()
         if cat:
             return cat
     for name in names:

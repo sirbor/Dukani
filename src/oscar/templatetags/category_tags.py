@@ -76,7 +76,9 @@ def category_url(slug, parent_slug=None):
         if category:
             return category.get_absolute_url()
     cat = (
-        Category.objects.filter(slug=slug_norm, is_public=True).order_by("depth").first()
+        Category.objects.filter(slug=slug_norm, is_public=True)
+        .order_by("depth")
+        .first()
     )
     if cat:
         return cat.get_absolute_url()

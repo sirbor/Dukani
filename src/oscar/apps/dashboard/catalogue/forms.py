@@ -349,7 +349,9 @@ class DepartmentCategoryChoiceField(forms.ModelChoiceField):
     """Books root + ten genre shelves; labels use canonical BOOK_DEPARTMENT_SPECS casing."""
 
     def label_from_instance(self, obj):
-        from oscar.apps.catalogue.category_resolution import book_department_display_name
+        from oscar.apps.catalogue.category_resolution import (
+            book_department_display_name,
+        )
 
         return book_department_display_name(obj)
 

@@ -83,7 +83,6 @@ class TestProductListView(WebTestCase):
         if connection.vendor == "sqlite":
             call_command("update_index")
 
-
     def test_shows_add_to_basket_button_for_available_product(self):
         product = create_product(num_in_stock=1)
         self.refresh_index()

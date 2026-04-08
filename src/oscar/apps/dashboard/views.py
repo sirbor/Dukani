@@ -12,7 +12,13 @@ from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils import formats
 from django.utils.dateparse import parse_date
-from django.utils.timezone import get_current_timezone, localdate, localtime, make_aware, now
+from django.utils.timezone import (
+    get_current_timezone,
+    localdate,
+    localtime,
+    make_aware,
+    now,
+)
 from django.utils.translation import get_language, to_locale
 from django.views.generic import TemplateView
 

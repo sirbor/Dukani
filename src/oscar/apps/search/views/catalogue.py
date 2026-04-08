@@ -7,13 +7,13 @@ from django.shortcuts import get_object_or_404, redirect
 from django.db import DatabaseError
 from django.utils.translation import gettext_lazy as _
 
-from oscar.apps.catalogue.category_resolution import category_is_in_storefront_books_tree
+from oscar.apps.catalogue.category_resolution import (
+    category_is_in_storefront_books_tree,
+)
 from oscar.core.loading import get_class, get_model
 
 BrowseCategoryForm = get_class("search.forms", "BrowseCategoryForm")
-DepartmentBrowseCategoryForm = get_class(
-    "search.forms", "DepartmentBrowseCategoryForm"
-)
+DepartmentBrowseCategoryForm = get_class("search.forms", "DepartmentBrowseCategoryForm")
 CategoryForm = get_class("search.forms", "CategoryForm")
 BaseSearchView = get_class("search.views.base", "BaseSearchView")
 Category = get_model("catalogue", "Category")

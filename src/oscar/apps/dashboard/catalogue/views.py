@@ -641,9 +641,7 @@ class CategoryDetailListView(
             ordered = resolve_book_department_categories()
             ordered_ids = {c.pk for c in ordered}
             extra = (
-                self.object.get_children()
-                .exclude(pk__in=ordered_ids)
-                .order_by("path")
+                self.object.get_children().exclude(pk__in=ordered_ids).order_by("path")
             )
             return list(ordered) + list(extra)
         return self.object.get_children()

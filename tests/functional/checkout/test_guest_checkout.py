@@ -106,7 +106,9 @@ class TestIndexView(
         email = "forgetfulguest@test.com"
         self.enter_guest_details(email)
         page = self.get(reverse("checkout:index"))
-        self.assertEqual(email, first_form_with_field(page, "username")["username"].value)
+        self.assertEqual(
+            email, first_form_with_field(page, "username")["username"].value
+        )
 
     def test_auto_select_existing_user(self):
         email = "forgetfulguest@test.com"
