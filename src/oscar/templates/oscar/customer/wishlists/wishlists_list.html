@@ -1,0 +1,59 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-wishlists">
+    <h2 class="account-section-title">{% trans "Your lists" %}</h2>
+
+    {% if wishlists %}
+        {% for wishlist in wishlists %}
+            <div class="wishlist-card">
+                <div>
+                    <div class="wishlist-card__name">
+                        <a href="{% url 'customer:wishlists-detail' key=wishlist.key %}">{{ wishlist.name }}</a>
+                    </div>
+                    <div class="wishlist-card__count mt-1">
+                        {{ wishlist.lines.count }} {% trans "products" %}
+                    </div>
+                </div>
+                <div class="account-address-actions">
+                    <a class="btn btn-black btn-sm" href="{% url 'customer:wishlists-detail' key=wishlist.key %}">{% trans 'View' %}</a>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-black btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans "More" %}</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="{% url 'customer:wishlists-update' key=wishlist.key %}" class="dropdown-item">
+                                {% trans 'Wish list settings' %}
+                            </a>
+                            {% if wishlist.is_shareable %}
+                                <a href="{{ wishlist.get_shared_url }}" class="dropdown-item clipboard-item">
+                                    {% trans 'Copy sharing link' %}
+                                </a>
+                            {% endif %}
+                            <a href="{% url 'customer:wishlists-delete' key=wishlist.key %}" class="dropdown-item">
+                                {% trans 'Delete' %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="account-orders__pagination">
+            {% include "oscar/partials/pagination.html" %}
+        </div>
+    {% else %}
+        <div class="account-empty">
+            <p class="account-empty__title mb-2">{% trans "No wish lists yet" %}</p>
+            <p class="mb-0">{% trans "Create a list to save books for later or share with someone." %}</p>
+        </div>
+    {% endif %}
+
+    <div class="account-actions border-0 pt-3 mt-2">
+        <a href="{% url 'customer:wishlists-create' %}" class="btn btn-primary">{% trans 'Create a new wish list' %}</a>
+    </div>
+</div>
+{% endblock tabcontent %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.customer.wishlists.init();
+{% endblock %}

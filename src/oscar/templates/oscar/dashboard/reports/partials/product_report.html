@@ -1,0 +1,33 @@
+{% extends 'oscar/dashboard/reports/index.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block report %}
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>{% trans "Product" %}</th>
+                    <th>{% trans "Views" %}</th>
+                    <th>{% trans "Basket additions" %}</th>
+                    <th>{% trans "Purchases" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in objects %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'dashboard:catalogue-product' product.product.id %}">{{ product.product }}</a>
+                        </td>
+                        <td>{{ product.num_views }}</td>
+                        <td>{{ product.num_basket_additions }}</td>
+                        <td>{{ product.num_purchases }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td class="text-muted small p-4" colspan="4">{% trans "No results found." %}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "oscar/dashboard/partials/pagination.html" %}
+{% endblock %}

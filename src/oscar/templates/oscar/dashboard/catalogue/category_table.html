@@ -1,0 +1,26 @@
+{% extends 'oscar/dashboard/table.html' %}
+{% load i18n %}
+
+{% block table.caption %}
+<div class="dashboard-table-caption">
+    <div class="dashboard-table-caption__left">
+        {% if table.icon %}
+            <i class="{{ table.icon }} dashboard-table-caption__icon" aria-hidden="true"></i>
+        {% endif %}
+        <h3 class="dashboard-table-caption__heading">{{ table.get_caption_display }}</h3>
+    </div>
+    <div class="dashboard-bulk-toolbar" role="group" aria-label="{% trans 'Bulk actions' %}">
+        <span class="dashboard-bulk-toolbar__badge"><i class="fas fa-layer-group" aria-hidden="true"></i> {% trans "Bulk" %}</span>
+        <span class="dashboard-bulk-toolbar__prompt text-muted">{% trans "With selected:" %}</span>
+        <div class="form-check dashboard-bulk-toolbar__check">
+            <input id="make_public_check" class="form-check-input" type="radio" name="action" value="make_public" />
+            <label class="form-check-label" for="make_public_check">{% trans "Make public" %}</label>
+        </div>
+        <div class="form-check dashboard-bulk-toolbar__check">
+            <input id="make_non_public_check" class="form-check-input" type="radio" name="action" value="make_non_public" />
+            <label class="form-check-label" for="make_non_public_check">{% trans "Make non-public" %}</label>
+        </div>
+        <button type="submit" class="btn-dashboard-chart-submit btn-dashboard-chart-submit--sm">{% trans "Apply" %}</button>
+    </div>
+</div>
+{% endblock %}

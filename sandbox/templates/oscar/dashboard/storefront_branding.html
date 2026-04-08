@@ -1,0 +1,65 @@
+{% extends 'oscar/dashboard/layout.html' %}
+
+{% load i18n %}
+
+{% block body_class %}{{ block.super }} storefront-branding{% endblock %}
+
+{% block title %}
+{% trans "Storefront appearance" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Storefront appearance" %}</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block headertext %}
+{% trans "Storefront appearance" %}
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="table-header">
+    <h2>{% trans "Branding & home page" %}</h2>
+    <p class="text-muted">{% trans "Changes apply to the public shop immediately after saving." %}</p>
+</div>
+
+<form method="post" class="card card-body form-stacked" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+        </div>
+    {% endif %}
+    {% for field in form %}
+        {% if field.name == 'shop_name' %}
+            <h3 class="h4 mt-0">{% trans "Shop identity" %}</h3>
+        {% elif field.name == 'home_hero_eyebrow' %}
+            <h3 class="h4 mt-4 pt-2 border-top">{% trans "Homepage hero text" %}</h3>
+            <p class="text-muted small mb-3">
+                {% blocktrans trimmed %}
+                    The large headline area on the home page (left column on desktop). Leave fields blank to keep the original wording.
+                {% endblocktrans %}
+            </p>
+        {% elif field.name == 'announcement_badge_label' %}
+            <h3 class="h4 mt-4 pt-2 border-top">{% trans "Announcement ticker" %}</h3>
+        {% elif field.name == 'nav_background' %}
+            <h3 class="h4 mt-4 pt-2 border-top">{% trans "Homepage & navigation photos" %}</h3>
+            <p class="text-muted small mb-3">
+                {% blocktrans trimmed %}
+                    Replace the main navigation backdrop, the large “book room” hero, and the four department tiles.
+                    Leave a field empty (or tick “Clear” on an existing upload) to use the default images from the theme.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+        {% include 'oscar/dashboard/partials/form_field.html' with field=field %}
+    {% endfor %}
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
+    </div>
+</form>
+
+{% endblock dashboard_content %}

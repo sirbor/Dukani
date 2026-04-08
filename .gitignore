@@ -1,0 +1,53 @@
+# Project-specific (Dukani)
+/dukani/
+/node_modules/
+/venv/
+
+# Python-specific
+*.pyc
+__pycache__
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+ENV/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Django-specific
+*.sqlite
+.pytest_local.sqlite3
+pytest_local_output.txt
+/sandbox/.env
+/sandbox/db.sqlite
+/sandbox/public/static/
+/sandbox/public/media/
+/sandbox/whoosh_index/
+/tests/whoosh_index/
+settings_local.py
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# IDE-specific
+.vscode/
+.idea/
+.project
+.pydevproject
+.settings/
+
+# Packaging
+/dist/
+/build/
+
+# Docs
+/docs/build/
+*.pdf

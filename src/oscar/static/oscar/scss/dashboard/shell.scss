@@ -1,0 +1,1044 @@
+// Dukani dashboard shell — layout, tokens, and component polish (compiled into dashboard.css)
+
+:root {
+  --cartier-gold: #{$dukani-accent};
+  --cartier-gold-faded: #{dukani-accent-a(0.08)};
+  --cartier-gold-deep: #{$dukani-accent-deep};
+  --cartier-black: #111111;
+  --cartier-white: #ffffff;
+  --cartier-gray: #f7f7f8;
+  --cartier-border: #e8e8ea;
+  --dukani-shadow-sm: 0 1px 2px rgba(17, 17, 17, 0.04);
+  --dukani-shadow-md: 0 8px 24px rgba(17, 17, 17, 0.06);
+  --dukani-shadow-lg: 0 16px 48px rgba(17, 17, 17, 0.08);
+  --dukani-radius: 0.5rem;
+  --dukani-radius-sm: 0.375rem;
+  --dukani-sidebar-width: 16.25rem;
+  --dukani-topbar-height: 3.75rem;
+  --dukani-transition: 0.2s ease;
+}
+
+// ---------------------------------------------------------------------------
+// Base (dashboard routes only — dashboard.css is not loaded on storefront)
+// ---------------------------------------------------------------------------
+
+body.dashboard-app {
+  font-family: "DM Sans", "Montserrat", system-ui, -apple-system, sans-serif;
+  background-color: var(--cartier-white);
+  color: var(--cartier-black);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.text-gold {
+  color: var(--cartier-gold-deep) !important;
+}
+
+.text-charcoal {
+  color: #242428 !important;
+}
+
+.border-gold-low {
+  border-color: dukani-accent-a(0.22) !important;
+}
+
+// ---------------------------------------------------------------------------
+// App frame
+// ---------------------------------------------------------------------------
+
+.dashboard-app__frame {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1035;
+  background: rgba(17, 17, 17, 0.35);
+  backdrop-filter: blur(2px);
+}
+
+body.dashboard-sidebar-active .dashboard-sidebar-backdrop {
+  display: block;
+}
+
+.dashboard-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  width: var(--dukani-sidebar-width);
+  background: var(--cartier-white);
+  border-right: 1px solid var(--cartier-border);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--dukani-transition);
+  box-shadow: var(--dukani-shadow-sm);
+}
+
+.dashboard-sidebar__header {
+  flex-shrink: 0;
+  height: var(--dukani-topbar-height);
+  padding: 0 1.25rem;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--cartier-border);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b6b70;
+}
+
+.dashboard-sidebar__scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(var(--dukani-topbar-height) + 0.5rem) 0 1.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+// Sidebar navigation
+.dashboard-sidebar .sidebar-nav-luxury .nav-link {
+  padding: 0.75rem 1.5rem;
+  margin: 0 0.65rem;
+  border-radius: var(--dukani-radius-sm);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #5c5c62;
+  font-weight: 500;
+  transition: background-color var(--dukani-transition), color var(--dukani-transition);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: none;
+  border-left: 3px solid transparent;
+}
+
+.dashboard-sidebar .sidebar-nav-luxury .nav-link:hover {
+  color: var(--cartier-gold-deep);
+  background-color: var(--cartier-gold-faded);
+}
+
+.dashboard-sidebar .sidebar-nav-luxury .nav-link.active {
+  color: var(--cartier-gold-deep);
+  background-color: var(--cartier-gold-faded);
+  border-left-color: var(--cartier-gold);
+  font-weight: 600;
+}
+
+.dashboard-sidebar .sidebar-nav-luxury .nav-link [class*="fa-"],
+.dashboard-sidebar .sidebar-nav-luxury .nav-link i {
+  width: 1.1rem;
+  text-align: center;
+  color: var(--cartier-gold);
+  opacity: 0.85;
+  font-size: 0.85rem;
+}
+
+.dashboard-sidebar .sidebar-nav-luxury .nav-link.active [class*="fa-"] {
+  opacity: 1;
+}
+
+.dashboard-sidebar .sidebar-nav-luxury .collapse .nav-link {
+  margin-left: 0.5rem;
+  padding-left: 1.25rem;
+  font-size: 0.68rem;
+  border-left: 2px solid var(--cartier-border);
+  border-radius: 0 var(--dukani-radius-sm) var(--dukani-radius-sm) 0;
+}
+
+.dashboard-sidebar .sidebar-nav-luxury .collapse .border-left {
+  border-color: var(--cartier-border) !important;
+}
+
+.dashboard-sidebar-submenu-chevron {
+  font-size: 0.6rem;
+  transition: transform 0.2s ease;
+}
+
+.dashboard-sidebar [data-dashboard-submenu-toggle].collapsed .dashboard-sidebar-submenu-chevron {
+  transform: rotate(-90deg);
+}
+
+.dashboard-body {
+  flex: 1;
+  min-width: 0;
+  margin-left: var(--dukani-sidebar-width);
+  display: flex;
+  flex-direction: column;
+  background: var(--cartier-gray);
+}
+
+.dashboard-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  min-height: var(--dukani-topbar-height);
+  padding: 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--cartier-border);
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--dukani-shadow-sm);
+}
+
+.dashboard-topbar .navbar-brand {
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  color: var(--cartier-black) !important;
+}
+
+.dashboard-sidebar-toggle {
+  border: 1px solid var(--cartier-border) !important;
+  border-radius: var(--dukani-radius-sm);
+  padding: 0.35rem 0.55rem;
+  margin-right: 0.75rem;
+  background: var(--cartier-white);
+}
+
+.avatar-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--cartier-gold-faded);
+  color: var(--cartier-gold-deep);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.dashboard-main {
+  flex: 1;
+  padding: 1.75rem 2rem 2.5rem;
+}
+
+@media (min-width: 992px) {
+  .dashboard-main {
+    padding: 2rem 2.5rem 3rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Typography & chrome
+// ---------------------------------------------------------------------------
+
+.dashboard-app h1,
+.dashboard-app .h1 {
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--cartier-black);
+}
+
+.dashboard-app .page-heading-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--cartier-gold);
+  border-bottom: 2px solid var(--cartier-gold);
+  display: inline-block;
+  padding-bottom: 0.65rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-app .breadcrumb {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+  background: transparent;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.dashboard-app .breadcrumb-item + .breadcrumb-item::before {
+  content: "·";
+  color: #b0b0b5;
+}
+
+.dashboard-app .breadcrumb-item a {
+  color: #6b6b70;
+  text-decoration: none;
+}
+
+.dashboard-app .breadcrumb-item a:hover {
+  color: var(--cartier-gold-deep);
+}
+
+// ---------------------------------------------------------------------------
+// Tables
+// ---------------------------------------------------------------------------
+
+.dashboard-app .table-responsive {
+  background: var(--cartier-white);
+  border-radius: var(--dukani-radius);
+  box-shadow: var(--dukani-shadow-sm);
+  border: 1px solid var(--cartier-border);
+  overflow: hidden;
+}
+
+// django_tables2: `.table-container` holds `<table>` then pagination; without this,
+// the pagination bar paints on top and hides open row action dropdowns (last row).
+.dashboard-app .table-container > .dashboard-table-elevated {
+  position: relative;
+  z-index: 2;
+}
+
+.dashboard-app .table-container > nav {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-app .table-container > ul.pagination {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-app .table {
+  margin-bottom: 0;
+  border: none !important;
+}
+
+.dashboard-app .table thead th {
+  background: #fafafa;
+  border-bottom: 1px solid var(--cartier-border) !important;
+  border-top: none !important;
+  color: #75757c;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-app .table td {
+  border-bottom: 1px solid var(--cartier-border) !important;
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+  font-size: 0.82rem;
+  color: #3a3a40;
+  transition: background-color var(--dukani-transition);
+}
+
+.dashboard-app .table tbody tr:hover td {
+  background-color: #fcfcfd;
+}
+
+.dashboard-app .table td a {
+  color: var(--cartier-black);
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+.dashboard-app .table td a:hover {
+  color: var(--cartier-gold-deep);
+}
+
+.dashboard-app .table-header h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cartier-gold);
+  font-weight: 700;
+}
+
+// ---------------------------------------------------------------------------
+// Buttons
+// ---------------------------------------------------------------------------
+
+.dashboard-app .btn {
+  border-radius: var(--dukani-radius-sm);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  padding: 0.65rem 1.25rem;
+  font-weight: 600;
+  transition: transform var(--dukani-transition), background-color var(--dukani-transition),
+    border-color var(--dukani-transition), box-shadow var(--dukani-transition);
+}
+
+.dashboard-app .btn-primary,
+.dashboard-app .btn-info {
+  background-color: var(--cartier-black) !important;
+  border-color: var(--cartier-black) !important;
+  color: var(--cartier-white) !important;
+}
+
+.dashboard-app .btn-primary:hover,
+.dashboard-app .btn-info:hover {
+  background-color: var(--cartier-gold-deep) !important;
+  border-color: var(--cartier-gold-deep) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--dukani-shadow-md);
+}
+
+.dashboard-app .btn-secondary,
+.dashboard-app .btn-outline-secondary {
+  background-color: transparent !important;
+  border: 1px solid var(--cartier-border) !important;
+  color: #555 !important;
+}
+
+.dashboard-app .btn-secondary:hover,
+.dashboard-app .btn-outline-secondary:hover {
+  border-color: var(--cartier-black) !important;
+  color: var(--cartier-black) !important;
+  background-color: var(--cartier-white) !important;
+}
+
+.dashboard-app .btn-sm {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.6rem;
+}
+
+// ---------------------------------------------------------------------------
+// Forms
+// ---------------------------------------------------------------------------
+
+.dashboard-app .form-control,
+.dashboard-app select {
+  border-radius: var(--dukani-radius-sm) !important;
+  border: 1px solid var(--cartier-border) !important;
+  font-size: 0.82rem !important;
+  padding: 0.65rem 0.9rem !important;
+  transition: border-color var(--dukani-transition), box-shadow var(--dukani-transition) !important;
+}
+
+.dashboard-app .form-control:focus {
+  border-color: var(--cartier-gold) !important;
+  box-shadow: 0 0 0 3px var(--cartier-gold-faded) !important;
+}
+
+.dashboard-app .form-group label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #75757c;
+  font-weight: 700;
+  margin-bottom: 0.45rem;
+}
+
+// ---------------------------------------------------------------------------
+// Cards
+// ---------------------------------------------------------------------------
+
+.dashboard-app .card {
+  border-radius: var(--dukani-radius);
+  border: 1px solid var(--cartier-border);
+  box-shadow: var(--dukani-shadow-sm);
+  overflow: hidden;
+}
+
+.dashboard-app .card-header {
+  background-color: var(--cartier-white);
+  border-bottom: 1px solid var(--cartier-border);
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-app .table-header {
+  background: transparent;
+  margin-bottom: 1.25rem;
+  border: none;
+}
+
+// ---------------------------------------------------------------------------
+// Badges & pagination
+// ---------------------------------------------------------------------------
+
+.dashboard-app .badge {
+  border-radius: var(--dukani-radius-sm);
+  text-transform: uppercase;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.65rem;
+  font-weight: 600;
+}
+
+.dashboard-app .badge-success {
+  background-color: #ecfdf3;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.dashboard-app .badge-danger {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.dashboard-app .badge-warning {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.dashboard-app .badge-info {
+  background: var(--cartier-gold-faded);
+  color: var(--cartier-gold-deep);
+  border: 1px solid dukani-accent-a(0.35);
+}
+
+.dashboard-app .pagination .page-link {
+  border: none;
+  color: #5c5c62;
+  text-transform: uppercase;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  padding: 0.6rem 1rem;
+  background: transparent;
+  border-radius: var(--dukani-radius-sm);
+}
+
+.dashboard-app .pagination .page-item.active .page-link {
+  color: var(--cartier-gold-deep);
+  font-weight: 700;
+  background: var(--cartier-gold-faded);
+}
+
+// ---------------------------------------------------------------------------
+// Dashboard home — stat cards & panels
+// ---------------------------------------------------------------------------
+
+.luxury-card-stat {
+  border-radius: var(--dukani-radius) !important;
+  border: 1px solid var(--cartier-border) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background-color: var(--cartier-white) !important;
+}
+
+.luxury-card-stat:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--dukani-shadow-lg) !important;
+}
+
+.luxury-card-stat--interactive {
+  cursor: pointer;
+
+  .stretched-link:focus {
+    outline: 2px solid var(--cartier-gold-deep, #5c4b3d);
+    outline-offset: 2px;
+  }
+}
+
+.bg-gold-faded {
+  background-color: var(--cartier-gold-faded) !important;
+}
+
+.icon-circle {
+  border-radius: 50%;
+}
+
+.luxury-list .list-group-item {
+  border-bottom: 1px solid var(--cartier-border);
+  background: transparent;
+  transition: background-color var(--dukani-transition);
+}
+
+.luxury-list .list-group-item:hover {
+  background-color: #fafafa;
+}
+
+.badge-gold-outline {
+  border: 1px solid var(--cartier-gold);
+  color: var(--cartier-gold-deep);
+  background: transparent;
+  border-radius: var(--dukani-radius-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding: 0.35rem 0.75rem;
+}
+
+.btn-luxury-dark {
+  background-color: var(--cartier-black);
+  color: var(--cartier-white);
+  border-radius: var(--dukani-radius-sm);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  padding: 0.55rem 1.15rem;
+  font-weight: 600;
+  border: none;
+  transition: background-color var(--dukani-transition), transform var(--dukani-transition);
+}
+
+.btn-luxury-dark:hover {
+  background-color: var(--cartier-gold-deep);
+  color: var(--cartier-white);
+  transform: translateY(-1px);
+}
+
+.btn-luxury-outline {
+  border: 1px solid var(--cartier-border);
+  color: #555;
+  background: transparent;
+  border-radius: var(--dukani-radius-sm);
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  padding: 0.55rem 1.15rem;
+  transition: border-color var(--dukani-transition), color var(--dukani-transition), background var(--dukani-transition);
+}
+
+.btn-luxury-outline:hover {
+  border-color: var(--cartier-black);
+  color: var(--cartier-black);
+  background: #fafafa;
+}
+
+.bg-light-faded {
+  background-color: #f3f3f5 !important;
+}
+
+// Sales chart card — modern panel + controls
+.dashboard-sales-chart-card {
+  border-radius: var(--dukani-radius) !important;
+  border: 1px solid var(--cartier-border) !important;
+  box-shadow: var(--dukani-shadow-sm);
+  background: var(--cartier-white);
+}
+
+.dashboard-sales-chart-card__header {
+  padding: 1.1rem 1.35rem !important;
+  background: linear-gradient(180deg, #fff 0%, #fafafa 100%) !important;
+}
+
+.dashboard-sales-chart-card__top {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+
+  @media (min-width: 1200px) {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+}
+
+.dashboard-sales-chart-card__title-row .dashboard-sales-chart-card__title {
+  margin-right: 0.65rem !important;
+  letter-spacing: 0.12em !important;
+}
+
+.dashboard-sales-chart-pill {
+  display: inline-block;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  background: var(--cartier-gold-faded);
+  color: var(--cartier-gold-deep);
+  border: 1px solid dukani-accent-a(0.35);
+  vertical-align: middle;
+}
+
+.dashboard-sales-chart-card__hint {
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+}
+
+.dashboard-chart-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.65rem 1rem;
+}
+
+.dashboard-chart-controls__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.dashboard-chart-controls__label {
+  margin: 0;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.dashboard-input-modern {
+  min-width: 10.75rem;
+  padding: 0.48rem 0.75rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--cartier-border);
+  border-radius: var(--dukani-radius-sm);
+  background: var(--cartier-white);
+  color: var(--cartier-black);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    border-color: var(--cartier-gold);
+    box-shadow: 0 0 0 3px dukani-accent-a(0.18);
+    outline: none;
+  }
+}
+
+.dashboard-chart-controls__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 0.85rem;
+}
+
+.btn-dashboard-chart-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.52rem 1.35rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--dukani-radius-sm);
+  color: #fff !important;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--cartier-gold-deep) 0%, #{darken($dukani-accent-deep, 12%)} 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    filter: brightness(1.03);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px dukani-accent-a(0.35);
+  }
+
+  i {
+    font-size: 0.75rem;
+    opacity: 0.95;
+  }
+}
+
+.btn-dashboard-chart-submit--sm {
+  padding: 0.44rem 1.05rem !important;
+  font-size: 0.58rem !important;
+  letter-spacing: 0.1em !important;
+
+  i {
+    font-size: 0.7rem !important;
+  }
+}
+
+.btn-dashboard-header-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.46rem 1rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  color: #3a3a40 !important;
+  border: 1px solid var(--cartier-border);
+  border-radius: var(--dukani-radius-sm);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: dukani-accent-a(0.55);
+    color: var(--cartier-black) !important;
+    box-shadow: 0 4px 14px dukani-accent-a(0.12);
+    transform: translateY(-1px);
+  }
+
+  i {
+    color: var(--cartier-gold-deep);
+    font-size: 0.85rem;
+  }
+}
+
+.btn-dashboard-link-muted {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8a90;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  padding: 0.25rem 0;
+
+  &:hover {
+    color: var(--cartier-black);
+    border-bottom-color: rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+  }
+}
+
+.dashboard-sales-chart-card__body {
+  background: linear-gradient(180deg, #fdfdfd 0%, #fff 40%);
+}
+
+.dashboard-chart-wrap {
+  height: 360px;
+  position: relative;
+}
+
+// At a glance — quick navigation (dashboard home)
+.dashboard-at-a-glance-cta {
+  background: linear-gradient(180deg, #f0f0f3 0%, #f6f6f8 100%) !important;
+}
+
+.dashboard-quicklinks {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (min-width: 992px) {
+    justify-content: flex-start;
+  }
+}
+
+.btn-dashboard-quicklink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 1.35rem 0.45rem 0.45rem;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  border: 1px solid transparent;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.35rem;
+    height: 2.35rem;
+    border-radius: 50%;
+    font-size: 0.95rem;
+    line-height: 1;
+    transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
+  }
+
+  &__label {
+    padding-right: 0.35rem;
+    line-height: 1.2;
+  }
+
+  &:hover {
+    .btn-dashboard-quicklink__icon {
+      transform: scale(1.05);
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px dukani-accent-a(0.4);
+  }
+
+  &--primary {
+    background: linear-gradient(145deg, #141418 0%, #2a2a30 55%, #1f1f24 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14);
+
+    .btn-dashboard-quicklink__icon {
+      background: rgba(255, 255, 255, 0.11);
+      color: #e4cf96;
+    }
+
+    &:hover {
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+    }
+  }
+
+  &--secondary {
+    background: #fff;
+    border-color: dukani-accent-a(0.35);
+    color: #35353a;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+    .btn-dashboard-quicklink__icon {
+      background: var(--cartier-gold-faded);
+      color: var(--cartier-gold-deep);
+    }
+
+    &:hover {
+      border-color: var(--cartier-gold-deep);
+      color: var(--cartier-black);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px dukani-accent-a(0.18);
+    }
+  }
+
+  @media (min-width: 480px) {
+    min-width: 11.5rem;
+    justify-content: flex-start;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Login
+// ---------------------------------------------------------------------------
+
+body.dashboard-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  font-family: "DM Sans", "Montserrat", system-ui, sans-serif;
+  background: linear-gradient(145deg, #f7f7f8 0%, #ececee 50%, #f4f1eb 100%);
+}
+
+body.dashboard-login .dashboard-login-card {
+  width: 100%;
+  max-width: 26rem;
+  border: 1px solid var(--cartier-border);
+  border-radius: var(--dukani-radius);
+  box-shadow: var(--dukani-shadow-lg);
+  overflow: hidden;
+}
+
+body.dashboard-login .dashboard-login-card .card-body {
+  padding: 2rem 2.25rem 2.25rem;
+}
+
+body.dashboard-login h1 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cartier-black);
+}
+
+body.dashboard-login .btn-primary {
+  width: 100%;
+  margin-top: 0.5rem;
+  border-radius: var(--dukani-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  padding: 0.75rem;
+  background-color: var(--cartier-black);
+  border-color: var(--cartier-black);
+}
+
+body.dashboard-login .btn-primary:hover {
+  background-color: var(--cartier-gold-deep);
+  border-color: var(--cartier-gold-deep);
+}
+
+body.dashboard-login .form-control {
+  border-radius: var(--dukani-radius-sm);
+  border: 1px solid var(--cartier-border);
+  padding: 0.65rem 0.9rem;
+}
+
+body.dashboard-login .form-control:focus {
+  border-color: var(--cartier-gold);
+  box-shadow: 0 0 0 3px var(--cartier-gold-faded);
+}
+
+body.dashboard-login label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #75757c;
+  font-weight: 600;
+}
+
+// ---------------------------------------------------------------------------
+// Mobile sidebar
+// ---------------------------------------------------------------------------
+
+@media (max-width: 767.98px) {
+  .dashboard-sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+
+  .dashboard-sidebar.dashboard-sidebar--open {
+    transform: translateX(0);
+    box-shadow: var(--dukani-shadow-lg);
+  }
+
+  .dashboard-sidebar__header {
+    display: flex;
+  }
+
+  .dashboard-sidebar__scroll {
+    padding-top: 0.5rem;
+  }
+
+  .dashboard-body {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  body.dashboard-sidebar-active {
+    overflow: auto;
+  }
+}
+
+// Checkboxes
+.dashboard-app input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--cartier-gold);
+  cursor: pointer;
+}
+
+.dashboard-app ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.dashboard-app ::-webkit-scrollbar-thumb {
+  background: #c8c8cf;
+  border-radius: 4px;
+}
+
+.dashboard-app ::-webkit-scrollbar-thumb:hover {
+  background: var(--cartier-gold);
+}

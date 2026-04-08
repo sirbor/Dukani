@@ -1,0 +1,68 @@
+{% load i18n %}
+
+<nav id="top_page" class="navbar navbar-expand-lg navbar-light bg-white accounts border-bottom border-gold-low">
+    <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target=".account-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="container">
+
+        <div class="navbar-collapse account-collapse collapse">
+            {% block nav_account_languages %}
+            {% endblock %}
+            <ul class="navbar-nav ml-md-auto d-md-flex align-items-center">
+                {% if user.is_authenticated %}
+                {% block nav_account_navbar_authenticated %}
+                    <li class="nav-item px-2">
+                        {% if num_unread_notifications > 0 %}
+                            <a href="{% url 'customer:notifications-inbox' %}" class="nav-link text-uppercase small tracking-wider text-muted" title="{% trans "Notifications" %}">
+                                <i class="far fa-bell text-gold"></i>
+                                <span class="badge badge-gold-faded text-gold">{{ num_unread_notifications }}</span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'customer:summary' %}" class="nav-link text-uppercase small tracking-wider text-muted" title="{% trans "Account" %}">
+                                <i class="far fa-user text-gold" style="font-size: 1.1rem;"></i>
+                            </a>
+                        {% endif %}
+                    </li>
+                    {% if user.is_staff or perms.partner.dashboard_access %}
+                        <li class="nav-item px-2">
+                            <a href="{% url 'dashboard:index' %}" class="nav-link text-uppercase small tracking-wider text-muted" title="{% trans "Dashboard" %}">
+                                <i class="fas fa-cog text-gold" style="font-size: 1.1rem;"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item px-2">
+                        <a id="logout_link" href="{% url 'customer:logout' %}" class="nav-link text-uppercase small tracking-wider text-muted" title="{% trans "Logout" %}">
+                            <i class="fas fa-sign-out-alt text-gold" style="font-size: 1.1rem;"></i>
+                        </a>
+                    </li>
+                {% endblock %}
+                {% else %}
+                    <li class="nav-item px-2">
+                        <a id="login_link" href="{% url 'customer:login' %}" class="nav-link text-uppercase small tracking-wider text-muted font-weight-bold" title="{% trans "Sign In" %}">
+                            <i class="fas fa-sign-in-alt text-gold" style="font-size: 1.1rem;"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    
+    <style>
+        .luxury-lang-select select {
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.05em;
+        }
+        .badge-gold-faded {
+            background-color: rgba(197, 160, 40, 0.1);
+            border: 1px solid rgba(197, 160, 40, 0.2);
+        }
+        .navbar-nav .nav-link {
+            font-family: 'Montserrat', sans-serif;
+            transition: color 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: var(--gold) !important;
+        }
+    </style>
+</nav>

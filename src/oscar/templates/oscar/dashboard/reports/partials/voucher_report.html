@@ -1,0 +1,35 @@
+{% extends 'oscar/dashboard/reports/index.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block report %}
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            {% if objects %}
+                <thead>
+                    <tr>
+                        <th>{% trans "Voucher code" %}</th>
+                        <th>{% trans "Added to a basket" %}</th>
+                        <th>{% trans "Used in an order" %}</th>
+                        <th>{% trans "Total discount" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voucher in objects %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:voucher-stats' voucher.id %}">{{ voucher.code }}</a></td>
+                            <td>{{ voucher.num_basket_additions }}</td>
+                            <td>{{ voucher.num_orders }}</td>
+                            <td>{{ voucher.total_discount|currency }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <tbody>
+                    <tr><td class="text-muted small p-4" colspan="4">{% trans "No vouchers were used in this period" %}</td></tr>
+                </tbody>
+            {% endif %}
+        </table>
+    </div>
+    {% include "oscar/dashboard/partials/pagination.html" %}
+{% endblock %}

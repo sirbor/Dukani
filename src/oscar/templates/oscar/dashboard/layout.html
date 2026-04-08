@@ -1,0 +1,272 @@
+{% extends "oscar/dashboard/base.html" %}
+
+{% load category_tags %}
+{% load dashboard_tags %}
+{% load i18n %}
+{% load static %}
+
+{% block body_class %}dashboard-app{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/dashboard.css" %}" />
+{% endblock %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static "oscar/js/select2/select2.min.css" %}" />
+    <link rel="stylesheet" href="{% static "oscar/css/select2-bootstrap.min.css" %}" />
+    <link rel="stylesheet" href="{% static "oscar/js/bootstrap4-datetimepicker/tempusdominus-bootstrap-4.min.css" %}" />
+{% endblock %}
+
+{% block title %}
+    {% trans "Dashboard" %} | {{ block.super }}
+{% endblock %}
+
+{% block layout %}
+<div class="dashboard-app__frame">
+    <div class="dashboard-sidebar-backdrop" hidden data-dashboard-sidebar-backdrop aria-hidden="true"></div>
+
+    <aside class="dashboard-sidebar" id="dashboard-sidebar" aria-label="{% trans 'Primary navigation' %}">
+        <div class="dashboard-sidebar__header">
+            <span>{% trans "Menu" %}</span>
+            <button type="button" class="close text-muted" data-dashboard-sidebar-close aria-label="{% trans 'Close menu' %}">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="dashboard-sidebar__scroll">
+            {% block dashboard_nav %}
+                {% dashboard_navigation user as nav_items %}
+                <ul class="nav flex-column sidebar-nav-luxury">
+                    {% for item in nav_items %}
+                        <li class="nav-item mb-1">
+                            {% if item.has_children %}
+                                {% with sid=forloop.counter0 %}
+                                <a class="nav-link d-flex justify-content-between align-items-center {% if not item.active %}collapsed{% endif %}"
+                                   href="#"
+                                   data-dashboard-submenu-toggle
+                                   role="button"
+                                   aria-expanded="{{ item.active|yesno:'true,false' }}"
+                                   aria-controls="dashboard-sidebar-submenu-{{ sid }}">
+                                    <span>
+                                        {% if "Orders" in item.label %}<i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                                        {% elif "Catalogue" in item.label %}<i class="fas fa-book" aria-hidden="true"></i>
+                                        {% elif "Customers" in item.label %}<i class="fas fa-users" aria-hidden="true"></i>
+                                        {% elif "Offers" in item.label %}<i class="fas fa-tags" aria-hidden="true"></i>
+                                        {% elif "Content" in item.label %}<i class="fas fa-file-alt" aria-hidden="true"></i>
+                                        {% elif "Reports" in item.label %}<i class="fas fa-chart-bar" aria-hidden="true"></i>
+                                        {% elif "Partners" in item.label %}<i class="fas fa-handshake" aria-hidden="true"></i>
+                                        {% else %}<i class="fas fa-folder" aria-hidden="true"></i>{% endif %}
+                                        {{ item.label }}
+                                    </span>
+                                    <i class="fas fa-chevron-down small text-muted dashboard-sidebar-submenu-chevron" aria-hidden="true"></i>
+                                </a>
+                                <div class="collapse {% if item.active %}show{% endif %} pl-0" id="dashboard-sidebar-submenu-{{ sid }}">
+                                    <ul class="nav flex-column ml-3 py-2 border-left mb-2">
+                                        {% for subitem in item.children %}
+                                            <li class="nav-item">
+                                                <a class="nav-link py-2 small {% if subitem.active %}text-gold font-weight-bold{% else %}text-muted{% endif %}" href="{{ subitem.url }}">
+                                                    {{ subitem.label }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endwith %}
+                            {% else %}
+                                <a class="nav-link {% if item.active %}active{% endif %}" href="{{ item.url }}">
+                                    <span>
+                                        {% if "Index" in item.label or "Dashboard" in item.label %}
+                                            <i class="fas fa-th-large" aria-hidden="true"></i>
+                                        {% elif item.icon %}
+                                            <i class="{{ item.icon }}" aria-hidden="true"></i>
+                                        {% endif %}
+                                        {{ item.label }}
+                                    </span>
+                                </a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endblock %}
+        </div>
+    </aside>
+
+    <div class="dashboard-body">
+        {% block navbar %}
+            <nav class="dashboard-topbar navbar navbar-expand-md navbar-light align-items-center">
+                <button class="navbar-toggler dashboard-sidebar-toggle d-md-none" type="button"
+                        data-dashboard-sidebar-toggle
+                        aria-controls="dashboard-sidebar" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand d-flex align-items-center mr-auto" href="{% url 'dashboard:index' %}">
+                    {% if storefront_logo_url %}
+                    <img src="{{ storefront_logo_url }}" alt="{{ shop_name }}" class="mr-2" width="30" height="30" style="object-fit: contain;" />
+                    {% else %}
+                    <img src="{% static "img/logo.png" %}" alt="{{ shop_name }}" class="mr-2" width="30" height="30" style="object-fit: contain;" />
+                    {% endif %}
+                    <span class="text-uppercase d-none d-sm-inline">{{ shop_name }}</span>
+                </a>
+
+                <button class="navbar-toggler border-0 ml-2 d-md-none" type="button" data-toggle="collapse" data-target="#top_nav_bar"
+                        aria-controls="top_nav_bar" aria-expanded="false" aria-label="{% trans 'Account menu' %}">
+                    <i class="fas fa-ellipsis-h text-muted" aria-hidden="true"></i>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end" id="top_nav_bar">
+                    <ul class="navbar-nav align-items-md-center">
+                        <li class="nav-item">
+                            <a class="nav-link text-muted small text-uppercase px-2" href="{{ homepage_url }}">{% trans "Bookstore" %}</a>
+                        </li>
+                        <li class="nav-item dropdown ml-md-3">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center py-2" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="avatar-circle mr-2">{{ user.email|slice:":1"|upper }}</span>
+                                <span class="small text-uppercase font-weight-bold text-dark">{{ user.get_full_name|default:user.email }}</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow border-0 mt-1" style="border-radius: var(--dukani-radius-sm);" aria-labelledby="userDropdown">
+                                <a class="dropdown-item small text-uppercase py-2" href="{% url 'customer:summary' %}">{% trans "Account" %}</a>
+                                <div class="dropdown-divider m-0"></div>
+                                <form method="post" action="{% url 'dashboard:logout' %}">
+                                    {% csrf_token %}
+                                    <button class="dropdown-item small text-uppercase py-2 text-danger" type="submit">{% trans "Sign Out" %}</button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        {% endblock navbar %}
+
+        <main class="dashboard-main" role="main">
+            {% block breadcrumbs %}
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Administration" %}</a></li>
+                        {% block extra_breadcrumbs %}{% endblock %}
+                    </ol>
+                </nav>
+            {% endblock %}
+
+            <div class="content">
+                {% include 'oscar/dashboard/partials/alert_messages.html' %}
+                {% block header %}
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-baseline mb-4 mb-md-5">
+                        <h1 class="h3 text-uppercase mb-3 mb-md-0 font-weight-light">{% block headertext %}{% endblock %}</h1>
+                        <div class="btn-toolbar">
+                            {% block header_actions %}{% endblock %}
+                        </div>
+                    </div>
+                {% endblock %}
+
+                <div class="page-content">
+                    {% block content %}
+                        {% block dashboard_content %}{% endblock dashboard_content %}
+                    {% endblock content %}
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Twitter Bootstrap -->
+    <script src="{% static "oscar/js/bootstrap4/bootstrap.bundle.min.js" %}"></script>
+    <!-- Oscar -->
+    <script src="{% static "oscar/js/oscar/ui.js" %}"></script>
+{% endblock %}
+
+{% block extrascripts %}
+    {{ block.super }}
+
+    {# jQuery plugins #}
+    <script src="{% static "oscar/js/mousewheel/jquery.mousewheel.js" %}"></script>
+    <script src="{% static "oscar/js/bootstrap4-datetimepicker/moment-with-locales.min.js" %}"></script>
+    <script src="{% static "oscar/js/bootstrap4-datetimepicker/tempusdominus-bootstrap-4.min.js" %}"></script>
+    <script src="{% static "oscar/js/inputmask/jquery.inputmask.min.js" %}"></script>
+    <script src="{% static "oscar/js/select2/select2.min.js" %}"></script>
+    <script src="{% static "oscar/js/jquery-sortable/jquery-sortable-min.js" %}"></script>
+    <script src="{% static "oscar/js/oscar/dashboard.js" %}"></script>
+    <script src="{% static "oscar/js/oscar/RelatedObjectLookups.js" %}"></script>
+    <script src="{% static "oscar/js/tinymce/tinymce.min.js" %}"></script>
+    <script src="{% static "oscar/js/tinymce/jquery.tinymce.min.js" %}"></script>
+    <script>
+    (function () {
+        var sidebar = document.getElementById('dashboard-sidebar');
+        var toggles = document.querySelectorAll('[data-dashboard-sidebar-toggle]');
+        var backdrop = document.querySelector('[data-dashboard-sidebar-backdrop]');
+        var closers = document.querySelectorAll('[data-dashboard-sidebar-close]');
+
+        function setOpen(open) {
+            if (!sidebar) {
+                return;
+            }
+            sidebar.classList.toggle('dashboard-sidebar--open', open);
+            document.body.classList.toggle('dashboard-sidebar-active', open);
+            toggles.forEach(function (btn) { btn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+            if (backdrop) {
+                backdrop.hidden = !open;
+                backdrop.setAttribute('aria-hidden', open ? 'false' : 'true');
+            }
+        }
+
+        toggles.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var open = !sidebar.classList.contains('dashboard-sidebar--open');
+                setOpen(open);
+            });
+        });
+        closers.forEach(function (btn) { btn.addEventListener('click', function () { setOpen(false); }); });
+        if (backdrop) {
+            backdrop.addEventListener('click', function () { setOpen(false); });
+        }
+        window.addEventListener('resize', function () {
+            if (window.innerWidth >= 768) {
+                setOpen(false);
+            }
+        });
+
+        // Submenu expand: toggle only the panel tied to the clicked control (avoids
+        // Bootstrap’s querySelectorAll on #href matching multiple nodes).
+        document.querySelectorAll('[data-dashboard-submenu-toggle]').forEach(function (trigger) {
+            trigger.addEventListener('click', function (e) {
+                e.preventDefault();
+                var id = trigger.getAttribute('aria-controls');
+                if (!id) {
+                    return;
+                }
+                var panel = document.getElementById(id);
+                if (!panel) {
+                    return;
+                }
+                var nowOpen = panel.classList.toggle('show');
+                trigger.classList.toggle('collapsed', !nowOpen);
+                trigger.setAttribute('aria-expanded', nowOpen ? 'true' : 'false');
+            });
+        });
+    })();
+    </script>
+{% endblock %}
+
+{% block onbodyload %}
+    {{ block.super }}
+
+    // Javascript to enable link to tab
+    var url = document.location.toString();
+    if (url.match('#')) {
+        $('.bs-docs-sidenav a[href="#' + url.split('#')[1] + '"]').tab('show');
+    }
+
+    // Change hash for page-reload
+    $('.nav-list a').on('shown.bs.tab', function (e) {
+        window.location.hash = e.target.hash;
+    });
+
+    options = {
+      'languageCode': '{{ LANGUAGE_CODE }}'
+    };
+    oscar.dashboard.init(options);
+{% endblock %}

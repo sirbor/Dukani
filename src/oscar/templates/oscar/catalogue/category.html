@@ -1,0 +1,79 @@
+{% extends "oscar/catalogue/browse.html" %}
+
+{% load i18n %}
+
+{% block browse_breadcrumbs %}
+    <nav aria-label="{% trans 'Breadcrumb' %}">
+        <ol class="breadcrumb browse-breadcrumbs bg-transparent px-0 mb-0 flex-wrap">
+            <li class="breadcrumb-item">
+                <a href="{{ homepage_url }}" class="text-uppercase small tracking-wider">{% trans "Home" %}</a>
+            </li>
+            {% for ancestor in category.get_ancestors %}
+                <li class="breadcrumb-item">
+                    <a href="{{ ancestor.get_absolute_url }}" class="text-uppercase small tracking-wider">{{ ancestor.name }}</a>
+                </li>
+            {% endfor %}
+            <li class="breadcrumb-item active text-uppercase small tracking-wider" aria-current="page">{{ category.name }}</li>
+        </ol>
+    </nav>
+{% endblock browse_breadcrumbs %}
+
+{% block browse_intro %}
+    <section class="category-hero">
+        <div class="row align-items-center">
+            <div class="{% if category.image %}col-lg-7{% else %}col-12{% endif %}">
+                {% if category.slug == 'books' %}
+                    <p class="category-hero__eyebrow">{% trans "The library" %}</p>
+                {% else %}
+                    <p class="category-hero__eyebrow">{% trans "Collection" %}</p>
+                {% endif %}
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h1 class="category-hero__title mb-0">{{ category.name }}</h1>
+                    {% if user.is_staff %}
+                        <a href="{% url 'dashboard:catalogue-category-update' pk=category.id %}" class="text-gold small text-uppercase text-nowrap ml-3 mt-2">
+                            <i class="fas fa-pencil-alt" aria-hidden="true"></i> {% trans "Edit" %}
+                        </a>
+                    {% endif %}
+                </div>
+                {% if category.description %}
+                    <div class="category-hero__body">{{ category.description|safe }}</div>
+                {% endif %}
+                {% if paginator.count %}
+                    <p class="category-hero__meta">
+                        {% if category.slug == 'books' %}
+                            {% blocktrans count num_results=paginator.count %}
+                                {{ num_results }} volume listed
+                            {% plural %}
+                                {{ num_results }} volumes listed
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans count num_results=paginator.count %}
+                                {{ num_results }} piece in this collection
+                            {% plural %}
+                                {{ num_results }} pieces in this collection
+                            {% endblocktrans %}
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+            {% if category.image %}
+                <div class="col-lg-5 mt-4 mt-lg-0">
+                    <div class="category-hero__image">
+                        <img src="{{ category.image.url }}" alt="{{ category.name }}" loading="lazy" />
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock browse_intro %}
+
+{% block browse_footer %}
+    {% if category.long_description %}
+        <div class="category-long">
+            <h4>{% trans "More details" %}</h4>
+            <div class="font-weight-light text-muted">
+                {{ category.long_description|safe }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

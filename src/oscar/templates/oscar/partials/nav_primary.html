@@ -1,0 +1,129 @@
+{% load currency_filters %}
+{% load category_tags %}
+{% load i18n %}
+
+<nav class="{% block nav_classes %}navbar navbar-expand-lg navbar-light bg-white shadow-sm border-top border-bottom border-gold-low{% endblock %} luxury-primary-nav py-3">
+    <div class="container-fluid d-flex align-items-center">
+        {% block navbar_brand %}
+            {% include "oscar/partials/brand.html" %}
+        {% endblock %}
+
+        {% block navbar_toggler %}
+            <button class="navbar-toggler border-0 ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        {% endblock %}
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            {% block nav %}
+                <ul class="navbar-nav mr-auto align-items-center">
+                    {% block nav_items %}
+                        <li class="nav-item px-2 px-lg-3">
+                            <a class="nav-link text-uppercase tracking-wider small font-weight-bold d-flex align-items-center" href="{% category_url 'books' %}" style="color: #333 !important;">
+                                <i class="fas fa-book-open mr-2 text-gold" style="font-size: 0.9rem;" aria-hidden="true"></i>
+                                {% trans "Books" %}
+                            </a>
+                        </li>
+                        <li class="nav-item px-2 px-lg-3">
+                            <a class="nav-link text-uppercase tracking-wider small font-weight-bold d-flex align-items-center" href="{% catalogue_browse_url %}" style="color: #333 !important;">
+                                <i class="fas fa-th-large mr-2 text-gold" style="font-size: 0.9rem;" aria-hidden="true"></i>
+                                {% trans "Catalogue" %}
+                            </a>
+                        </li>
+                   {% endblock %}
+               </ul>
+            {% endblock %}
+
+            {% block nav_extra %}
+                <div class="luxury-nav-tools d-flex align-items-center ml-auto">
+                    <div class="luxury-search-wrapper mr-4">
+                        {% include "oscar/partials/search.html" %}
+                    </div>
+                    {% block navbar_basket %}
+                        <a class="text-black text-decoration-none small text-uppercase tracking-widest d-flex align-items-center" href="{% url 'basket:summary' %}">
+                            <i class="fas fa-shopping-bag mr-2 text-gold" aria-hidden="true"></i>
+                            <span class="d-none d-md-inline">{% trans "Archive" %}</span>
+                            {% if not request.basket.is_empty %}
+                                <span class="badge badge-gold ml-2 rounded-0">{{ request.basket.num_items }}</span>
+                            {% endif %}
+                        </a>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+    
+    <style>
+        .luxury-primary-nav {
+            border-top: 1px solid #f8f8f8 !important;
+            border-bottom: 1px solid #f8f8f8 !important;
+            background-color: #fff !important;
+        }
+        .luxury-primary-nav .nav-link {
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            letter-spacing: 0.15em;
+            position: relative;
+            padding-bottom: 5px;
+        }
+        .luxury-primary-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: 0;
+            left: 50%;
+            background-color: var(--cartier-gold-deep);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .luxury-primary-nav .nav-link:hover::after {
+            width: 80%;
+        }
+        .luxury-primary-nav .nav-link:hover {
+            color: var(--cartier-gold-deep) !important;
+        }
+        
+        .luxury-hover-dropdown:hover > .dropdown-menu {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .luxury-primary-nav .dropdown-menu {
+            border: 1px solid #f0f0f0 !important;
+            display: block;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .luxury-mega-dropdown {
+            background-color: #fff;
+        }
+
+        .luxury-primary-nav .dropdown-item {
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            padding: 8px 25px;
+            font-size: 0.7rem;
+            color: #666;
+            width: auto;
+        }
+
+        .luxury-primary-nav .dropdown-item:hover {
+            background-color: transparent;
+            color: var(--cartier-gold-deep);
+            transform: translateX(5px);
+        }
+        .btn-gold-outline {
+            border: 1px solid var(--cartier-gold-deep);
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+    </style>
+</nav>

@@ -1,0 +1,63 @@
+{% load history_tags %}
+{% load basket_tags %}
+{% load category_tags %}
+{% load currency_filters %}
+{% load image_tags %}
+{% load i18n %}
+
+<ul class="basket-mini-item basket-mini-dropdown list-unstyled mb-0">
+    {% if request.basket.num_lines %}
+        <li class="basket-mini-dropdown__head">
+            {% trans "Your bag" %}
+        </li>
+        {% for line in request.basket.all_lines %}
+            <li class="basket-mini-dropdown__line">
+                <div class="row align-items-center no-gutters">
+                    <div class="col-3 pr-2">
+                        <div class="basket-mini-dropdown__thumb w-100">
+                            {% with image=line.product.primary_image %}
+                                {% oscar_thumbnail image.original "72x72" upscale=False as thumb %}
+                                <a href="{{ line.product.get_absolute_url }}">
+                                    <img src="{{ thumb.url }}" alt="{{ line.product.get_title }}" class="img-fluid w-100 d-block">
+                                </a>
+                            {% endwith %}
+                        </div>
+                    </div>
+                    <div class="col-6 pl-1">
+                        <p class="basket-mini-dropdown__title mb-1"><a href="{{ line.product.get_absolute_url }}">{{ line.description }}</a></p>
+                        <p class="basket-mini-dropdown__qty mb-0">{% trans "Qty" %} {{ line.quantity }}</p>
+                    </div>
+                    <div class="col-3 text-right pl-1">
+                        <span class="basket-mini-dropdown__price d-block">
+                            {% if line.is_tax_known %}
+                                {{ line.unit_price_incl_tax|currency:line.price_currency }}
+                            {% else %}
+                                {{ line.unit_price_excl_tax|currency:line.price_currency }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+        <li class="basket-mini-dropdown__footer mb-0 list-unstyled">
+            <p class="text-right mb-3">
+                {% if request.basket.is_tax_known %}
+                    <span class="basket-mini-dropdown__total-label d-block mb-1">{% trans "Total" %}</span>
+                    <strong class="basket-mini-dropdown__total-value d-block mb-0">{{ request.basket.total_incl_tax|currency:request.basket.currency }}</strong>
+                {% else %}
+                    <span class="basket-mini-dropdown__total-label d-block mb-1">{% trans "Total" %}</span>
+                    <strong class="basket-mini-dropdown__total-value d-block mb-0">{{ request.basket.total_excl_tax|currency:request.basket.currency }}</strong>
+                {% endif %}
+            </p>
+            <div class="basket-mini-dropdown__actions d-flex justify-content-between">
+                <a href="{% url 'basket:summary' %}" class="btn btn-sm flex-fill mr-1 btn-outline-basket">{% trans "View bag" %}</a>
+                <a href="{% url 'checkout:index' %}" class="btn btn-sm flex-fill ml-1 btn-basket-solid">{% trans "Checkout" %}</a>
+            </div>
+        </li>
+    {% else %}
+        <li class="basket-mini-dropdown__empty text-center py-2 px-2">
+            <p class="small mb-3 text-muted">{% trans "Your basket is empty." %}</p>
+            <a href="{% catalogue_browse_url %}" class="btn btn-sm btn-block btn-outline-basket">{% trans "Browse catalogue" %}</a>
+        </li>
+    {% endif %}
+</ul>

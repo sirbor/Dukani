@@ -1,0 +1,44 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block extra_breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:notifications-inbox' %}">{% trans 'Notifications inbox' %}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+<div class="account-notification-detail">
+    <h2 class="account-section-title">{% trans "Message" %}</h2>
+    <dl class="account-dl">
+        {% if notification.sender %}
+            <div class="account-dl__row">
+                <dt>{% trans 'Sender' %}</dt>
+                <dd>{{ notification.sender }}</dd>
+            </div>
+        {% endif %}
+        <div class="account-dl__row">
+            <dt>{% trans 'Date sent' %}</dt>
+            <dd>{{ notification.date_sent }}</dd>
+        </div>
+        {% if notification.body %}
+            <div class="account-dl__row">
+                <dt>{% trans 'Subject' %}</dt>
+                <dd>{{ notification.subject|safe }}</dd>
+            </div>
+            <div class="account-dl__row">
+                <dt>{% trans 'Body' %}</dt>
+                <dd>{{ notification.body|safe }}</dd>
+            </div>
+        {% else %}
+            <div class="account-dl__row">
+                <dt>{% trans 'Message' %}</dt>
+                <dd>{{ notification.subject|safe }}</dd>
+            </div>
+        {% endif %}
+    </dl>
+    <div class="account-actions border-0 pt-2 mt-2">
+        <a href="{% url 'customer:notifications-inbox' %}" class="btn btn-outline-black">{% trans 'Back to inbox' %}</a>
+    </div>
+</div>
+{% endblock tabcontent %}

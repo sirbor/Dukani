@@ -1,0 +1,52 @@
+{% extends "oscar/layout.html" %}
+{% load i18n %}
+
+{% block layout %}
+    {# Top-horizontal bar with account, notifications, dashboard links #}
+    {% include "oscar/partials/nav_accounts.html" %}
+
+    {% block navigation %}
+        {% include "oscar/partials/nav_primary.html" %}
+    {% endblock %}
+
+    <div class="container py-5">
+       <div class="page_inner checkout-shell checkout-flow">
+            {% include 'oscar/partials/alert_messages.html' %}
+
+            {% block checkout_nav %}{% endblock %}
+
+            <div class="checkout-page-heading">
+                <h1 class="mb-0">{% block checkout_title %}{% endblock %}</h1>
+                <div class="gold-divider"></div>
+            </div>
+
+            {% block modal %}
+                {% load flatpages %}
+                {% get_flatpages '/order/' as flatpages %}
+                {% for page in flatpages %}
+                <div id="{{ page.title|slugify }}" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content rounded-0 border-0 shadow-lg">
+                            <div class="modal-header border-bottom-pristine">
+                                <h5 class="modal-title font-serif text-uppercase tracking-wider">{{ page.title }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body p-5">
+                                <div class="large-content lead font-weight-light">
+                                    {{ page.content|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endblock %}
+
+            {% block content %}{% endblock %}
+
+        </div><!-- /page_inner -->
+    </div>
+    {% include "oscar/partials/footer.html" %}
+{% endblock %}

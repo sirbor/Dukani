@@ -1,0 +1,52 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+
+{% load i18n %}
+
+{% block extra_breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:email-list' %}">{% trans 'Email history' %}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+<article class="account-email-detail" aria-label="{% trans 'Email message' %}">
+    <div class="account-email-envelope">
+        <p class="account-email-envelope__eyebrow">{% trans "From us to you" %}</p>
+        <h2 class="account-email-envelope__subject">{{ email.subject }}</h2>
+        <p class="account-email-envelope__date">
+            <span class="account-email-envelope__date-label">{% trans "Sent" %}</span>
+            {{ email.date_sent }}
+        </p>
+
+        <h3 class="account-email-detail__preview-title">{% trans "Message preview" %}</h3>
+        <p class="account-email-detail__preview-hint text-muted small">{% trans "This is how the email appeared. Links open in a new tab." %}</p>
+        <div class="account-email-preview">
+            <iframe id="preview_box" class="account-email-preview__frame" title="{% trans 'Email preview' %}" src="about:blank">{{ email.body_html|safe }}</iframe>
+        </div>
+    </div>
+</article>
+{% endblock tabcontent %}
+
+{% block onbodyload %}
+    {{ block.super }}
+
+    $(function() {
+        var el = document.getElementById('preview_box');
+        if (!el || !el.contentWindow) {
+            return;
+        }
+        var html = $(el).text();
+        var doc = el.contentWindow.document;
+        doc.open();
+        doc.write(html);
+        doc.close();
+        try {
+            if (doc.head) {
+                var base = doc.createElement('base');
+                base.setAttribute('target', '_blank');
+                doc.head.insertBefore(base, doc.head.firstChild);
+            }
+        } catch (e) { /* ignore cross-origin or old markup */ }
+    });
+
+{% endblock %}

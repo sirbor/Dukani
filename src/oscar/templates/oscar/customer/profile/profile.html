@@ -1,0 +1,37 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-profile-summary">
+    <h2 class="account-section-title">{% trans "Your details" %}</h2>
+    <dl class="account-dl">
+        <div class="account-dl__row">
+            <dt>{% trans 'Name' %}</dt>
+            <dd>{{ user.get_full_name|default:'-' }}</dd>
+        </div>
+        <div class="account-dl__row">
+            <dt>{% trans 'Email address' %}</dt>
+            <dd>{{ user.email }}</dd>
+        </div>
+        {% block profile_fields %}
+            {% for field in profile_fields %}
+                <div class="account-dl__row">
+                    <dt>{{ field.name }}</dt>
+                    <dd>{{ field.value|default:"-" }}</dd>
+                </div>
+            {% endfor %}
+        {% endblock %}
+        <div class="account-dl__row">
+            <dt>{% trans 'Date registered' %}</dt>
+            <dd>{{ user.date_joined }}</dd>
+        </div>
+    </dl>
+
+    <div class="account-actions">
+        <a href="{% url 'customer:change-password' %}" class="btn btn-primary">{% trans 'Change password' %}</a>
+        <a href="{% url 'customer:profile-update' %}" class="btn btn-outline-black">{% trans 'Edit profile' %}</a>
+        <a id="delete_profile" href="{% url 'customer:profile-delete' %}" class="btn btn-outline-danger">{% trans 'Delete profile' %}</a>
+    </div>
+</div>
+{% endblock %}

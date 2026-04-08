@@ -1,0 +1,114 @@
+{% extends 'oscar/dashboard/layout.html' %}
+{% load category_tags %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+
+{% block body_class %}{{ block.super }} catalogue{% endblock %}
+
+{% block title %}
+    {% trans "Categories" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {% trans "Categories" %}
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block headertext %}{% trans "Categories" %}{% endblock %}
+
+{% block header_actions %}
+    <a href="{% url 'dashboard:catalogue-product-list' %}" class="btn-dashboard-header-ghost">
+        <i class="fas fa-book" aria-hidden="true"></i> {% trans "Products" %}
+    </a>
+    <a href="{% url 'dashboard:catalogue-category-create' %}" class="btn-dashboard-chart-submit btn-dashboard-chart-submit--sm ml-2">
+        <i class="fas fa-plus" aria-hidden="true"></i> {% trans "New category" %}
+    </a>
+{% endblock %}
+
+{% block dashboard_content %}
+    {% if not request.GET.name %}
+        <div class="dashboard-catalogue-breadcrumb">
+            <i class="fas fa-map-marker-alt dashboard-catalogue-breadcrumb__icon" aria-hidden="true"></i>
+            <span class="dashboard-catalogue-breadcrumb__label">{% trans "Location" %}:</span>
+            <nav class="dashboard-catalogue-breadcrumb__nav" aria-label="{% trans 'Category path' %}">
+                <a href="{% url 'dashboard:catalogue-category-list' %}">{% trans "Root" %}</a>
+                {% if ancestors %}
+                    {% for ancestor in ancestors %}
+                        <span class="dashboard-catalogue-breadcrumb__sep" aria-hidden="true">/</span>
+                        <a href="{% url 'dashboard:catalogue-category-detail-list' pk=ancestor.pk %}">{{ ancestor.name }}</a>
+                    {% endfor %}
+                {% endif %}
+            </nav>
+        </div>
+    {% endif %}
+
+    {% block search_categories %}
+        <section class="dashboard-panel dashboard-panel--catalogue">
+            <div class="dashboard-panel__head">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                {% trans "Search categories" %}
+            </div>
+            <div class="dashboard-panel__body">
+                <form id="search_category_form" method="get" class="dashboard-panel-form form-inline flex-wrap align-items-end" action="{% url 'dashboard:catalogue-category-list' %}">
+                    {% comment %}
+                        Add the current query string to the search form so that the
+                        sort order is not reset when searching.
+                    {% endcomment %}
+                    {% for name, value in request.GET.items %}
+                        {% if name not in form.fields %}
+                            <input type="hidden" name="{{ name }}" value="{{ value }}"/>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% include "oscar/dashboard/partials/form_fields_inline.html" with form=form %}
+                    <div class="dashboard-panel-form__actions mt-2 mt-md-0 ml-md-2">
+                        <button type="submit" class="btn-dashboard-chart-submit btn-dashboard-chart-submit--sm" data-loading-text="{% trans 'Searching...' %}">
+                            <i class="fas fa-search" aria-hidden="true"></i> {% trans "Search" %}
+                        </button>
+                        <a href="{% url 'dashboard:catalogue-category-list' %}" class="btn-dashboard-link-muted ml-3">{% trans "Reset" %}</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    {% endblock %}
+
+    {% if category_list or child_categories %}
+        <div class="dashboard-data-table-wrap">
+        <form method="post">
+            {% csrf_token %}
+            {% block bulk_action %}
+                {% trans "Categories" as module_label %}
+                {% include "oscar/dashboard/partials/bulk_actions.html" with page_objects_count=categories.page.object_list.data.count num_pages=categories.paginator.num_pages total_count=categories.paginator.count module=module_label %}
+            {% endblock bulk_action %}
+            {% block category_table %}
+                {% render_table categories %}
+            {% endblock category_table %}
+        </form>
+        </div>
+    {% elif request.GET.name %}
+        <div class="dashboard-empty-state">
+            <div class="dashboard-empty-state__icon" aria-hidden="true"><i class="fas fa-search"></i></div>
+            <p class="dashboard-empty-state__title">{% trans "No categories found" %}</p>
+            <p class="dashboard-empty-state__hint text-muted small">{% trans "Adjust your search or reset filters." %}</p>
+        </div>
+    {% endif %}
+
+    {% if not child_categories %}
+        <div class="dashboard-empty-state dashboard-empty-state--compact">
+            <p class="mb-0 text-muted small">{% trans "There are no categories in this branch." %}</p>
+        </div>
+    {% endif %}
+{% endblock dashboard_content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.dashboard.bulk_actions.init();
+{% endblock onbodyload %}

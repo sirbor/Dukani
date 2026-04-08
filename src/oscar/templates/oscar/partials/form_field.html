@@ -1,0 +1,75 @@
+{% load widget_tweaks %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+    {% if style == "modern" %}
+        <div class="checkout-field-modern{% if field.errors %} checkout-field-modern--invalid{% endif %}{% if field.widget_type == 'checkbox' %} checkout-field-modern--checkbox{% endif %}">
+            {% if field.widget_type == 'checkbox' %}
+                <label for="{{ field.auto_id }}" class="checkout-field-modern__check-label">
+                    {% render_field field class+="checkout-field-modern__check-input mr-2" %}
+                    <span class="checkout-field-modern__check-text">{{ field.label|safe }}{% if field.field.required %}<span class="checkout-field-modern__req" aria-hidden="true"> *</span>{% endif %}</span>
+                </label>
+            {% else %}
+                {% if not nolabel %}
+                    <label for="{{ field.auto_id }}" class="checkout-field-modern__label{% if field.field.required %} checkout-field-modern__label--required{% endif %}">{{ field.label|safe }}</label>
+                {% endif %}
+                {% render_field field class+="form-control checkout-field-modern__input" %}
+            {% endif %}
+            {% for error in field.errors %}
+                <div class="checkout-field-modern__error" role="alert"><i class="fas fa-exclamation-circle" aria-hidden="true"></i> {{ error }}</div>
+            {% endfor %}
+            {% if field.help_text %}
+                <small class="checkout-field-modern__help">{{ field.help_text|safe }}</small>
+            {% endif %}
+        </div>
+    {% else %}
+    {% comment %}
+        Make the field widget type available to templates so we can mark-up
+        checkbox and radio inputs differently to other widgets.
+    {% endcomment %}
+
+    {% block control_group %}
+        <div class="form-group{% if style == "horizontal" %} row{% endif %}">
+
+            {% block label %}
+                {% if not nolabel and field.widget_type != 'checkbox' %}
+                    <label for="{{ field.auto_id }}" class="{% if style|default:"stacked" != 'stacked' %}col-sm-4{% endif %} col-form-label{% if field.field.required %} required{% endif %}">
+                        {{ field.label|safe }}
+                    </label>
+                {% endif %}
+            {% endblock %}
+
+            {% block controls %}
+                <div class="{% if style|default:"stacked" != 'stacked' %}col-sm-7{% endif %}{% if field.widget_type == 'checkbox' %} form-check{% endif %}">
+                    {% block widget %}
+                        {% if field.widget_type == 'checkbox' %}
+                            <label for="{{ field.auto_id }}" class="col-form-label {% if field.field.required %}required{% endif %}">
+                                {% render_field field %}
+                                {{ field.label|safe }}
+                            </label>
+                        {% else %}
+                            {% render_field field class+="form-control" %}
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block errors %}
+                        {% for error in field.errors %}
+                            <span class="error-block"><i class="fas fa-exclamation"></i> {{ error }}</span>
+                        {% endfor %}
+                    {% endblock %}
+
+                    {% block help_text %}
+                        {% if field.help_text %}
+                            <small class="form-text text-muted">
+                                {# We allow HTML within form help fields #}
+                                {{ field.help_text|safe }}
+                            </small>
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    {% endblock %}
+    {% endif %}
+{% endif %}

@@ -1,0 +1,35 @@
+{% extends 'oscar/dashboard/reports/index.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block report %}
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            {% if objects %}
+                <thead>
+                    <tr>
+                        <th>{% trans "Offer" %}</th>
+                        <th>{% trans "Total discount" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer_discount in objects %}
+                        <tr>
+                            <td>
+                                <a {% if offer_discount.offer %}href="{% url 'dashboard:offer-detail' offer_discount.offer_id %}"{% endif %}>
+                                    {{ offer_discount.display_offer_name }}
+                                </a>
+                            </td>
+                            <td>{{ offer_discount.total_discount|currency }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <tbody>
+                    <tr><td class="text-muted small p-4" colspan="2">{% trans "No results found." %}</td></tr>
+                </tbody>
+            {% endif %}
+        </table>
+    </div>
+    {% include "oscar/dashboard/partials/pagination.html" %}
+{% endblock %}

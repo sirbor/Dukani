@@ -1,0 +1,177 @@
+{% extends "oscar/checkout/layout.html" %}
+{% load currency_filters %}
+{% load i18n %}
+{% load image_tags %}
+
+{% block title %}
+    {% blocktrans with number=order.number %}
+        Order {{ number }}: confirmation
+    {% endblocktrans %} | {{ block.super }}
+{% endblock title %}
+
+{% block checkout_nav %}
+    {% include 'oscar/checkout/nav.html' with step=5 %}
+{% endblock %}
+
+{% block checkout_title %}
+    {% blocktrans with number=order.number %}
+        Thank you — order {{ number }}
+    {% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+    <div class="checkout-thankyou-hero">
+        <div class="checkout-thankyou-hero__badge" aria-hidden="true">
+            <i class="fas fa-check"></i>
+        </div>
+        <p class="checkout-thankyou-hero__order mb-2">
+            {% blocktrans with number=order.number %}
+                Order {{ number }}
+            {% endblocktrans %}
+        </p>
+        <p class="lead text-muted mb-0" style="max-width: 40rem; margin-left: auto; margin-right: auto;">
+            {% blocktrans with number=order.number %}
+                Your order has been placed and a confirmation email has been sent. Please save reference
+                <strong>{{ number }}</strong> for any enquiries.
+            {% endblocktrans %}
+            {% trans "You can print this page or quote the order number when you contact us." %}
+        </p>
+    </div>
+
+    <div class="row shipping-payment">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            {% block shipping_info %}
+                <div class="sub-header">
+                    <h2>{% trans "Shipping" %}</h2>
+                </div>
+                {% include "oscar/checkout/partials/shipping_detail_card.html" with address=order.shipping_address guest_email=order.guest_email %}
+
+                <div class="card card-body checkout-summary-panel">
+                    <h3>{% trans "Shipping method" %}</h3>
+                    <p>{{ order.shipping_method }}</p>
+                </div>
+            {% endblock %}
+        </div>
+
+        <div class="col-lg-6">
+            {% block payment_info %}
+                <div class="sub-header">
+                    <h2>{% trans "Payment" %}</h2>
+                </div>
+                <div class="card card-body checkout-summary-panel">
+                    <h3>{% trans "Payment" %}</h3>
+                    {% for source in order.sources.all %}
+                        <p>
+                        {% if source.reference %}
+                            {% blocktrans with amount=source.amount_allocated|currency:source.currency type=source.source_type.name reference=source.reference %}
+                                Allocation of {{ amount }} from type {{ type }} (reference: {{ reference }})
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans with amount=source.amount_allocated|currency:source.currency type=source.source_type.name %}
+                                Allocation of {{ amount }} from type {{ type }}
+                            {% endblocktrans %}
+                        {% endif %}
+                        </p>
+                    {% empty %}
+                        <p>{% trans "No payment was required for this order." %}</p>
+                    {% endfor %}
+
+                    {% if order.billing_address %}
+                        <h4>{% trans "Billing address" %}</h4>
+                        <address>
+                            {% for field in order.billing_address.active_address_fields %}
+                                {{ field }}<br/>
+                            {% endfor %}
+                        </address>
+                    {% endif %}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+
+    {% block order_contents %}
+        <div class="sub-header d-flex flex-wrap align-items-center justify-content-between mt-5">
+            <h2 class="mb-0">{% trans "Order contents" %}</h2>
+        </div>
+
+        <div class="mt-4">
+            {% for line in order.lines.all %}
+                <div class="checkout-thankyou-line">
+                    <div class="row align-items-center">
+                        <div class="col-auto pr-2">
+                            {% with image=line.product.primary_image %}
+                                {% oscar_thumbnail image.original "200x200" upscale=False as thumb %}
+                                <a href="{{ line.product.get_absolute_url }}">
+                                    <img src="{{ thumb.url }}" alt="{{ line.product.get_title }}" class="checkout-thankyou-line__img">
+                                </a>
+                            {% endwith %}
+                        </div>
+                        <div class="col">
+                            <h3 class="h6 font-weight-bold mb-1">
+                                <a href="{{ line.product.get_absolute_url }}" class="text-dark">{{ line.description }}</a>
+                            </h3>
+                            {% if line.upc %}<p class="small text-muted mb-0">{{ line.upc }}</p>{% endif %}
+                        </div>
+                        <div class="col-6 col-sm-2 text-center text-sm-center mt-2 mt-sm-0">
+                            <span class="small text-muted d-block d-sm-none">{% trans "Qty" %}</span>
+                            <span class="font-weight-bold">{{ line.quantity }}</span>
+                        </div>
+                        <div class="col-6 col-sm-3 text-right mt-2 mt-sm-0">
+                            <span class="small text-muted d-block d-sm-none">{% trans "Total" %}</span>
+                            <span class="price_color font-weight-bold">
+                                {% if show_tax_separately %}
+                                    {{ line.line_price_before_discounts_excl_tax|currency:order.currency }}
+                                {% else %}
+                                    {{ line.line_price_before_discounts_incl_tax|currency:order.currency }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% block basket_totals %}
+            <div class="row justify-content-end mt-4">
+                <div class="col-md-7 col-lg-5 col-xl-4">
+                    <div class="sub-header">
+                        <h2>{% trans 'Totals' %}</h2>
+                    </div>
+                    <div class="card border-0 checkout-totals-card">
+                        <div class="card-body p-3 p-md-4">
+                            {% include 'oscar/order/partials/basket_totals.html' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock basket_totals %}
+
+    {% endblock order_contents %}
+
+    {% block order_tracking %}
+        {% if not order.user %}
+            <div class="checkout-thankyou-card mt-5">
+                <h2>{% trans "Tracking your order" %}</h2>
+                <p class="mb-3">{% trans "You can track the status of your order with the link below." %}</p>
+                <a class="btn btn-checkout-primary" href="{% url 'customer:anon-order' order_number=order.number hash=order.verification_hash %}">{% trans "View order status" %}</a>
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {% block order_actions %}
+        <div class="row mt-5">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <button type="button" onclick="window.print(); return false;" class="btn btn-block checkout-btn-ghost">{% trans "Print this page" %}</button>
+            </div>
+            <div class="col-sm-6">
+                <a href="{{ homepage_url }}" class="btn btn-block btn-checkout-primary">{% trans "Continue shopping" %}</a>
+            </div>
+        </div>
+    {% endblock order_actions %}
+{% endblock content %}
+
+{% block tracking %}
+    {% if send_analytics_event %}
+        {% include "oscar/partials/google_analytics_transaction.html" %}
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% load i18n %}
+
+<div class="checkout-stepper-wrap">
+<nav class="navbar navbar-expand-md navbar-light bg-white mb-4 checkout-stepper border-gold-low">
+    <div class="container justify-content-center px-2 px-md-3">
+        <ul class="navbar-nav w-100 justify-content-between text-center">
+        {% spaceless %}
+            <li class="nav-item step-item {% if step == 1 %}active{% elif step > 1 %}visited{% else %}disabled{% endif %}">
+                {% if step > 1 %}
+                    <a href="{% url 'checkout:shipping-address' %}" class="nav-link">
+                        <span class="step-num">1</span>
+                        <span class="step-label">{% trans "Shipping Address" %}</span>
+                    </a>
+                {% else %}
+                    <span class="nav-link">
+                        <span class="step-num">1</span>
+                        <span class="step-label">{% trans "Shipping Address" %}</span>
+                    </span>
+                {% endif %}
+            </li>
+
+            <li class="nav-item step-item {% if step == 2 %}active{% elif step > 2 %}visited{% else %}disabled{% endif %}">
+                {% if step > 2 %}
+                    <a href="{% url 'checkout:shipping-method' %}" class="nav-link">
+                        <span class="step-num">2</span>
+                        <span class="step-label">{% trans "Shipping Method" %}</span>
+                    </a>
+                {% else %}
+                    <span class="nav-link">
+                        <span class="step-num">2</span>
+                        <span class="step-label">{% trans "Shipping Method" %}</span>
+                    </span>
+                {% endif %}
+            </li>
+
+            <li class="nav-item step-item {% if step == 3 %}active{% elif step > 3 %}visited{% else %}disabled{% endif %}">
+                {% if step > 3 %}
+                    <a href="{% url 'checkout:payment-details' %}" class="nav-link">
+                        <span class="step-num">3</span>
+                        <span class="step-label">{% trans "Payment" %}</span>
+                    </a>
+                {% else %}
+                    <span class="nav-link">
+                        <span class="step-num">3</span>
+                        <span class="step-label">{% trans "Payment" %}</span>
+                    </span>
+                {% endif %}
+            </li>
+
+            <li class="nav-item step-item {% if step == 4 %}active{% elif step > 4 %}visited{% else %}disabled{% endif %}">
+                <span class="nav-link">
+                    <span class="step-num">4</span>
+                    <span class="step-label">{% trans "Review" %}</span>
+                </span>
+            </li>
+
+            <li class="nav-item step-item {% if step == 5 %}active{% else %}disabled{% endif %}">
+                <span class="nav-link">
+                    <span class="step-num">5</span>
+                    <span class="step-label">{% trans "Confirmation" %}</span>
+                </span>
+            </li>
+        {% endspaceless %}
+      </ul>
+    </div>
+</nav>
+</div>

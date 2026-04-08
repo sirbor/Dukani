@@ -1,0 +1,49 @@
+{% load i18n %}
+{# address: ShippingAddress or None; guest_email optional string; change_url optional #}
+<div class="checkout-shipping-detail-card">
+    <div class="checkout-shipping-detail-card__header">
+        <div class="checkout-shipping-detail-card__head-row">
+            <h3 class="checkout-shipping-detail-card__title">{% trans "Delivery address" %}</h3>
+            {% if change_url %}
+                <a href="{{ change_url }}" class="checkout-shipping-detail-card__action">
+                    {% trans "Change" %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% if address %}
+        <div class="checkout-shipping-detail-card__body">
+            <div class="checkout-shipping-detail-card__address-block">
+                <address class="checkout-shipping-detail-card__address">
+                    {% for field in address.active_address_fields %}
+                        {{ field }}<br/>
+                    {% endfor %}
+                </address>
+            </div>
+            {% if address.phone_number or guest_email %}
+                <dl class="checkout-shipping-detail-card__meta">
+                    {% if address.phone_number %}
+                        <div class="checkout-shipping-detail-card__meta-row">
+                            <dt>{% trans "Phone" %}</dt>
+                            <dd>{{ address.phone_number }}</dd>
+                        </div>
+                    {% endif %}
+                    {% if guest_email %}
+                        <div class="checkout-shipping-detail-card__meta-row">
+                            <dt>{% trans "Email" %}</dt>
+                            <dd>{{ guest_email }}</dd>
+                        </div>
+                    {% endif %}
+                </dl>
+            {% endif %}
+            {% if address.notes %}
+                <div class="checkout-shipping-detail-card__notes">
+                    <span class="checkout-shipping-detail-card__notes-label">{% trans "Instructions" %}</span>
+                    <div class="checkout-shipping-detail-card__notes-body">{{ address.notes|linebreaks }}</div>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <p class="checkout-shipping-detail-card__empty mb-0">{% trans "No shipping address required." %}</p>
+    {% endif %}
+</div>

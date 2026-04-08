@@ -1,0 +1,129 @@
+// -----------------------------------------------------------------------------
+// Partner order detail (/dashboard/orders/<number>/)
+// -----------------------------------------------------------------------------
+
+.dashboard-app.dashboard-order-detail {
+  .dashboard-order-detail__summary {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.35rem;
+
+    @media (min-width: 992px) {
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+    }
+  }
+
+  .dashboard-order-summary-card {
+    background: var(--cartier-white);
+    border: 1px solid var(--cartier-border);
+    border-radius: var(--dukani-radius-sm);
+    box-shadow: var(--dukani-shadow-sm);
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  .dashboard-order-summary-card__head {
+    padding: 0.65rem 1rem;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #75757c;
+    background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+    border-bottom: 1px solid var(--cartier-border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    i {
+      color: var(--cartier-gold-deep, #5c4b3d);
+      opacity: 0.9;
+    }
+  }
+
+  .dashboard-order-summary-card__body {
+    padding: 1rem 1.15rem 1.1rem;
+    font-size: 0.88rem;
+  }
+
+  .dashboard-order-summary-card__body dl.row {
+    margin-bottom: 0;
+  }
+
+  .dashboard-order-summary-card__body dt {
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #75757c;
+    font-weight: 700;
+  }
+
+  .dashboard-order-summary-card__body dd {
+    margin-bottom: 0.65rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .dashboard-order-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+
+    @media (min-width: 576px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .dashboard-order-stat {
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--cartier-border);
+    border-radius: var(--dukani-radius-sm);
+    background: #fbfbfb;
+    min-width: 0;
+  }
+
+  .dashboard-order-stat__label {
+    font-size: 0.58rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: #75757c;
+    font-weight: 700;
+    margin-bottom: 0.35rem;
+  }
+
+  .dashboard-order-stat__value {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--cartier-black);
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .dashboard-order-detail__section-title {
+    margin: 1.5rem 0 1rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cartier-black);
+  }
+
+  .dashboard-order-detail__workspace {
+    margin-top: 0.35rem;
+  }
+
+  .table-responsive-lines {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+    border-radius: var(--dukani-radius-sm);
+
+    .table {
+      margin-bottom: 0;
+    }
+  }
+}

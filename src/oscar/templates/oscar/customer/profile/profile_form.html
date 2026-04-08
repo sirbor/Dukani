@@ -1,0 +1,8 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-form-panel">
+    {% include 'oscar/partials/form.html' with form_id="profile_form" %}
+</div>
+{% endblock tabcontent %}

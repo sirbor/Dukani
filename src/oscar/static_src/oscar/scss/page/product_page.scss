@@ -1,0 +1,335 @@
+// OSCAR PRODUCTS UNIQUE STYLES
+// ----------------------------
+.availability {
+  &.outofstock {
+    color: $danger;
+  }
+
+  &.instock {
+    color: $success;
+  }
+}
+
+// PRICE SIZE/COLOR
+// ----------------
+
+.price_color {
+  display: block;
+  color: $success;
+  font-weight: bold;
+}
+
+.product_main .price_color {
+  font-size: $h2-font-size;
+}
+
+.product_pod .price_color {
+  margin-top: 0;
+}
+
+.es-carousel .price_color {
+  font-size: $h3-font-size;
+}
+
+.review_add,
+.side_categories {
+  li {
+    ul,
+    ol {
+      padding-left: 18px;
+    }
+  }
+}
+
+// Wish lists
+// Align wish list button with add to basket button
+.add-to-basket {
+  //Width of default input/select/textarea
+  width: 220px;
+  margin-right: 10px;
+}
+
+.add-to-basket,
+.btn-wishlist {
+  display: inline-block;
+  zoom: 1;
+}
+
+.add-to-basket .btn,
+.btn-wishlist {
+  margin-bottom: $base-margin-bottom;
+}
+
+#add_review_form {
+  #id_title, #id_body {
+    max-width: 500px;
+  }
+}
+
+#add_to_basket_form {
+    .form-check {
+        padding-left: 0;
+    }
+    ul.form-control {
+        height: auto;
+        list-style-type:none;
+        li {
+            line-height: auto;
+            label {
+                display: block;
+                input.form-control {
+                    height: auto;
+                    display: inline;
+                    width: auto;
+                }
+            }
+        }
+    }
+}
+
+// Product detail (single catalogue item)
+// --------------------------------------
+
+.product-detail-page {
+  .font-serif {
+    font-family: "Playfair Display", serif;
+  }
+
+  .text-gold {
+    color: var(--cartier-gold-deep) !important;
+  }
+
+  .text-black {
+    color: var(--cartier-black) !important;
+  }
+
+  .border-gold-subtle {
+    border-color: dukani-accent-a(0.15) !important;
+  }
+
+  .tracking-widest {
+    letter-spacing: 0.25em;
+  }
+
+  .tracking-wider {
+    letter-spacing: 0.1em;
+  }
+
+  .luxury-card-flat {
+    background: #fcfcfc;
+    border: 1px solid #f0ebe3;
+    padding: 1.75rem;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    border-radius: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .luxury-card-flat {
+      padding: 2.5rem;
+    }
+  }
+
+  .luxury-card-flat:hover {
+    background: #fff;
+    border-color: dukani-accent-a(0.35);
+    box-shadow: 0 12px 40px rgba(17, 17, 17, 0.06);
+  }
+
+  .table-pristine {
+    margin-top: 0;
+  }
+
+  .table-pristine th {
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+    color: #888;
+    border-top: none;
+    padding: 1rem 1rem 1rem 0;
+    vertical-align: top;
+    width: 38%;
+  }
+
+  .table-pristine td {
+    border-top: none;
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    color: #333;
+    vertical-align: top;
+  }
+
+  .table-pristine tr:last-child td,
+  .table-pristine tr:last-child th {
+    border-bottom: none;
+  }
+
+  .border-faded {
+    border-color: #f2f2f2 !important;
+  }
+
+  .add-to-basket-luxury-large .btn-primary {
+    background-color: var(--cartier-black) !important;
+    border: 1px solid var(--cartier-black) !important;
+    color: #fff !important;
+    width: 100%;
+    padding: 1rem 1.25rem !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.22em !important;
+  }
+
+  .add-to-basket-luxury-large .btn-primary:hover,
+  .add-to-basket-luxury-large .btn-primary:focus {
+    background-color: #fff !important;
+    color: var(--cartier-black) !important;
+  }
+
+  .product-detail__divider {
+    width: 48px;
+    height: 1px;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .product-detail__title {
+    line-height: 1.12;
+    font-size: clamp(1.85rem, 4vw, 2.75rem) !important;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  .product-detail__price {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 300;
+    font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+    color: #111;
+  }
+
+  .product-detail__description {
+    line-height: 1.8;
+    font-size: 1rem;
+  }
+
+  .product-detail__description :last-child {
+    margin-bottom: 0;
+  }
+
+  .product-detail__reviews-all {
+    font-size: 0.62rem !important;
+    letter-spacing: 0.12em;
+    padding: 0.4rem 0.85rem !important;
+  }
+
+  @media (min-width: 992px) {
+    .product-detail__buy {
+      position: sticky;
+      top: 7rem;
+    }
+  }
+
+  .product-detail .browse-breadcrumbs a {
+    color: #6c757d;
+  }
+
+  .product-detail .browse-breadcrumbs a:hover {
+    color: $dukani-accent-deep;
+  }
+
+  .product-detail .browse-breadcrumbs .active {
+    color: #111;
+    font-weight: 600;
+  }
+
+  .product-detail__gallery-wrap {
+    min-height: 280px;
+  }
+
+  .product-detail__gallery-stage {
+    border: none !important;
+    background: #fff !important;
+    padding: 0.5rem;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .product-detail__gallery-stage .carousel-inner {
+    border-radius: 2px;
+  }
+
+  .product-detail__gallery-stage img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .product-detail__gallery .carousel-control-prev,
+  .product-detail__gallery .carousel-control-next {
+    width: 2.5rem;
+    height: 2.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    bottom: auto;
+    opacity: 0.85;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 50%;
+    border: 1px solid dukani-accent-a(0.25);
+  }
+
+  .product-detail__gallery .carousel-control-prev {
+    left: 0.5rem;
+  }
+
+  .product-detail__gallery .carousel-control-next {
+    right: 0.5rem;
+  }
+
+  .product-detail__gallery .carousel-control-prev-icon,
+  .product-detail__gallery .carousel-control-next-icon {
+    filter: invert(0.35);
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .product-detail__gallery-thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-bottom: 0;
+    padding: 0.5rem;
+    list-style: none;
+    border: none !important;
+    background: #faf9f7 !important;
+  }
+
+  .product-detail__gallery-thumbs li {
+    flex: 0 0 auto;
+    width: 56px;
+    height: 48px;
+    margin: 0 !important;
+    text-indent: 0;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0.65;
+    transition: opacity 0.2s, border-color 0.2s;
+  }
+
+  .product-detail__gallery-thumbs li:hover,
+  .product-detail__gallery-thumbs li.active {
+    opacity: 1;
+    border-color: dukani-accent-a(0.7);
+  }
+
+  .product-detail__gallery-thumbs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-detail__reco-heading {
+    font-size: clamp(0.72rem, 1.5vw, 0.82rem);
+    letter-spacing: 0.28em;
+  }
+}

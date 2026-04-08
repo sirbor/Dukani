@@ -1,0 +1,1199 @@
+// -----------------------------------------------------------------------------
+// Storefront modernization — home, catalogue, book cards, cart/checkout, account, icons
+// Loaded last in styles.scss; complements layout.html tokens (--cartier-*).
+// -----------------------------------------------------------------------------
+
+$sf-gold: $dukani-accent;
+$sf-gold-deep: $dukani-accent-deep;
+$sf-ink: #111111;
+$sf-line: #e8e8ea;
+$sf-radius: 0.375rem;
+$sf-shadow: 0 10px 32px rgba(17, 17, 17, 0.07);
+$sf-shadow-soft: 0 4px 18px rgba(17, 17, 17, 0.05);
+
+// --- Icons: no global gold on every FA glyph (removed from layout.html) ---
+.luxury-header i[class*="fa-"],
+.site-announcement i[class*="fa-"],
+.luxury-nav-icon-link i[class*="fa-"],
+.nav-tools > a i[class*="fa-"],
+.top-bar-right i[class*="fa-"],
+.top-bar-right button i[class*="fa-"] {
+  color: var(--cartier-gold-deep) !important;
+}
+
+.text-gold,
+.text-gold i[class*="fa-"] {
+  color: var(--cartier-gold-deep) !important;
+}
+
+.home-chip i[class*="fa-"] {
+  color: $sf-gold-deep !important;
+}
+
+// --- Book product cards (luxury grid) ---
+.product_pod.luxury-card {
+  border: none !important;
+  background: #fff !important;
+  border-radius: $sf-radius !important;
+  border: 1px solid $sf-line !important;
+  box-shadow: $sf-shadow-soft;
+  padding: 1rem 1rem 1.25rem !important;
+  margin-bottom: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  text-align: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $sf-shadow;
+    border-color: dukani-accent-a(0.35) !important;
+  }
+
+  .image_container {
+    background: linear-gradient(180deg, #fafafa 0%, #fff 100%) !important;
+    border: 1px solid rgba(232, 232, 234, 0.95) !important;
+    border-radius: calc(#{$sf-radius} - 0.05rem);
+    margin-bottom: 1rem !important;
+    padding: 0.75rem !important;
+    min-height: 0 !important;
+
+    img.product-img {
+      height: 260px !important;
+      object-fit: contain !important;
+      width: 100% !important;
+      transition: transform 0.65s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+  }
+
+  &:hover .image_container img.product-img {
+    transform: scale(1.04);
+  }
+
+  &:hover .product-title-luxury a {
+    color: $sf-gold !important;
+  }
+
+  .product-title-luxury {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+    min-height: 2.75rem;
+    line-height: 1.35;
+    margin-bottom: 0.5rem !important;
+
+    a {
+      color: $sf-ink !important;
+      text-decoration: none !important;
+      transition: color 0.2s ease;
+    }
+  }
+
+  .price-luxury {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    color: $sf-gold-deep !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.06em;
+  }
+
+  .btn-outline-black {
+    border: 1px solid $sf-ink !important;
+    color: $sf-ink !important;
+    border-radius: $sf-radius !important;
+    font-size: 0.68rem !important;
+    letter-spacing: 0.14em !important;
+    font-weight: 600;
+    padding: 0.65rem 1rem !important;
+    transition:
+      background 0.25s ease,
+      color 0.25s ease,
+      border-color 0.25s ease;
+
+    &:hover {
+      background: $sf-ink !important;
+      color: #fff !important;
+    }
+  }
+
+  .add-to-basket-luxury .btn-primary {
+    background: $sf-ink !important;
+    border: 1px solid $sf-ink !important;
+    color: #fff !important;
+    border-radius: $sf-radius !important;
+    text-transform: uppercase !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 0.14em !important;
+    padding: 0.65rem 1rem !important;
+    width: 100% !important;
+    font-weight: 600 !important;
+
+    &:hover {
+      background: $sf-gold-deep !important;
+      border-color: $sf-gold-deep !important;
+      color: #fff !important;
+    }
+  }
+}
+
+// Legacy Oscar pods (search fallback)
+.product_pod:not(.luxury-card) {
+  border-radius: $sf-radius;
+  padding: 0.5rem;
+  transition: box-shadow 0.25s ease;
+
+  &:hover {
+    box-shadow: $sf-shadow-soft;
+  }
+
+  .image_container {
+    border-radius: $sf-radius;
+    border: 1px solid $sf-line !important;
+  }
+}
+
+// --- Homepage: section rhythm + staff-picks canvas ---
+.page-home .home-section {
+  position: relative;
+
+  &:not(:first-of-type)::before {
+    content: "";
+    display: block;
+    width: 100%;
+    max-width: 7rem;
+    height: 1px;
+    margin: 0 auto 3rem;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      dukani-accent-a(0.45),
+      transparent
+    );
+  }
+
+  &:first-of-type::before {
+    display: none;
+  }
+}
+
+.page-home .home-section__head {
+  margin-bottom: 2.25rem;
+}
+
+.page-home .home-cta-primary,
+.page-home .home-cta-ghost {
+  border-radius: $sf-radius;
+}
+
+// --- Catalogue browse ---
+.catalogue-browse .browse-breadcrumbs {
+  padding: 0.65rem 1rem !important;
+  background: #fff;
+  border: 1px solid $sf-line !important;
+  border-radius: $sf-radius;
+  box-shadow: $sf-shadow-soft;
+  margin-bottom: 1.75rem !important;
+}
+
+.catalogue-browse .browse-toolbar {
+  box-shadow: $sf-shadow-soft;
+  border-radius: $sf-radius !important;
+}
+
+.catalogue-browse .archive-section {
+  padding-top: 0.5rem;
+}
+
+.catalogue-browse .catalogue-grid ol.row {
+  margin-left: 0;
+}
+
+// --- Basket + checkout: unify radii / shadows (detail in basket.scss / checkout_flow.scss) ---
+.basket-page__header,
+.checkout-page-heading {
+  border-bottom-color: $sf-line !important;
+}
+
+.basket-line-card,
+.checkout-stepper,
+.checkout-summary-panel,
+.checkout-flow .checkout-shipping-detail-card {
+  border-radius: $sf-radius !important;
+}
+
+// --- Account / profile ---
+body.account-profile {
+  .account-nav-luxury .nav-link {
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: #888 !important;
+    padding: 1.1rem 0.75rem !important;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .account-nav-luxury .nav-link.active {
+    color: $sf-ink !important;
+    font-weight: 700;
+    border-bottom: 2px solid $sf-gold;
+  }
+
+  .account-nav-luxury .nav-link:hover {
+    color: $sf-gold-deep !important;
+  }
+
+  .luxury-breadcrumbs {
+    padding: 0.55rem 1rem;
+    background: #fff;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    box-shadow: $sf-shadow-soft;
+    justify-content: center !important;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .account-nav-luxury {
+    border-radius: $sf-radius;
+    border: 1px solid $sf-line !important;
+    box-shadow: $sf-shadow-soft;
+    padding: 0 0.5rem !important;
+    background: #fff !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .account-nav-luxury .nav-link {
+    white-space: nowrap;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .account-tab-content {
+    background: #fff;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    box-shadow: $sf-shadow-soft;
+    padding: 1.35rem 1.5rem 1.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .account-tab-content .table {
+    margin-bottom: 1.25rem;
+    border-radius: calc(#{$sf-radius} - 0.05rem);
+    overflow: hidden;
+    font-size: 0.9rem;
+  }
+
+  .account-tab-content .table th {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b6b70;
+    background: #fafafa;
+    border-color: $sf-line !important;
+  }
+
+  .account-tab-content .table td {
+    border-color: $sf-line !important;
+    vertical-align: middle;
+  }
+
+  .account-tab-content .btn {
+    border-radius: $sf-radius !important;
+    margin-right: 0.5rem;
+    margin-top: 0.35rem;
+  }
+
+  .account-tab-content .btn-outline-danger {
+    border-radius: $sf-radius !important;
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    border-color: #c53030;
+    color: #c53030;
+
+    &:hover {
+      background: #c53030;
+      color: #fff;
+    }
+  }
+
+  // --- Order history list ---
+  .account-orders__filter {
+    padding: 1.35rem 1.5rem 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    background: linear-gradient(180deg, #fdfdfd 0%, #fafafa 100%);
+  }
+
+  .account-orders__filter-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: $sf-ink;
+    margin-bottom: 0.35rem;
+  }
+
+  .account-orders__filter-hint {
+    margin-bottom: 1.1rem;
+    letter-spacing: 0.02em;
+  }
+
+  .account-orders__filter-actions .btn-primary {
+    text-transform: uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    padding: 0.65rem 1.25rem;
+  }
+
+  .account-orders__list-head {
+    margin-bottom: 1.25rem;
+  }
+
+  .account-orders__list-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b6b70;
+    margin: 0;
+  }
+
+  .account-orders__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .order-summary-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
+    align-items: center;
+    padding: 1.25rem 1.35rem;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    background: #fff;
+    box-shadow: $sf-shadow-soft;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+
+    @media (min-width: 768px) {
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) auto;
+      gap: 1.5rem;
+    }
+
+    &:hover {
+      border-color: dukani-accent-a(0.35);
+      box-shadow: $sf-shadow;
+      transform: translateY(-2px);
+    }
+  }
+
+  .order-summary-card__primary {
+    min-width: 0;
+  }
+
+  .order-summary-card__eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #6b6b70;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .order-summary-card__number {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: $sf-ink !important;
+    text-decoration: none !important;
+    display: inline-block;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.35rem;
+    border-bottom: 1px solid transparent;
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover {
+      color: $sf-gold-deep !important;
+      border-bottom-color: $sf-gold-deep;
+    }
+  }
+
+  .order-summary-card__date {
+    display: block;
+    font-size: 0.82rem;
+    color: #5c5c62;
+    font-weight: 400;
+  }
+
+  .order-summary-card__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 2rem;
+    margin: 0;
+  }
+
+  .order-summary-card__stat {
+    margin: 0;
+
+    dt {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #888;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    dd {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: $sf-ink;
+    }
+  }
+
+  .order-summary-card__stat--total dd {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  .order-summary-card__action {
+    justify-self: stretch;
+
+    @media (min-width: 768px) {
+      justify-self: end;
+    }
+  }
+
+  .order-summary-card__btn {
+    width: 100%;
+    text-transform: uppercase;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.14em !important;
+    font-weight: 600 !important;
+    padding: 0.65rem 1.1rem !important;
+    white-space: nowrap;
+
+    @media (min-width: 768px) {
+      width: auto;
+      min-width: 9.5rem;
+    }
+  }
+
+  .account-orders__pagination {
+    margin-top: 2rem;
+    padding-top: 0.5rem;
+  }
+
+  .account-orders__pagination .pagination {
+    justify-content: center;
+    margin-bottom: 0;
+  }
+
+  .account-orders__empty {
+    text-align: center;
+    padding: 2.75rem 1.5rem 2.25rem;
+    border: 1px dashed $sf-line;
+    border-radius: $sf-radius;
+    background: #fcfcfc;
+  }
+
+  .account-orders__empty-icon {
+    font-size: 2.25rem;
+    color: dukani-accent-a(0.55);
+    margin-bottom: 1rem;
+  }
+
+  .account-orders__empty-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.35rem;
+    color: $sf-ink;
+    margin-bottom: 0.5rem;
+  }
+
+  .account-orders__empty-text {
+    max-width: 26rem;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
+  // --- Shared account patterns (profile, addresses, emails, alerts, notifications, wishlists, orders) ---
+  .account-modern .account-section-title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: $sf-ink;
+    margin-bottom: 1rem;
+  }
+
+  .account-modern .account-dl {
+    margin: 0;
+  }
+
+  .account-modern .account-dl__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.15rem 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid $sf-line;
+
+    @media (min-width: 576px) {
+      grid-template-columns: minmax(7rem, 10rem) 1fr;
+      align-items: baseline;
+    }
+
+    &:first-child {
+      padding-top: 0;
+    }
+
+    &:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+  }
+
+  .account-modern .account-dl__row dt {
+    margin: 0;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #6b6b70;
+  }
+
+  .account-modern .account-dl__row dd {
+    margin: 0;
+    font-size: 0.95rem;
+    color: $sf-ink;
+    line-height: 1.5;
+  }
+
+  .account-modern .account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid $sf-line;
+
+    .btn {
+      text-transform: uppercase;
+      font-size: 0.65rem !important;
+      letter-spacing: 0.12em !important;
+      font-weight: 600 !important;
+      padding: 0.65rem 1.15rem !important;
+      border-radius: $sf-radius !important;
+    }
+
+    .btn-primary,
+    .btn-black {
+      letter-spacing: 0.12em !important;
+    }
+  }
+
+  .account-modern .account-form-panel .btn-lg {
+    font-size: 0.72rem !important;
+    padding: 0.75rem 1.35rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+
+  .account-modern .account-confirm-lead {
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+    color: #3a3a3e;
+  }
+
+  .account-modern .account-warning-panel {
+    border: 1px solid rgba(197, 48, 48, 0.35);
+    background: rgba(197, 48, 48, 0.04);
+    border-radius: $sf-radius;
+    padding: 1.1rem 1.25rem;
+    margin: 1.25rem 0;
+
+    h3 {
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #9b2c2c;
+      margin-bottom: 0.5rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .account-modern .account-empty {
+    text-align: center;
+    padding: 2.5rem 1.25rem;
+    border: 1px dashed $sf-line;
+    border-radius: $sf-radius;
+    background: #fcfcfc;
+    color: #5c5c62;
+    line-height: 1.6;
+
+    .account-empty__title {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.25rem;
+      color: $sf-ink;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .account-modern .account-address-card {
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    padding: 1.25rem 1.35rem;
+    margin-bottom: 1rem;
+    box-shadow: $sf-shadow-soft;
+    background: #fff;
+
+    .account-address-card__badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .account-address-card__badges .badge {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 0.35rem 0.55rem;
+      border-radius: 2px;
+    }
+
+    address {
+      margin-bottom: 1rem;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: $sf-ink;
+    }
+  }
+
+  .account-modern .account-address-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+
+    .btn {
+      text-transform: uppercase;
+      font-size: 0.62rem !important;
+      letter-spacing: 0.1em !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  .account-modern .account-email-card {
+    display: block;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 0.85rem;
+    text-decoration: none !important;
+    color: inherit !important;
+    box-shadow: $sf-shadow-soft;
+    background: #fff;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      border-color: dukani-accent-a(0.35);
+      box-shadow: $sf-shadow;
+      transform: translateY(-2px);
+
+      .account-email-card__subject {
+        color: $sf-gold-deep !important;
+      }
+    }
+  }
+
+  .account-modern .account-email-card__subject {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: $sf-ink !important;
+    margin-bottom: 0.35rem;
+    line-height: 1.3;
+  }
+
+  .account-modern .account-email-card__meta {
+    font-size: 0.8rem;
+    color: #6b6b70;
+  }
+
+  .account-modern .account-email-envelope {
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    padding: 1.75rem 1.85rem 1.5rem;
+    background: linear-gradient(180deg, #fffefb 0%, #fff 45%);
+    box-shadow: $sf-shadow-soft;
+  }
+
+  .account-modern .account-email-envelope__eyebrow {
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #6b6b70;
+    margin-bottom: 0.5rem;
+  }
+
+  .account-modern .account-email-envelope__subject {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+    font-weight: 500;
+    color: $sf-ink;
+    line-height: 1.25;
+    margin: 0 0 0.65rem;
+  }
+
+  .account-modern .account-email-envelope__date {
+    font-size: 0.88rem;
+    color: #5c5c62;
+    margin-bottom: 0;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid $sf-line;
+  }
+
+  .account-modern .account-email-envelope__date-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #888;
+    margin-right: 0.5rem;
+  }
+
+  .account-modern .account-email-detail__preview-title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #6b6b70;
+    margin-top: 1.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .account-modern .account-email-detail__preview-hint {
+    margin-bottom: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .account-modern .account-email-preview {
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    overflow: hidden;
+    background: #f4f2f0;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+
+    iframe,
+    .account-email-preview__frame {
+      display: block;
+      width:100%;
+      min-height: min(72vh, 32rem);
+      border: 0;
+      background: #fff;
+    }
+  }
+
+  .account-modern .account-alert-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1.15rem 1.25rem;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    margin-bottom: 0.85rem;
+    background: #fff;
+    box-shadow: $sf-shadow-soft;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr auto auto minmax(7rem, auto);
+      gap: 1.25rem;
+    }
+  }
+
+  .account-modern .account-alert-card__product a {
+    font-weight: 500;
+    color: $sf-ink !important;
+  }
+
+  .account-modern .account-alert-card__meta {
+    font-size: 0.82rem;
+    color: #6b6b70;
+  }
+
+  .account-modern .account-alert-card__label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #888;
+  }
+
+  .account-modern .account-tabs-modern {
+    border-bottom: 1px solid $sf-line;
+    margin-bottom: 1.5rem;
+
+    .nav-link {
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #888 !important;
+      border: none !important;
+      border-bottom: 2px solid transparent !important;
+      padding: 0.85rem 1rem !important;
+      margin-bottom: -1px;
+      border-radius: 0 !important;
+    }
+
+    .nav-link.active {
+      color: $sf-ink !important;
+      border-bottom-color: $sf-gold !important;
+      background: transparent !important;
+    }
+
+    .nav-link:hover {
+      color: $sf-gold-deep !important;
+    }
+  }
+
+  .account-modern .account-notif-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 1rem 1.1rem;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    margin-bottom: 0.65rem;
+    background: #fff;
+    box-shadow: $sf-shadow-soft;
+
+    @media (min-width: 768px) {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: center;
+    }
+  }
+
+  .account-modern .account-notif-row__leading {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .account-modern .account-notif-row__icon {
+    color: $sf-gold-deep;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .account-modern .account-notif-row__body {
+    em {
+      display: block;
+      font-size: 0.78rem;
+      color: #6b6b70;
+      margin-top: 0.25rem;
+      font-style: normal;
+    }
+  }
+
+  .account-modern .account-notif-row__actions {
+    text-align: left;
+
+    @media (min-width: 768px) {
+      text-align: right;
+      white-space: nowrap;
+    }
+  }
+
+  .account-modern .account-notif-row .form-check-input,
+  .account-modern .account-notif-row input[type="checkbox"] {
+    margin: 0;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .account-modern .account-notif-row__actions .btn {
+    text-transform: uppercase;
+    font-size: 0.58rem !important;
+    letter-spacing: 0.08em !important;
+    margin: 0.15rem 0 0.15rem 0.35rem;
+    border-radius: $sf-radius !important;
+  }
+
+  .account-modern .account-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.25rem 0 1rem;
+    padding-top: 0.5rem;
+    font-size: 0.75rem;
+    color: #6b6b70;
+
+    .btn {
+      text-transform: uppercase;
+      font-size: 0.62rem !important;
+      letter-spacing: 0.1em !important;
+    }
+  }
+
+  .account-modern .wishlist-card {
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    padding: 1.15rem 1.3rem;
+    margin-bottom: 0.85rem;
+    background: #fff;
+    box-shadow: $sf-shadow-soft;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+    }
+  }
+
+  .account-modern .wishlist-card__name a {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.2rem;
+    color: $sf-ink !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      color: $sf-gold-deep !important;
+      border-bottom-color: $sf-gold-deep;
+    }
+  }
+
+  .account-modern .wishlist-card__count {
+    font-size: 0.8rem;
+    color: #6b6b70;
+  }
+
+  .account-modern .wishlist-lines {
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    padding: 0.25rem 1.25rem;
+    background: #fff;
+    box-shadow: $sf-shadow-soft;
+    margin-bottom: 1rem;
+  }
+
+  .account-modern .wishlist-line-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid $sf-line;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 5.5rem 1fr 7.5rem auto;
+      align-items: center;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  .account-modern .wishlist-line-row__img img {
+    border-radius: $sf-radius;
+    border: 1px solid $sf-line;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .account-modern .order-detail__status {
+    padding: 0.85rem 1.1rem;
+    border-radius: $sf-radius;
+    border: 1px solid $sf-line;
+    background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+    margin-bottom: 1.5rem;
+
+    .order-detail__status-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #6b6b70;
+      margin-bottom: 0.35rem;
+    }
+
+    .order-detail__status-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: $sf-ink;
+    }
+  }
+
+  .account-modern .order-detail-line {
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    padding: 1.15rem 1.25rem;
+    margin-bottom: 1rem;
+    background: #fff;
+    box-shadow: $sf-shadow-soft;
+  }
+
+  .account-modern .order-detail-line__title a {
+    font-weight: 500;
+    color: $sf-ink !important;
+  }
+
+  .account-modern .order-detail-line__grid {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 0.85rem;
+
+    @media (min-width: 576px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .account-modern .order-detail-line__label {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+
+  .account-modern .order-detail-totals {
+    margin-top: 1.5rem;
+    padding: 1.1rem 1.25rem;
+    border: 1px solid $sf-line;
+    border-radius: $sf-radius;
+    background: #fafafa;
+  }
+
+  .account-modern .order-detail-totals__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.4rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(232, 232, 234, 0.85);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &--strong {
+      font-weight: 700;
+      font-size: 1.05rem;
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
+      border-top: 2px solid $sf-line;
+      border-bottom: none;
+    }
+
+    &--discount .order-detail-totals__val {
+      color: #2f855a;
+    }
+  }
+
+  .account-modern .order-detail-totals__key .badge {
+    font-size: 0.55rem;
+    vertical-align: middle;
+    margin-right: 0.35rem;
+  }
+
+  .account-modern .order-detail-ship {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid $sf-line;
+
+    h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.15rem;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .account-modern .shared-emails-block {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid $sf-line;
+
+    h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.15rem;
+    }
+
+    small {
+      display: block;
+      margin-bottom: 1rem;
+      color: #6b6b70;
+      line-height: 1.55;
+    }
+  }
+}
+
+// Outline black button (profile, cards)
+.btn-outline-black {
+  border: 1px solid $sf-ink !important;
+  color: $sf-ink !important;
+  background: transparent !important;
+  border-radius: $sf-radius !important;
+  text-transform: uppercase;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.12em !important;
+  font-weight: 600 !important;
+  padding: 0.65rem 1.15rem !important;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease !important;
+
+  &:hover {
+    background: $sf-ink !important;
+    color: #fff !important;
+    border-color: $sf-ink !important;
+  }
+}

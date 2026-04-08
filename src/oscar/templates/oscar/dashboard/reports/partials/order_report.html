@@ -1,0 +1,47 @@
+{% extends 'oscar/dashboard/reports/index.html' %}
+{% load currency_filters %}
+{% load i18n %}
+
+{% block report %}
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            {% if objects %}
+                <thead>
+                    <tr>
+                        <th>{% trans "Order number" %}</th>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Email" %}</th>
+                        <th>{% trans "Total incl. tax" %}</th>
+                        <th>{% trans "Date placed" %}</th>
+                        <th class="text-right">{% trans "Actions" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in objects %}
+                        <tr>
+                            <td><a href="{% url 'dashboard:order-detail' order.number %}">{{ order.number }}</a></td>
+                            <td>
+                                {% if order.user %}
+                                    <a href="{% url 'dashboard:user-detail' order.user.id %}">{{ order.user.get_full_name|default:"-" }}</a>
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td>{{ order.email }}</td>
+                            <td>{{ order.total_incl_tax|currency:order.currency }}</td>
+                            <td>{{ order.date_placed }}</td>
+                            <td class="text-right">
+                                <a class="btn btn-sm btn-luxury-outline" href="{% url 'dashboard:order-detail' number=order.number %}">{% trans "View" %}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% else %}
+                <tbody>
+                    <tr><td class="text-muted small p-4" colspan="6">{% trans "No results found." %}</td></tr>
+                </tbody>
+            {% endif %}
+        </table>
+    </div>
+    {% include "oscar/dashboard/partials/pagination.html" %}
+{% endblock %}

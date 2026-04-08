@@ -1,0 +1,184 @@
+{% extends "oscar/layout.html" %}
+{% load i18n %}
+{% load product_tags %}
+{% load category_tags %}
+{% load static %}
+{% load storefront_tags %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+{% endblock %}
+
+{% block title %}
+    {{ storefront_home_hero_title }}
+{% endblock %}
+
+{% block content_wrapper %}
+<div class="page-home">
+    <section class="home-hero">
+        <div class="home-hero__grid">
+            <div class="home-hero__copy">
+                <div class="home-hero__copy-inner home-animate-in">
+                    <p class="home-hero__eyebrow">{{ storefront_home_hero_eyebrow }}</p>
+                    <h1 class="home-hero__title">{{ storefront_home_hero_title }}</h1>
+                    <p class="home-hero__lede">{{ storefront_home_hero_lede }}</p>
+                    <div class="home-hero__ctas">
+                        {% if books_category %}
+                            <a href="{{ books_category.get_absolute_url }}" class="home-cta-primary">{% trans "Shop books" %}</a>
+                        {% else %}
+                            <a href="{% category_url 'books' %}" class="home-cta-primary">{% trans "Shop books" %}</a>
+                        {% endif %}
+                        <a href="{% catalogue_browse_url %}" class="home-cta-ghost">{% trans "Full catalogue" %}</a>
+                    </div>
+                    <div class="home-hero__chips">
+                        {% if books_category %}
+                            <a class="home-chip" href="{{ books_category.get_absolute_url }}">
+                                <i class="fas fa-book-open" aria-hidden="true"></i>
+                                {% trans "Bestsellers & new releases" %}
+                            </a>
+                        {% else %}
+                            <a class="home-chip" href="{% category_url 'books' %}">
+                                <i class="fas fa-book-open" aria-hidden="true"></i>
+                                {% trans "Bestsellers & new releases" %}
+                            </a>
+                        {% endif %}
+                        <a class="home-chip" href="{% catalogue_browse_url %}">
+                            <i class="fas fa-th-large" aria-hidden="true"></i>
+                            {% trans "All titles" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-hero__visual">
+                <div class="home-hero__mosaic">
+                    {% if books_category %}
+                        <a class="home-mosaic__cell home-mosaic__cell--books" href="{{ books_category.get_absolute_url }}">
+                            <div class="home-mosaic__media-wrap">
+                                <img
+                                    class="home-mosaic__shelf-bg"
+                                    src="{{ storefront_book_room_background_url }}"
+                                    alt=""
+                                    decoding="async"
+                                    fetchpriority="high"
+                                />
+                            </div>
+                            <div class="home-mosaic__veil" aria-hidden="true"></div>
+                            <div class="home-mosaic__label">
+                                <p class="home-mosaic__kicker">{% trans "The book room" %}</p>
+                                <p class="home-mosaic__name">{{ books_category.name }}</p>
+                                <p class="home-mosaic__hint">{% trans "Start reading" %}</p>
+                            </div>
+                        </a>
+                    {% else %}
+                        <a class="home-mosaic__cell home-mosaic__cell--books" href="{% category_url 'books' %}">
+                            <div class="home-mosaic__media-wrap">
+                                <img
+                                    class="home-mosaic__shelf-bg"
+                                    src="{{ storefront_book_room_background_url }}"
+                                    alt=""
+                                    decoding="async"
+                                    fetchpriority="high"
+                                />
+                            </div>
+                            <div class="home-mosaic__veil" aria-hidden="true"></div>
+                            <div class="home-mosaic__label">
+                                <p class="home-mosaic__kicker">{% trans "The book room" %}</p>
+                                <p class="home-mosaic__name">{% trans "Books" %}</p>
+                                <p class="home-mosaic__hint">{% trans "Start reading" %}</p>
+                            </div>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        {% if featured_products %}
+            <section class="home-section">
+                <div class="home-section__head">
+                    <h2 class="home-section__title">{% trans "Staff picks" %}</h2>
+                    <p class="home-section__meta">{% trans "Titles we love this month" %}</p>
+                </div>
+                <div class="row">
+                    {% for product in featured_products %}
+                        <div class="col-6 col-md-4 col-lg-3">
+                            {% render_product product %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+
+        {% if books_category %}
+            <section class="home-section">
+                <div class="home-section__head">
+                    <h2 class="home-section__title">{% trans "Browse by department" %}</h2>
+                    <p class="home-section__meta">{% trans "Everything in our shop is a book" %}</p>
+                </div>
+                {% if book_department_categories %}
+                    <div class="home-collection-row home-collection-row--departments">
+                        {% for dept in book_department_categories %}
+                            <a class="home-collection-card home-collection-card--department" href="{{ dept.get_absolute_url }}">
+                                <div class="home-collection-card__img-wrap">
+                                    <img
+                                        class="home-collection-card__bg"
+                                        src="{% storefront_dept_card_url storefront_department_background_urls forloop.counter %}"
+                                        alt=""
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </div>
+                                <div class="home-collection-card__veil" aria-hidden="true"></div>
+                                <div class="home-collection-card__body">
+                                    <h3 class="home-collection-card__name">{{ dept.name }}</h3>
+                                    <span class="home-collection-card__cta">{% trans "Shop" %}</span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="home-collection-row">
+                        <a class="home-collection-card" href="{{ books_category.get_absolute_url }}">
+                            <div class="home-collection-card__img-wrap">
+                                {% if books_category.image %}
+                                    <img class="home-collection-card__img" src="{{ books_category.image.url }}" alt="{{ books_category.name }}" loading="lazy" />
+                                {% else %}
+                                    <div class="home-collection-card__placeholder">
+                                        <i class="fas fa-book-open" aria-hidden="true"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="home-collection-card__veil" aria-hidden="true"></div>
+                            <div class="home-collection-card__body">
+                                <h3 class="home-collection-card__name">{{ books_category.name }}</h3>
+                                <span class="home-collection-card__cta">{% trans "Discover" %}</span>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+            </section>
+        {% endif %}
+
+        {% if newest_products %}
+            <section class="home-section home-new-row pb-5">
+                <div class="home-section__head">
+                    <h2 class="home-section__title">{% trans "New arrivals" %}</h2>
+                    <p class="home-section__meta">{% trans "Fresh on the shelf" %}</p>
+                </div>
+                <div class="row">
+                    {% for product in newest_products %}
+                        <div class="col-6 col-md-4 col-lg-3">
+                            {% render_product product %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </div>
+</div>
+{% endblock content_wrapper %}

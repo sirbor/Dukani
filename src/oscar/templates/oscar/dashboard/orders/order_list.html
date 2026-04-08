@@ -1,0 +1,186 @@
+{% extends 'oscar/dashboard/layout.html' %}
+{% load currency_filters %}
+{% load sorting_tags %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block body_class %}{{ block.super }} orders{% endblock %}
+
+{% block title %}
+    {% trans "Orders" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Orders" %}</li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block header %}
+    <div class="page-header d-flex justify-content-between align-items-end mb-5">
+        <h1 class="m-0 text-uppercase tracking-widest">{% trans "Order Registry" %}</h1>
+    </div>
+{% endblock header %}
+
+{% block dashboard_content %}
+    <div class="card border-0 shadow-sm mb-5 overflow-hidden">
+        <div class="card-header bg-white py-3 border-bottom">
+            <h3 class="m-0 h6 font-weight-bold text-gold text-uppercase tracking-wider"><i class="fas fa-search mr-2"></i> {% trans "Search Orders" %}</h3>
+        </div>
+        <div class="card-body bg-white p-4">
+            <form method="get" class="form-inline" id="search_form">
+                {% for field in form %}
+                    {% if "order" in field.id_for_label %}
+                        {% if field.is_hidden %}
+                            {% render_field field class+='form-control' %}
+                        {% else %}
+                            <div class="form-group mr-3 mb-2">
+                                <label class="mr-2 small text-muted text-uppercase tracking-widest">{{ field.label }}</label>
+                                {% render_field field class+='form-control' placeholder=field.label %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <button type="submit" class="btn btn-primary mb-2 mr-3">
+                    <i class="fas fa-search mr-2"></i> {% trans "Search" %}
+                </button>
+                <a data-toggle="modal" data-target="#SearchModal" href="#" class="small text-gold font-weight-bold text-uppercase tracking-wider mb-2">{% trans "Advanced Search" %}</a>
+            </form>
+
+            {% include "oscar/dashboard/partials/advanced_search_modal.html" with form=form style='horizontal' %}
+
+            {% if search_filters %}
+            <div class="mt-3 pt-3 border-top">
+                <label class="small text-muted text-uppercase tracking-widest mr-2">Filters:</label>
+                {% for filter in search_filters %}
+                <span class="badge badge-info mr-1">{{ filter }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if orders %}
+        <form method="post" class="order_table" id="orders_form">
+            {% csrf_token %}
+            
+            <div class="table-header d-flex justify-content-between align-items-center mb-3">
+                <h3 class="m-0 text-uppercase tracking-wider" style="font-size: 0.7rem; font-weight: 700; color: var(--cartier-gold-deep);">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    {% if search_filters %}
+                    {% trans "Search Results" %}
+                    {% else %}
+                    {% trans "Full Register" %}
+                    {% endif %}
+                </h3>
+                <div class="d-flex align-items-center">
+                    <button type="submit" class="btn btn-secondary btn-sm" name="action" value="download_selected_orders" data-loading-text="{% trans 'Submitting...' %}">
+                        <i class="fas fa-download mr-2"></i> {% trans "Export CSV" %}
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>{% anchor 'number' _("Order number") %}</th>
+                            <th>{% anchor 'total_incl_tax' _("Total") %}</th>
+                            <th>{% trans "Items" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th>{% trans "Customer" %}</th>
+                            <th>{% trans "Date" %}</th>
+                            <th class="text-right">{% trans "Actions" %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td><input type="checkbox" name="selected_order" class="selected_order" value="{{ order.id }}"/></td>
+                            <td><a href="{% url 'dashboard:order-detail' number=order.number %}" class="font-weight-bold">{{ order.number }}</a></td>
+                            <td><span class="text-dark font-weight-bold">{{ order.total_incl_tax|currency:order.currency }}</span></td>
+                            <td>{{ order.num_items }}</td>
+                            <td>
+                                {% if order.status == "Shipped" %}
+                                    <span class="badge badge-success">{{ order.status }}</span>
+                                {% elif order.status == "Cancelled" %}
+                                    <span class="badge badge-danger">{{ order.status }}</span>
+                                {% else %}
+                                    <span class="badge badge-info">{{ order.status|default:"-" }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if order.guest_email %}
+                                    <span class="text-muted small">{{ order.guest_email }}</span>
+                                {% elif order.user %}
+                                    <a href="{% url 'dashboard:user-detail' pk=order.user.id %}">{{ order.user.get_full_name|default:order.user.email }}</a>
+                                {% else %}
+                                    &lt;{% trans "Deleted" %}&gt;
+                                {% endif %}
+                            </td>
+                            <td><span class="text-muted small">{{ order.date_placed|date:"d M Y, H:i" }}</span></td>
+                            <td class="text-right">
+                                <a class="btn btn-secondary btn-sm" href="{% url 'dashboard:order-detail' number=order.number %}">
+                                    <i class="fas fa-eye mr-1"></i> {% trans "View" %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-4">
+                {% include "oscar/dashboard/partials/pagination.html" %}
+            </div>
+
+            {% block order_actions %}
+                <div class="card border-0 shadow-sm mt-5">
+                    <div class="card-header bg-white py-3 border-bottom">
+                        <h3 class="m-0 h6 font-weight-bold text-gold text-uppercase tracking-wider"><i class="fas fa-tasks mr-2"></i> {% trans "Bulk Status Update" %}</h3>
+                    </div>
+                    <div class="card-body bg-white p-4">
+                        {% if order_statuses %}
+                            <div class="d-flex align-items-end">
+                                <div class="form-group mb-0 mr-3" style="flex-grow: 1;">
+                                    <label class="small text-muted text-uppercase tracking-widest mb-2 d-block">{% trans "New Status" %}</label>
+                                    <select name="new_status" class="form-control">
+                                        <option value=""> -- {% trans "Select new status" %} -- </option>
+                                        {% for status in order_statuses %}
+                                            <option>{{ status }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <button type="submit" name="action" value="change_order_statuses" class="btn btn-primary" data-loading-text="{% trans 'Updating...' %}">
+                                    {% trans "Apply Change" %}
+                                </button>
+                            </div>
+                        {% else %}
+                            <p class="text-muted mb-0 small">{% trans "Bulk status updates are not available for the selected orders." %}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endblock %}
+        </form>
+    {% else %}
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-5 text-center">
+                <i class="fas fa-shopping-cart fa-3x text-light mb-3"></i>
+                <p class="text-muted text-uppercase tracking-widest small">{% trans "No records found in the registry." %}</p>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock dashboard_content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.dashboard.bulk_actions.init();
+    {% if form.errors %}
+    $('#SearchModal').modal('show');
+    {% endif %}
+{% endblock onbodyload %}

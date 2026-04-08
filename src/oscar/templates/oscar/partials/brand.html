@@ -1,0 +1,17 @@
+{% load static %}
+<div class="brand-logo-navbar mr-4">
+    <a href="{{ homepage_url }}" class="text-decoration-none d-flex align-items-center">
+        {% if storefront_logo_url %}
+        <img src="{{ storefront_logo_url }}" alt="{{ shop_name }}" class="mr-3 brand-logo-img" width="40" height="40" loading="eager" decoding="async" style="height: 40px; width: auto; object-fit: contain;" onerror="this.style.display='none';this.nextElementSibling.classList.remove('d-none');">
+        {% else %}
+        <img src="{% static 'img/logo.png' %}" alt="{{ shop_name }}" class="mr-3 brand-logo-img" width="40" height="40" loading="eager" decoding="async" style="height: 40px; width: auto; object-fit: contain;" onerror="this.style.display='none';this.nextElementSibling.classList.remove('d-none');">
+        {% endif %}
+        <i class="fas fa-shopping-bag fa-2x mr-3 text-gold d-none" aria-hidden="true"></i>
+        <div class="d-flex flex-column">
+            <span class="text-black text-uppercase mb-0 tracking-widest font-weight-bold" style="font-family: 'Montserrat', sans-serif; font-size: 1.2rem; line-height: 1;">
+                {{ shop_name }}
+            </span>
+            <span class="text-gold text-uppercase tracking-wider d-none d-lg-inline" style="font-size: 0.5rem; letter-spacing: 0.2em; margin-top: 2px;">{{ shop_tagline }}</span>
+        </div>
+    </a>
+</div>

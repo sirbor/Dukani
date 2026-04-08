@@ -1,0 +1,102 @@
+{% extends "oscar/layout.html" %}
+{% load i18n %}
+{% load product_tags %}
+{% load category_tags %}
+
+{% block body_class %}default offer-detail-page{% endblock %}
+
+{% block title %}
+{{ offer.name }} | {{ block.super }}
+{% endblock %}
+
+{% block description %}
+{% if offer.description %}{{ offer.name }} — {{ shop_name }}{% else %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}
+{# Breadcrumbs rendered inside content for layout alignment with catalogue browse #}
+{% endblock %}
+
+{% block headertext %}{% endblock %}
+
+{% block content %}
+<div class="offer-detail">
+    <div class="container py-5">
+        <nav aria-label="{% trans 'Breadcrumb' %}">
+            <ol class="breadcrumb browse-breadcrumbs bg-transparent px-0 mb-4 flex-wrap">
+                <li class="breadcrumb-item">
+                    <a href="{{ homepage_url }}" class="text-uppercase small tracking-wider">{% trans "Home" %}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{% url 'offer:list' %}" class="text-uppercase small tracking-wider">{% trans "Offers" %}</a>
+                </li>
+                <li class="breadcrumb-item active text-uppercase small tracking-wider" aria-current="page">{{ offer.name }}</li>
+            </ol>
+        </nav>
+
+        <header class="offer-detail__hero text-center mb-5">
+            <p class="offer-detail__eyebrow text-gold mb-2">{% trans "Curation" %}</p>
+            <h1 class="offer-detail__title font-serif mb-3 text-black text-uppercase tracking-widest">{{ offer.name }}</h1>
+            <div class="gold-divider mx-auto mb-4"></div>
+            {% if not offer.is_available %}
+                <div class="alert alert-danger border-0 rounded-0 d-inline-block text-uppercase small tracking-wider px-4 py-3 mb-0" role="alert">
+                    {% trans "This offer is no longer available." %}
+                </div>
+            {% else %}
+                <span class="offer-detail__badge">{% trans "Active offer" %}</span>
+            {% endif %}
+        </header>
+
+        {% if offer.description %}
+            <div class="offer-detail__prose font-weight-light mx-auto text-center text-md-left mb-5">
+                {{ offer.description|safe }}
+            </div>
+        {% endif %}
+
+        {% if upsell_message %}
+            <aside class="offer-detail__upsell mb-5" aria-labelledby="offer-upsell-heading">
+                <div class="offer-detail__upsell-inner">
+                    <h2 id="offer-upsell-heading" class="offer-detail__upsell-title">
+                        <i class="fas fa-gem mr-2 text-gold" style="font-size: 0.9em;" aria-hidden="true"></i>{% trans "Make the most of this offer" %}
+                    </h2>
+                    <div class="offer-detail__upsell-body">{{ upsell_message }}</div>
+                </div>
+            </aside>
+        {% endif %}
+
+        {% if products %}
+            <section class="offer-detail__products" aria-labelledby="offer-products-heading">
+                <div class="text-center mb-5">
+                    <h2 id="offer-products-heading" class="offer-detail__products-heading font-serif text-uppercase tracking-widest text-black mb-3">{% trans "In this curation" %}</h2>
+                    <p class="text-muted small text-uppercase tracking-wider mb-3">{% trans "Selected pieces that qualify for this promotion" %}</p>
+                    <div class="gold-divider mx-auto"></div>
+                </div>
+
+                <div class="catalogue-grid">
+                    <div class="d-flex justify-content-center mb-4 pb-2 border-bottom border-gold-subtle">
+                        {% include "oscar/partials/pagination.html" %}
+                    </div>
+                    <ol class="row list-unstyled ml-0 pl-0">
+                        {% for product in products %}
+                            <li class="col-sm-6 col-md-4 col-lg-3 mb-5">{% render_product product %}</li>
+                        {% endfor %}
+                    </ol>
+                    <div class="luxury-pagination d-flex justify-content-center mt-5 pt-5 border-top border-gold-subtle">
+                        {% include "oscar/partials/pagination.html" %}
+                    </div>
+                </div>
+            </section>
+        {% else %}
+            <div class="offer-detail__empty text-center py-5 px-3 border border-gold-subtle bg-white">
+                <p class="lead font-serif text-muted mb-4">{% trans "No products are linked to this offer yet." %}</p>
+                <a href="{% catalogue_browse_url %}" class="btn btn-outline-gold text-uppercase tracking-wider px-4">{% trans "Browse catalogue" %}</a>
+            </div>
+        {% endif %}
+
+        <div class="offer-detail__footer-actions text-center mt-5 pt-5 border-top border-gold-subtle">
+            <a href="{% url 'offer:list' %}" class="btn btn-outline-black text-uppercase tracking-wider px-4">{% trans "All offers" %}</a>
+            <a href="{% catalogue_browse_url %}" class="btn btn-outline-gold text-uppercase tracking-wider px-4 ml-sm-2 mt-3 mt-sm-0">{% trans "Full catalogue" %}</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,59 @@
+{% extends "oscar/checkout/layout.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Confirm on your phone" %} | {{ block.super }}{% endblock %}
+
+{% block checkout_nav %}{% include 'oscar/checkout/nav.html' with step=4 %}{% endblock %}
+
+{% block checkout_title %}{% trans "Complete payment on your phone" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center text-center">
+    <div class="col-lg-8">
+        <p class="text-muted mb-4">{% trans "Check your Safaricom device for the M-Pesa prompt. This page updates automatically." %}</p>
+        <div class="spinner-border text-secondary mb-4" role="status" id="wait-spinner">
+            <span class="sr-only">{% trans "Loading" %}…</span>
+        </div>
+        <p class="small text-danger d-none" id="wait-error"></p>
+        <form id="complete-form" method="post" action="{{ complete_url }}" class="d-none">
+            {% csrf_token %}
+        </form>
+    </div>
+</div>
+<script>
+(function() {
+    const statusUrl = "{{ status_url|escapejs }}";
+    const failMessages = {
+        failed: "{% trans 'Payment was not completed. You can try again from checkout.'|escapejs %}",
+        forbidden: "{% trans 'Session expired. Please start checkout again.'|escapejs %}"
+    };
+    function poll() {
+        fetch(statusUrl, { credentials: "same-origin", headers: { "Accept": "application/json" } })
+            .then(function(r) {
+                if (r.status === 403) { throw new Error("forbidden"); }
+                return r.json();
+            })
+            .then(function(data) {
+                if (data.status === "succeeded") {
+                    document.getElementById("wait-spinner").classList.add("d-none");
+                    document.getElementById("complete-form").submit();
+                } else if (data.status === "failed") {
+                    document.getElementById("wait-spinner").classList.add("d-none");
+                    var el = document.getElementById("wait-error");
+                    el.textContent = data.failure_reason || failMessages.failed;
+                    el.classList.remove("d-none");
+                } else {
+                    setTimeout(poll, 2500);
+                }
+            })
+            .catch(function() {
+                document.getElementById("wait-spinner").classList.add("d-none");
+                var el = document.getElementById("wait-error");
+                el.textContent = failMessages.forbidden;
+                el.classList.remove("d-none");
+            });
+    }
+    poll();
+})();
+</script>
+{% endblock %}

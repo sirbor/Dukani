@@ -1,0 +1,43 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block extra_breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:wishlists-list' %}">{% trans 'Wish Lists' %}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+<div class="account-form-panel account-wishlist-form">
+    <form method="post" data-behaviours="lock">
+        {% csrf_token %}
+        {{ shared_emails_formset.management_form }}
+
+        {% if not wishlist %}
+            <p class="lead text-muted small mb-3">{% trans "What should your new wish list be called?" %}</p>
+        {% endif %}
+        {% include "oscar/partials/form_fields.html" %}
+        {% if product %}
+            <p class="text-muted small mt-3">
+                {% blocktrans with title=product.get_title %}
+                    After your wishlist is created, <strong>{{ title }}</strong> will be added.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+
+        <div class="shared-emails-block wishlist-shared-emails">
+            <h3>{% trans "Share wishlist" %}</h3>
+            <small>
+                {% trans "If you want to share your wishlist with others, you can add their email addresses below. The visibility must be set to shared in order for this to work." %}
+            </small>
+            {% for form in shared_emails_formset %}
+                {% include "oscar/partials/form_fields.html" with form=form %}
+            {% endfor %}
+        </div>
+        <div class="account-actions border-0 pt-3 mt-2">
+            <button class="btn btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
+            <a href="#" class="btn btn-outline-black" onclick="history.go(-1);return false">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock tabcontent %}

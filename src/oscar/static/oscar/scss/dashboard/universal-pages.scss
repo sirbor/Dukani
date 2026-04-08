@@ -1,0 +1,236 @@
+// -----------------------------------------------------------------------------
+// Dashboard-wide polish (all routes using layout.html / dashboard.css)
+// Complements shell.scss — typography, page chrome, tables, forms, alerts.
+// -----------------------------------------------------------------------------
+
+.dashboard-app {
+  // --- Page title row (layout header block) ---
+  .content > .d-flex.flex-column.flex-md-row.justify-content-between {
+    margin-bottom: 1.35rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--cartier-border);
+    gap: 1rem;
+
+    h1.h3 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      line-height: 1.25;
+      color: var(--cartier-black);
+    }
+
+    .btn-toolbar {
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  .page-content {
+    padding-top: 0.15rem;
+  }
+
+  // --- Breadcrumbs ---
+  .breadcrumb {
+    padding: 0.55rem 0.95rem;
+    background: var(--cartier-white);
+    border: 1px solid var(--cartier-border);
+    border-radius: var(--dukani-radius-sm);
+    box-shadow: var(--dukani-shadow-sm);
+    margin-bottom: 1.35rem;
+  }
+
+  // --- Alerts ---
+  .alert {
+    border-radius: var(--dukani-radius-sm);
+    border: 1px solid var(--cartier-border);
+    font-size: 0.82rem;
+    box-shadow: var(--dukani-shadow-sm);
+  }
+
+  .alert-success {
+    background: #ecfdf3;
+    border-color: #bbf7d0;
+    color: #166534;
+  }
+
+  .alert-danger,
+  .alert-error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+  }
+
+  .alert-info {
+    background: var(--cartier-gold-faded);
+    border-color: dukani-accent-a(0.35);
+    color: var(--cartier-black);
+  }
+
+  .alert-warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+  }
+
+  // --- Tables (list pages, order detail, inline forms) ---
+  .table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .table.table-bordered {
+    border: 1px solid var(--cartier-border) !important;
+    border-radius: var(--dukani-radius-sm);
+    overflow: hidden;
+    box-shadow: var(--dukani-shadow-sm);
+  }
+
+  .table-bordered thead th,
+  .table-bordered tbody td {
+    border-color: var(--cartier-border) !important;
+  }
+
+  .table caption {
+    caption-side: top;
+    padding: 0.6rem 0.95rem;
+    margin-bottom: 0;
+    background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+    border: 1px solid var(--cartier-border);
+    border-bottom: none;
+    border-radius: var(--dukani-radius-sm) var(--dukani-radius-sm) 0 0;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #75757c;
+  }
+
+  .table caption + thead th:first-child {
+    border-top-left-radius: 0;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) td {
+    background-color: rgba(255, 255, 255, 0.75);
+  }
+
+  .table-striped tbody tr:nth-of-type(even) td {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .table tbody tr:hover td {
+    background-color: dukani-accent-a(0.07) !important;
+  }
+
+  // --- Create / edit flows: section bars (product multi-tab overrides stay higher-specificity) ---
+  &.create-page .page-content .table-header {
+    padding: 0.6rem 0.95rem;
+    border: 1px solid var(--cartier-border);
+    border-radius: var(--dukani-radius-sm) var(--dukani-radius-sm) 0 0;
+    background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+    margin-bottom: 0;
+
+    h2,
+    h3 {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #75757c;
+      margin: 0;
+    }
+  }
+
+  &.create-page .page-content .table-header + table,
+  &.create-page .page-content .table-header + .card,
+  &.create-page .page-content .table-header + .table-responsive {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    margin-top: 0;
+  }
+
+  // --- Tabbed dashboard blocks (offers wizard, etc.) ---
+  .tabbable.dashboard .tab-content {
+    border: 1px solid var(--cartier-border);
+    border-top: none;
+    border-radius: 0 0 var(--dukani-radius-sm) var(--dukani-radius-sm);
+    padding: 1.15rem 1.25rem;
+    background: var(--cartier-white);
+    box-shadow: var(--dukani-shadow-sm);
+  }
+
+  .tabbable.dashboard .nav-tabs {
+    border-bottom-color: var(--cartier-border);
+  }
+
+  .tabbable.dashboard .nav-tabs .nav-link {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b6b70;
+    border-radius: var(--dukani-radius-sm) var(--dukani-radius-sm) 0 0;
+    padding: 0.55rem 1rem;
+  }
+
+  .tabbable.dashboard .nav-tabs .nav-link.active {
+    color: var(--cartier-black);
+    font-weight: 600;
+    border-color: var(--cartier-border) var(--cartier-border) var(--cartier-white);
+    background: var(--cartier-white);
+  }
+
+  // --- Forms: spacing in stacked / wizard pages ---
+  &.create-page .page-content form .form-group:last-child {
+    margin-bottom: 0;
+  }
+
+  &.create-page .page-content form .card.card-body {
+    border-radius: 0 0 var(--dukani-radius-sm) var(--dukani-radius-sm);
+  }
+
+  // --- Pagination ---
+  .pagination {
+    margin-top: 1.25rem;
+    margin-bottom: 0;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  // --- Well / deprecated panels ---
+  .well {
+    background: var(--cartier-white);
+    border: 1px solid var(--cartier-border);
+    border-radius: var(--dukani-radius-sm);
+    box-shadow: var(--dukani-shadow-sm);
+    padding: 1rem 1.15rem;
+  }
+
+  // --- Definition lists in detail views ---
+  .dl-horizontal dt,
+  dl.dl-horizontal dt {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #75757c;
+    font-weight: 700;
+  }
+
+  .dl-horizontal dd,
+  dl.dl-horizontal dd {
+    font-size: 0.88rem;
+    color: var(--cartier-black);
+  }
+
+  // --- Modals triggered from dashboard ---
+  .modal-content {
+    border-radius: var(--dukani-radius);
+    border: 1px solid var(--cartier-border);
+    box-shadow: var(--dukani-shadow-lg);
+  }
+
+  .modal-header {
+    border-bottom-color: var(--cartier-border);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+  }
+}

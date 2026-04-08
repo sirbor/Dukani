@@ -1,0 +1,43 @@
+{% extends "oscar/checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Payment details" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'oscar/checkout/nav.html' with step=3 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Enter payment details" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+
+{% block payment_details %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        {% block payment_details_content %}
+            <div class="checkout-payment-placeholder mb-4">
+                <h2 class="h5 font-weight-bold mb-3" style="color: #111; letter-spacing: -0.02em;">{% trans "Payment integration" %}</h2>
+                <p class="text-muted mb-3">
+                    {% trans "This page is a placeholder. Connect a payment provider in your project — for example:" %}
+                </p>
+                <ul class="mb-4 pl-3 small">
+                    <li><a href="https://github.com/django-oscar/django-oscar-paypal" rel="noopener noreferrer">django-oscar-paypal</a></li>
+                    <li><a href="https://github.com/django-oscar/django-oscar-adyen" rel="noopener noreferrer">django-oscar-adyen</a></li>
+                    <li><a href="https://github.com/django-oscar/django-oscar-docdata" rel="noopener noreferrer">django-oscar-docdata</a></li>
+                    <li><a href="https://github.com/django-oscar/django-oscar-accounts" rel="noopener noreferrer">django-oscar-accounts</a></li>
+                </ul>
+                <p class="small text-muted mb-0">{% trans "For demo checkout, you can continue to the order review." %}</p>
+            </div>
+            <div class="d-flex flex-column flex-sm-row align-items-stretch justify-content-between" style="gap: 1rem;">
+                <a href="{% url 'checkout:shipping-method' %}" class="btn checkout-btn-ghost order-sm-0">{% trans "Back" %}</a>
+                <a id="view_preview" href="{% url 'checkout:preview' %}" class="btn btn-checkout-primary order-sm-1 ml-sm-auto">{% trans "Continue to review" %}</a>
+            </div>
+        {% endblock payment_details_content %}
+    </div>
+</div>
+{% endblock payment_details %}

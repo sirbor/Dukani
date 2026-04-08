@@ -1,0 +1,127 @@
+{% extends "oscar/checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Shipping address" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'oscar/checkout/nav.html' with step=1 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Shipping address" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+
+{% block shipping_address %}
+<div class="col-12 checkout-shipping-page">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+            <div class="checkout-shipping-page__intro mb-4 pb-2">
+                <h2 class="checkout-shipping-page__title h4 font-weight-bold mb-2">{% trans "Where should we ship to?" %}</h2>
+                <p class="checkout-shipping-page__lede text-muted mb-0">{% trans "Choose a saved address or enter your details below." %}</p>
+            </div>
+
+            {% if user.is_authenticated %}
+                {% if addresses %}
+                    <h3 class="checkout-shipping-page__section-label h6 font-weight-bold text-uppercase mb-3">{% trans "Saved addresses" %}</h3>
+                    <div class="choose-block mb-5">
+                        <div class="row">
+                            {% for address in addresses %}
+                                {% block select_address_form %}
+                                    <div class="col-md-6 mb-4 d-flex">
+                                        <div class="checkout-address-card card flex-fill h-100 {% if address.is_default_for_shipping %}checkout-address-card--default{% endif %}">
+                                            <div class="checkout-address-card__header">
+                                                <div class="checkout-address-card__title-row">
+                                                    <span class="checkout-address-card__pin" aria-hidden="true">
+                                                        <i class="fas fa-map-marker-alt"></i>
+                                                    </span>
+                                                    <div class="checkout-address-card__header-copy">
+                                                        {% if address.is_default_for_shipping %}
+                                                            <span class="checkout-address-card__badge">
+                                                                <i class="fas fa-star" aria-hidden="true"></i>
+                                                                {% trans "Default shipping" %}
+                                                            </span>
+                                                            <span class="checkout-address-card__hint">{% trans "We'll use this unless you pick another." %}</span>
+                                                        {% else %}
+                                                            <span class="checkout-address-card__eyebrow">{% trans "Saved address" %}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="checkout-address-card__body">
+                                                <div class="checkout-address-card__address-panel">
+                                                    <address class="checkout-address-card__address mb-0">
+                                                        {% block select_address_fields %}
+                                                            {% for field in address.active_address_fields %}
+                                                                <span>{{ field }}</span>{% if not forloop.first %}<br/>{% endif %}
+                                                            {% endfor %}
+                                                        {% endblock %}
+                                                    </address>
+                                                </div>
+                                                {% if address.phone_number %}
+                                                    <div class="checkout-address-card__phone">
+                                                        <i class="fas fa-phone-alt checkout-address-card__phone-icon" aria-hidden="true"></i>
+                                                        <span class="checkout-address-card__phone-value">{{ address.phone_number }}</span>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <form action="{% url 'checkout:shipping-address' %}" method="post" id="select_shipping_address_{{ address.id }}" class="checkout-address-card__form mb-0 mt-auto">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="action" value="ship_to" />
+                                                <input type="hidden" name="address_id" value="{{ address.id }}" />
+                                                {% if address.is_default_for_shipping %}
+                                                    <button type="submit" class="btn checkout-address-card__submit checkout-address-card__submit--primary btn-block ship-address" data-loading-text="{% trans 'Saving...' %}">
+                                                        <i class="fas fa-check-circle mr-2" aria-hidden="true"></i>{% trans "Ship to default address" %}
+                                                    </button>
+                                                {% else %}
+                                                    <button type="submit" class="btn checkout-address-card__submit checkout-address-card__submit--accent btn-block ship-address" data-loading-text="{% trans 'Saving...' %}">
+                                                        {% trans "Ship to this address" %}
+                                                    </button>
+                                                {% endif %}
+
+                                                <div class="checkout-address-card__actions">
+                                                    <a href="{% url 'checkout:user-address-update' pk=address.id %}" class="checkout-address-card__action-link">
+                                                        <i class="fas fa-pen" aria-hidden="true"></i>
+                                                        {% trans "Edit" %}
+                                                    </a>
+                                                    <a href="{% url 'checkout:user-address-delete' pk=address.id %}" class="checkout-address-card__action-link checkout-address-card__action-link--danger">
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                        {% trans "Delete" %}
+                                                    </a>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endblock %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <h3 class="checkout-shipping-page__section-label h6 font-weight-bold text-uppercase mb-3">{% trans "New address" %}</h3>
+                {% endif %}
+            {% endif %}
+
+            {% block new_address_form %}
+                <div class="checkout-new-address-card card border-0 mb-4">
+                    <div class="card-body p-4 p-md-5">
+                        {% if not user.is_authenticated or not addresses %}
+                            <h3 class="checkout-new-address-card__title h5 font-weight-bold mb-4">{% trans "Delivery details" %}</h3>
+                        {% endif %}
+                        <form action="{% url 'checkout:shipping-address' %}" method="post" id="new_shipping_address">
+                            {% csrf_token %}
+                            {% include "oscar/partials/form_fields.html" with form=form style='modern' %}
+                            <div class="checkout-new-address-card__footer d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between pt-2">
+                                <button type="submit" class="btn checkout-btn-dark btn-lg order-sm-1" data-loading-text="{% trans 'Continuing...' %}">{% trans "Continue" %}</button>
+                                <a href="{% url 'basket:summary' %}" class="btn btn-link text-muted order-sm-2 px-sm-3 text-center text-sm-left" style="font-size: 0.9375rem;">{% trans "Return to basket" %}</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock shipping_address %}
+
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}

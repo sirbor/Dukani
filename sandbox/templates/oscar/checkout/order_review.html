@@ -1,0 +1,44 @@
+{% extends "oscar/checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Review order" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include "oscar/checkout/nav.html" with step=3 %}
+{% endblock %}
+
+{% block checkout_title %}
+    {% trans "Review your order" %}
+{% endblock %}
+
+{% block payment_method %}
+    <div class="col-sm-6">
+        <div class="sub-header">
+            <h2>{% trans "Payment" %}</h2>
+        </div>
+        <div class="card card-body checkout-summary-panel">
+            <p class="text-muted small mb-0">
+                {% trans "On the next step you will choose how to pay (M-Pesa, PayPal, or manual Paybill)." %}
+            </p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block place_order %}
+    <div class="checkout-preview-actions mt-4 pt-2">
+        <div class="row align-items-stretch align-items-md-center justify-content-between checkout-order-review-actions">
+            <div class="col-12 col-md-auto mb-3 mb-md-0">
+                <a href="{% url 'checkout:shipping-method' %}" class="btn checkout-btn-ghost btn-block">
+                    {% trans "Back" %}
+                </a>
+            </div>
+            <div class="col-12 col-md-5 col-lg-4">
+                <a href="{% url 'checkout:payment-method' %}" class="btn btn-lg btn-block checkout-btn-place-order">
+                    {% trans "Continue to payment" %}
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

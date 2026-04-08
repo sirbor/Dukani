@@ -1,0 +1,83 @@
+{% extends "oscar/checkout/checkout.html" %}
+{% load i18n %}
+{% load currency_filters %}
+
+{% block title %}
+    {% trans "Pay with M-Pesa Paybill" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'oscar/checkout/nav.html' with step=4 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Pay manually (Paybill)" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+
+{% block payment_details %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <p class="text-muted text-center mb-4">
+            {% trans "Pay using M-Pesa Paybill on your phone, then enter your confirmation code below to confirm and place your order." %}
+        </p>
+
+        <div class="manual-mpesa-card card border-0 shadow-sm mb-4">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h5 font-weight-bold text-uppercase tracking-wide mb-4 text-muted">
+                    {% trans "Paybill & account" %}
+                </h2>
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <span class="text-muted text-uppercase small d-block">{% trans "Paybill (business no.)" %}</span>
+                        <p class="h4 mb-0 font-weight-bold text-dark">{{ pay_intent.manual_paybill }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="text-muted text-uppercase small d-block">{% trans "Account number" %}</span>
+                        <p class="h4 mb-0 font-weight-bold text-dark">{{ pay_intent.manual_account_number }}</p>
+                    </div>
+                </div>
+                <div class="manual-mpesa-amount py-3 px-4 rounded mb-3">
+                    <span class="text-muted text-uppercase small d-block mb-1">{% trans "Amount to pay (exact)" %}</span>
+                    <span class="h3 mb-0 font-weight-bold">{{ pay_intent.amount|currency:pay_intent.currency }}</span>
+                </div>
+                <p class="small text-danger mb-0">
+                    {% trans "Enter this exact amount in M-Pesa so we can match your payment." %}
+                </p>
+
+                <hr class="my-4">
+
+                <h3 class="h6 font-weight-bold text-uppercase tracking-wider mb-3 text-muted">{% trans "Steps" %}</h3>
+                <ol class="pl-3 mb-0 manual-mpesa-steps text-muted">
+                    <li>{% trans "Open M-Pesa → Lipa na M-Pesa → Pay Bill." %}</li>
+                    <li>{% trans "Enter the paybill and account number shown above." %}</li>
+                    <li>{% trans "Enter the amount shown above and your PIN." %}</li>
+                    <li>{% trans "After M-Pesa confirms, copy the confirmation code from your SMS." %}</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="manual-mpesa-card card border-0 shadow-sm mb-4">
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h5 font-weight-bold text-uppercase tracking-wide mb-2">
+                    {% trans "Confirm your order" %}
+                </h2>
+                <p class="text-muted small mb-4">
+                    {% trans "Paste the M-Pesa confirmation code from your SMS. We save it with your order for the team to verify." %}
+                </p>
+                <form method="post">
+                    {% csrf_token %}
+                    {% include "oscar/partials/form_fields.html" %}
+                    <button type="submit" class="btn btn-checkout-primary btn-lg text-uppercase tracking-wider px-5">
+                        {% trans "Confirm order" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{% url 'checkout:payment-details' %}" class="btn checkout-btn-ghost">{% trans "Back" %}</a>
+    </div>
+</div>
+{% endblock %}

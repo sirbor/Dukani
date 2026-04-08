@@ -1,0 +1,61 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-addresses">
+    <h2 class="account-section-title">{% trans "Saved addresses" %}</h2>
+
+    {% if addresses %}
+        {% for address in addresses %}
+            <div class="account-address-card">
+                <div class="account-address-card__badges">
+                    {% if address.is_default_for_shipping %}
+                        <span class="badge badge-success">{% trans 'Default shipping address' %}</span>
+                    {% endif %}
+                    {% if address.is_default_for_billing %}
+                        <span class="badge badge-info">{% trans 'Default billing address' %}</span>
+                    {% endif %}
+                </div>
+                <address>
+                    {% for field in address.active_address_fields %}
+                        {{ field }}<br/>
+                    {% endfor %}
+                </address>
+                <div class="account-address-actions">
+                    <a class="btn btn-black btn-sm" href="{% url 'customer:address-detail' pk=address.id %}">{% trans 'Edit' %}</a>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-black btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans "More" %}</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="{% url 'customer:address-delete' pk=address.id %}" class="dropdown-item">
+                                {% trans 'Delete' %}
+                            </a>
+                            {% if address.country.is_shipping_country and not address.is_default_for_shipping %}
+                                <a href="{% url 'customer:address-change-status' pk=address.id action='default_for_shipping' %}" class="dropdown-item">
+                                    {% trans 'Set as default shipping address' %}
+                                </a>
+                            {% endif %}
+                            {% if not address.is_default_for_billing %}
+                                <a href="{% url 'customer:address-change-status' pk=address.id action='default_for_billing' %}" class="dropdown-item">
+                                    {% trans 'Set as default billing address' %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="account-orders__pagination">
+            {% include "oscar/partials/pagination.html" %}
+        </div>
+    {% else %}
+        <div class="account-empty">
+            <p class="account-empty__title mb-2">{% trans 'No addresses yet' %}</p>
+            <p class="mb-0">{% trans 'Add a delivery or billing address to speed up checkout.' %}</p>
+        </div>
+    {% endif %}
+
+    <div class="account-actions border-0 pt-3 mt-2">
+        <a href="{% url 'customer:address-create' %}" class="btn btn-primary">{% trans 'Add a new address' %}</a>
+    </div>
+</div>
+{% endblock tabcontent %}

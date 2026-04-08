@@ -1,0 +1,89 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load currency_filters %}
+{% load category_tags %}
+{% load i18n %}
+{% load static %}
+
+{% block styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static "oscar/js/bootstrap4-datetimepicker/tempusdominus-bootstrap-4.min.css" %}" />
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static "oscar/js/bootstrap4-datetimepicker/moment-with-locales.min.js" %}"></script>
+    <script src="{% static "oscar/js/bootstrap4-datetimepicker/tempusdominus-bootstrap-4.min.js" %}"></script>
+{% endblock %}
+
+{% block tabcontent %}
+<div class="account-orders">
+    {% if orders or form.is_bound %}
+        <section class="account-orders__filter" aria-labelledby="orders-filter-heading">
+            <h2 id="orders-filter-heading" class="account-orders__filter-title">{% trans "Filter orders" %}</h2>
+            <p class="account-orders__filter-hint text-muted small">{% trans "Narrow results by date or status using the fields below." %}</p>
+            <form method="get" class="account-orders__filter-form">
+                {% include "oscar/partials/form_fields.html" with form=form style='horizontal' %}
+                <div class="form-group row account-orders__filter-actions mb-0">
+                    <div class="offset-sm-4 col-sm-8">
+                        <button type="submit" class="btn btn-primary" data-loading-text="{% trans 'Filtering...' %}">{% trans 'Apply filters' %}</button>
+                        <a href="{% url 'customer:order-list' %}" class="btn btn-outline-black">{% trans 'Reset' %}</a>
+                    </div>
+                </div>
+            </form>
+        </section>
+    {% endif %}
+
+    {% if orders %}
+        <header class="account-orders__list-head">
+            <h2 class="account-orders__list-title">{{ form.description }}</h2>
+        </header>
+
+        <div class="account-orders__cards">
+            {% for order in orders %}
+                <article class="order-summary-card">
+                    <div class="order-summary-card__primary">
+                        <p class="order-summary-card__eyebrow">{% trans "Order number" %}</p>
+                        <a href="{% url 'customer:order' order_number=order.number %}" class="order-summary-card__number">
+                            {{ order.number }}
+                        </a>
+                        <time class="order-summary-card__date" datetime="{{ order.date_placed|date:'c' }}">{{ order.date_placed }}</time>
+                    </div>
+                    <dl class="order-summary-card__stats">
+                        <div class="order-summary-card__stat">
+                            <dt>{% trans "Items" %}</dt>
+                            <dd>{{ order.num_items }}</dd>
+                        </div>
+                        <div class="order-summary-card__stat order-summary-card__stat--total">
+                            <dt>{% trans "Total" %}</dt>
+                            <dd>{{ order.total_incl_tax|currency:order.currency }}</dd>
+                        </div>
+                    </dl>
+                    <div class="order-summary-card__action">
+                        <a href="{% url 'customer:order' order_number=order.number %}" class="btn btn-black btn-sm order-summary-card__btn">
+                            {% trans "View order" %}
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <div class="account-orders__pagination">
+            {% include "oscar/partials/pagination.html" %}
+        </div>
+    {% else %}
+        <div class="account-orders__empty">
+            {% if form.is_bound %}
+                <i class="fas fa-search account-orders__empty-icon" aria-hidden="true"></i>
+                <p class="account-orders__empty-title">{% trans "No orders match your filters" %}</p>
+                <p class="account-orders__empty-text text-muted">{% trans "Try different dates or clear the filters to see all orders." %}</p>
+                <a href="{% url 'customer:order-list' %}" class="btn btn-outline-black mt-2">{% trans "Show all orders" %}</a>
+            {% else %}
+                <i class="fas fa-shopping-bag account-orders__empty-icon" aria-hidden="true"></i>
+                <p class="account-orders__empty-title">{% trans "No orders yet" %}</p>
+                <p class="account-orders__empty-text text-muted">{% trans "When you place an order, it will appear here." %}</p>
+                <a href="{% catalogue_browse_url %}" class="btn btn-black mt-3">{% trans "Browse the shop" %}</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock tabcontent %}

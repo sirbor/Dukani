@@ -1,0 +1,25 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-emails">
+    <h2 class="account-section-title">{% trans "Messages from us" %}</h2>
+
+    {% if emails %}
+        {% for email in emails %}
+            <a href="{% url 'customer:email-detail' email_id=email.id %}" class="account-email-card">
+                <div class="account-email-card__subject">{{ email.subject }}</div>
+                <div class="account-email-card__meta">{{ email.date_sent }}</div>
+            </a>
+        {% endfor %}
+        <div class="account-orders__pagination">
+            {% include "oscar/partials/pagination.html" %}
+        </div>
+    {% else %}
+        <div class="account-empty">
+            <p class="account-empty__title mb-2">{% trans 'No emails yet' %}</p>
+            <p class="mb-0">{% trans 'Transactional messages from the shop will be listed here.' %}</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock tabcontent %}

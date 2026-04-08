@@ -1,0 +1,25 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+
+{% load i18n %}
+
+{% block extra_breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:address-list' %}">{% trans 'Address book' %}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+<div class="account-confirm">
+    <h2 class="account-section-title">{% trans "Remove address" %}</h2>
+    <p class="account-confirm-lead">{% trans 'Are you sure you want to delete this address?' %}</p>
+    <p><strong>{{ object.summary }}</strong></p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="account-actions border-0 pt-2 mt-3">
+            <button type="submit" class="btn btn-danger" data-loading-text="{% trans 'Deleting...' %}">{% trans 'Delete' %}</button>
+            <a href="{% url 'customer:address-list' %}" class="btn btn-outline-black">{% trans 'Cancel' %}</a>
+        </div>
+    </form>
+</div>
+{% endblock tabcontent %}

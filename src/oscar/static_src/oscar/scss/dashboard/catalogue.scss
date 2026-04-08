@@ -1,0 +1,536 @@
+.catalogue .tab-content {
+  overflow: visible;
+}
+
+.upload-image {
+  @include clearfix();
+  margin: 0;
+  z-index: 1;
+  position: relative;
+
+  li {
+    display: block;
+    width: 200px;
+    margin: 0 1% 2%;
+    float: left;
+    text-align: center;
+
+    > div {
+      padding: 4px;
+      background: $gray-400;
+      margin-bottom: 10px;
+
+      + label,
+      + label + input {
+        display: none;
+      }
+    }
+  }
+
+  div {
+    background: $white;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    z-index: 200;
+  }
+
+  img {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    max-height: 200px;
+    max-width: 200px;
+    width: auto;
+    height: auto;
+    left: 0;
+  }
+
+  .image-input {
+    z-index: 800;
+  }
+
+  .image-input button {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    @include border-radius(0);
+  }
+
+  .input-field {
+    position: relative;
+    z-index: 1000;
+    opacity: 0;
+  }
+
+  .input-field input {
+    border-width: 0;
+    direction: ltr;
+    cursor: pointer;
+    width: 200px;
+    height: 200px;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Dashboard product create/update — compact sections rail + modern tab tables/forms
+// -----------------------------------------------------------------------------
+.dashboard-app.catalogue .dashboard-product-edit {
+  > .row {
+    align-items: flex-start;
+  }
+
+  .dashboard-product-edit__main {
+    min-width: 0;
+  }
+
+  // Narrower “Sections” rail: frees horizontal space for Stock & pricing / Price
+  .dashboard-product-edit__sections .tab-nav {
+    .table-header {
+      padding: 0.45rem 0.55rem;
+      border: 1px solid var(--cartier-border);
+      border-radius: var(--dukani-radius-sm) var(--dukani-radius-sm) 0 0;
+      background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+      margin-bottom: 0;
+
+      h3 {
+        margin: 0;
+        font-size: 0.58rem;
+        letter-spacing: 0.12em;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #75757c;
+      }
+    }
+
+    .bs-docs-sidenav {
+      border-radius: 0 0 var(--dukani-radius-sm) var(--dukani-radius-sm);
+      border: 1px solid var(--cartier-border);
+      border-top: none;
+      box-shadow: var(--dukani-shadow-sm);
+
+      .nav-link {
+        padding: 0.4rem 0.55rem;
+        font-size: 0.68rem;
+        line-height: 1.3;
+        border-color: var(--cartier-border);
+        color: var(--cartier-black);
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.03);
+        }
+
+        &.active {
+          padding: 0.45rem 0.6rem;
+          font-weight: 600;
+          background: dukani-accent-a(0.12);
+          border-color: var(--cartier-border);
+          color: var(--cartier-black);
+
+          &:after {
+            border-left-width: 8px;
+            border-bottom-width: 8px;
+            border-top-width: 8px;
+            right: -7px;
+            top: 7px;
+          }
+
+          &:before {
+            border-left-width: 9px;
+            border-bottom-width: 9px;
+            border-top-width: 9px;
+            right: -8px;
+            top: 6px;
+          }
+        }
+      }
+    }
+  }
+
+  .tab-content {
+    min-width: 0;
+
+    .table-header {
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--cartier-border);
+      border-radius: var(--dukani-radius-sm) var(--dukani-radius-sm) 0 0;
+      background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+      margin-bottom: 0;
+
+      h3 {
+        margin: 0;
+        font-size: 0.68rem;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #75757c;
+      }
+    }
+
+    .table-header + .card.card-body {
+      border-radius: 0 0 var(--dukani-radius-sm) var(--dukani-radius-sm);
+      border: 1px solid var(--cartier-border);
+      border-top: none;
+      padding: 0.85rem 1rem;
+      box-shadow: var(--dukani-shadow-sm);
+    }
+
+    .form-group {
+      margin-bottom: 0.65rem;
+    }
+  }
+
+  // In-tab tables: card-like panel, tighter rhythm
+  .dashboard-product-edit__table {
+    margin-bottom: 0;
+    border-radius: var(--dukani-radius-sm);
+    border: 1px solid var(--cartier-border) !important;
+    overflow: hidden;
+    box-shadow: var(--dukani-shadow-sm);
+    background: #fff;
+
+    caption {
+      caption-side: top;
+      padding: 0.55rem 0.85rem;
+      margin: 0;
+      background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+      border-bottom: 1px solid var(--cartier-border);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #75757c;
+    }
+
+    thead th {
+      padding: 0.55rem 0.75rem !important;
+      font-size: 0.6rem !important;
+      letter-spacing: 0.06em;
+    }
+
+    tbody td {
+      padding: 0.55rem 0.75rem !important;
+      font-size: 0.8rem;
+    }
+
+    tbody tr:nth-of-type(even) td {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    tbody tr:hover td {
+      background-color: dukani-accent-a(0.06);
+    }
+  }
+
+  // Stock & pricing — extra room for Price now that main column is wider
+  #product_stock table.dashboard-product-edit__table {
+    $stock-col-partner: 14rem;
+
+    thead th:first-child,
+    tbody td:first-child {
+      min-width: $stock-col-partner;
+    }
+
+    thead th:nth-last-child(2),
+    tbody td:nth-last-child(2) {
+      min-width: 12rem;
+      width: auto;
+      max-width: none;
+    }
+
+    td {
+      select.form-control,
+      input.form-control {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .stockrecord-price-input.form-control {
+        font-size: 0.96rem !important;
+        font-variant-numeric: tabular-nums;
+        text-align: end;
+        border-radius: var(--dukani-radius-sm, 0.375rem);
+      }
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Dashboard catalogue lists — products & categories (modern panels + tables)
+// -----------------------------------------------------------------------------
+
+.dashboard-app.catalogue {
+  // Page title row: allow header action buttons to wrap on narrow widths
+  .content > .d-flex.flex-column.flex-md-row.justify-content-between .btn-toolbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .dashboard-panel {
+    border-radius: var(--dukani-radius);
+    border: 1px solid var(--cartier-border);
+    box-shadow: var(--dukani-shadow-sm);
+    background: #fff;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+
+  .dashboard-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.2rem;
+    background: linear-gradient(180deg, #fafafa 0%, #fff 100%);
+    border-bottom: 1px solid var(--cartier-border);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cartier-gold-deep);
+
+    i {
+      opacity: 0.88;
+      font-size: 0.85rem;
+    }
+  }
+
+  .dashboard-panel__body {
+    padding: 1.15rem 1.25rem;
+  }
+
+  .dashboard-panel-form {
+    .form-group {
+      margin-bottom: 0.5rem;
+      margin-right: 0.75rem;
+    }
+
+    .form-control {
+      border-radius: var(--dukani-radius-sm);
+      border-color: var(--cartier-border);
+      font-size: 0.82rem;
+      min-width: 8rem;
+
+      &:focus {
+        border-color: var(--cartier-gold);
+        box-shadow: 0 0 0 3px dukani-accent-a(0.15);
+      }
+    }
+  }
+
+  .dashboard-catalogue-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.65rem;
+    padding: 0.85rem 1.1rem;
+    margin-bottom: 1.1rem;
+    border-radius: var(--dukani-radius-sm);
+    border: 1px solid var(--cartier-border);
+    background: linear-gradient(90deg, var(--cartier-gold-faded) 0%, #fff 55%);
+    font-size: 0.8rem;
+  }
+
+  .dashboard-catalogue-breadcrumb__icon {
+    color: var(--cartier-gold-deep);
+  }
+
+  .dashboard-catalogue-breadcrumb__label {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: #666;
+  }
+
+  .dashboard-catalogue-breadcrumb__nav {
+    a {
+      color: var(--cartier-black);
+      font-weight: 600;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s ease, color 0.2s ease;
+
+      &:hover {
+        border-bottom-color: var(--cartier-gold);
+        color: var(--cartier-gold-deep);
+      }
+    }
+  }
+
+  .dashboard-catalogue-breadcrumb__sep {
+    margin: 0 0.35rem;
+    color: #bbb;
+  }
+
+  .dashboard-data-table-wrap {
+    border: 1px solid var(--cartier-border);
+    border-radius: var(--dukani-radius);
+    box-shadow: var(--dukani-shadow-sm);
+    background: #fff;
+    // Must stay visible so Bootstrap row “Actions” dropdowns are not clipped
+    // (especially the last row, which extends below the table edge).
+    overflow: visible;
+    margin-bottom: 1.5rem;
+
+    table.table {
+      margin-bottom: 0;
+    }
+
+    // Row menus stack within `.dashboard-table-elevated` (see shell.scss).
+    tbody td .dropdown {
+      position: relative;
+      z-index: 1;
+    }
+
+    tbody td .dropdown.show {
+      z-index: 2000;
+    }
+
+    tbody td .dropdown-menu {
+      z-index: 2001;
+    }
+
+    caption {
+      caption-side: top;
+      padding: 0;
+    }
+
+    thead th {
+      border-top: none;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+      background: #fafafa;
+      border-bottom: 1px solid var(--cartier-border);
+      vertical-align: middle;
+    }
+
+    thead th a {
+      color: inherit;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+
+      &:hover {
+        color: var(--cartier-gold-deep);
+      }
+    }
+
+    tbody td {
+      font-size: 0.82rem;
+      vertical-align: middle;
+    }
+
+    tbody tr:hover {
+      background-color: dukani-accent-a(0.04);
+    }
+  }
+
+  .dashboard-table-caption {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+
+    @media (min-width: 992px) {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .dashboard-table-caption__left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .dashboard-table-caption__icon {
+    color: var(--cartier-gold-deep);
+    font-size: 1rem;
+  }
+
+  .dashboard-table-caption__heading {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: #3a3a40;
+  }
+
+  .dashboard-bulk-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.65rem 1rem;
+    font-size: 0.78rem;
+  }
+
+  .dashboard-bulk-toolbar__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    background: #f0f0f3;
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #555;
+
+    i {
+      color: var(--cartier-gold-deep);
+    }
+  }
+
+  .dashboard-bulk-toolbar__prompt {
+    font-size: 0.72rem;
+  }
+
+  .dashboard-bulk-toolbar__check {
+    margin: 0 !important;
+    padding-left: 1.35rem;
+  }
+
+  .dashboard-empty-state {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    border: 1px dashed var(--cartier-border);
+    border-radius: var(--dukani-radius);
+    background: #fafafa;
+    margin-bottom: 1rem;
+
+    &--compact {
+      padding: 1rem 1.25rem;
+      text-align: left;
+    }
+  }
+
+  .dashboard-empty-state__icon {
+    font-size: 2rem;
+    color: var(--cartier-gold);
+    opacity: 0.65;
+    margin-bottom: 0.75rem;
+  }
+
+  .dashboard-empty-state__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+
+  .dashboard-empty-state__hint {
+    margin: 0;
+  }
+
+  .dashboard-modal .modal-content {
+    border-radius: var(--dukani-radius);
+    border: 1px solid var(--cartier-border);
+  }
+}

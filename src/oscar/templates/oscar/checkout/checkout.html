@@ -1,0 +1,144 @@
+{% extends "oscar/checkout/layout.html" %}
+{% load currency_filters %}
+{% load i18n %}
+{% load image_tags %}
+{% load purchase_info_tags %}
+
+{% block title %}
+    {% trans "Checkout" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'oscar/checkout/nav.html' with step=1 %}
+{% endblock %}
+
+{% block content %}
+
+    {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <div class="row shipping-payment">
+        {% block shipping_address %}
+            <div class="col-sm-6">
+                <div class="sub-header">
+                    <h2>{% trans "Shipping" %}</h2>
+                </div>
+                {% if shipping_address %}
+                    {% url 'checkout:shipping-address' as checkout_shipping_address_url %}
+                    {% block shipping_address_card %}
+                        {% include "oscar/checkout/partials/shipping_detail_card.html" with address=shipping_address guest_email=guest_email change_url=checkout_shipping_address_url %}
+                    {% endblock %}
+                {% endif %}
+
+                {% if shipping_method %}
+                    <div class="card card-body checkout-summary-panel">
+                        <h3>
+                          {% trans "Shipping method" %}
+                          {% block shipping_method_actions %}
+                            <a href="{% url 'checkout:shipping-method' %}" class="float-right">
+                                {% trans "Change" %}
+                            </a>
+                          {% endblock %}
+                        </h3>
+                        <p>{{ shipping_method.name }}
+                            {% if shipping_method.description %}
+                                - {{ shipping_method.description|safe }}
+                            {% endif %}
+                        </p>
+
+                    </div>
+                {% endif %}
+            </div>
+        {% endblock shipping_address %}
+
+        {# You will almost certainly want to override this block to provide a payment summary #}
+        {% block payment_method %}
+            <div class="col-sm-6">
+                <div class="sub-header">
+                    <h2>{% trans "Payment" %}</h2>
+                </div>
+                <div class="card card-body checkout-summary-panel">
+                    <h3>
+                      {% trans "Payment" %}
+                      <a href="{% url 'checkout:payment-details' %}" class="float-right">
+                        {% trans "Change" %}
+                      </a>
+                    </h3>
+                    <p>{% trans "Payment details to go here" %}</p>
+                </div>
+            </div>
+        {% endblock payment_method %}
+    </div>
+
+    {% block order_contents %}
+        <div class="sub-header d-flex flex-wrap align-items-center justify-content-between">
+            <h2 class="mb-2 mb-md-0">{% trans "Order contents" %}</h2>
+            {% block order_contents_actions %}
+                <a href="{% url 'basket:summary' %}" class="btn btn-sm checkout-btn-ghost">
+                    {% trans "Edit order contents" %}
+                </a>
+            {% endblock %}
+        </div>
+
+        <div class="row checkout-order-lines mx-n2 mt-4">
+            {% for line in basket.all_lines %}
+                {% purchase_info_for_line request line as session %}
+                <div class="col-6 col-md-4 col-lg-3 px-2 mb-3 d-flex">
+                    <div class="card checkout-order-item-card border-0 shadow-sm flex-fill w-100">
+                        <div class="card-body d-flex flex-column p-3">
+                            <div class="checkout-order-item-card__media text-center mb-3">
+                                {% with image=line.product.primary_image %}
+                                    {% oscar_thumbnail image.original "200x200" upscale=False as thumb %}
+                                    <a href="{{ line.product.get_absolute_url }}" class="d-inline-block">
+                                        <img src="{{ thumb.url }}" alt="{{ line.product.get_title }}" class="img-fluid rounded checkout-order-item-card__img">
+                                    </a>
+                                {% endwith %}
+                            </div>
+                            <h3 class="h6 font-weight-bold text-center mb-2 checkout-order-item-card__title">
+                                <a href="{{ line.product.get_absolute_url }}" class="text-dark">{{ line.description }}</a>
+                            </h3>
+                            <p class="small text-muted text-center mb-2 mb-md-3 availability {{ session.availability.code }}">{{ session.availability.message }}</p>
+                            <div class="d-flex justify-content-between align-items-center small text-muted px-1 mt-auto">
+                                <span>{% trans "Qty" %} <strong class="text-dark">{{ line.quantity }}</strong></span>
+                                <span class="price_color font-weight-bold text-dark">
+                                    {% if not show_tax_separately and line.is_tax_known %}
+                                        {{ line.line_price_incl_tax|currency:basket.currency }}
+                                    {% else %}
+                                        {{ line.line_price_excl_tax|currency:basket.currency }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row justify-content-end mt-2">
+            <div class="col-md-7 col-lg-5 col-xl-4">
+                <div class="sub-header mt-4">
+                    <h2>{% trans 'Totals' %}</h2>
+                </div>
+                <div class="card border-0 checkout-totals-card overflow-hidden">
+                    <div class="card-body p-3 p-md-4">
+                        {% include 'oscar/basket/partials/basket_totals.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endblock order_contents %}
+
+    {% block shipping_method %}
+    {% endblock shipping_method %}
+
+    {% block payment_details %}
+    {% endblock payment_details %}
+
+    {% block place_order %}
+    {% endblock place_order %}
+
+{% endblock content %}

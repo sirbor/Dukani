@@ -1,0 +1,364 @@
+{% load i18n %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+        <style type="text/css">
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+
+            body,
+            table,
+            td,
+            a {
+              -webkit-text-size-adjust: 100%;
+              -ms-text-size-adjust: 100%;
+            }
+
+            table,
+            td {
+              mso-table-lspace: 0pt;
+              mso-table-rspace: 0pt;
+            }
+
+            img {
+              -ms-interpolation-mode: bicubic;
+              border: 0;
+              height: auto;
+              line-height: 100%;
+              outline: none;
+              text-decoration: none;
+              max-width: 100%;
+            }
+
+            body {
+              margin: 0 !important;
+              padding: 0 !important;
+              width: 100% !important;
+              height: 100% !important;
+              -webkit-font-smoothing: antialiased;
+              background-color: #f4f2f0;
+              font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-size: 15px;
+              line-height: 1.65;
+              color: #2d2d2f;
+            }
+
+            table td {
+              vertical-align: top;
+            }
+
+            .body-wrap {
+              background-color: #f4f2f0;
+              width: 100%;
+              padding: 24px 12px;
+            }
+
+            .container {
+              display: block !important;
+              max-width: 600px !important;
+              margin: 0 auto !important;
+              clear: both !important;
+            }
+
+            .content {
+              max-width: 600px;
+              margin: 0 auto;
+              display: block;
+            }
+
+            .main {
+              background-color: #ffffff;
+              border: 1px solid #e8e8ea;
+              border-radius: 6px;
+              box-shadow: 0 8px 28px rgba(17, 17, 17, 0.06);
+            }
+
+            .content-wrap {
+              padding: 28px 28px 20px;
+            }
+
+            .content-block {
+              padding: 0 0 22px;
+            }
+
+            .email-masthead {
+              padding-bottom: 8px !important;
+              border-bottom: 1px solid #ece8e4;
+              margin-bottom: 8px !important;
+            }
+
+            .email-masthead__name {
+              font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+              font-size: 22px;
+              font-weight: 500;
+              letter-spacing: 0.06em;
+              text-transform: uppercase;
+              color: #111111;
+              margin: 0 0 10px;
+            }
+
+            .email-masthead__rule {
+              width: 48px;
+              height: 2px;
+              background-color: #5c4b3d;
+              margin: 0;
+            }
+
+            h1, h2, h3, h4 {
+              font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+              color: #111111;
+              line-height: 1.25;
+              font-weight: 500;
+              margin: 28px 0 10px;
+            }
+
+            h1 {
+              font-size: 26px;
+              margin-top: 8px;
+            }
+
+            h2 {
+              font-size: 22px;
+            }
+
+            h3 {
+              font-size: 18px;
+            }
+
+            h4 {
+              font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-size: 13px;
+              font-weight: 600;
+              letter-spacing: 0.08em;
+              text-transform: uppercase;
+              color: #5c5c62;
+            }
+
+            p, ul, ol {
+              margin: 0 0 14px;
+              font-weight: 400;
+            }
+
+            p li, ul li, ol li {
+              margin-left: 5px;
+              list-style-position: inside;
+            }
+
+            a {
+              color: #5c4b3d;
+              text-decoration: underline;
+              font-weight: 500;
+            }
+
+            .btn-primary {
+              display: inline-block;
+              text-decoration: none !important;
+              color: #ffffff !important;
+              background-color: #111111 !important;
+              border: 1px solid #111111 !important;
+              font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+              font-size: 11px !important;
+              font-weight: 600 !important;
+              letter-spacing: 0.18em !important;
+              text-transform: uppercase !important;
+              padding: 14px 28px !important;
+              line-height: 1.4 !important;
+              border-radius: 2px !important;
+              text-align: center !important;
+              margin: 4px 0;
+            }
+
+            .last {
+              margin-bottom: 0 !important;
+            }
+
+            .first {
+              margin-top: 0 !important;
+            }
+
+            .aligncenter {
+              text-align: center;
+            }
+
+            .alignright {
+              text-align: right;
+            }
+
+            .alignleft {
+              text-align: left;
+            }
+
+            .clear {
+              clear: both;
+            }
+
+            .alert {
+              font-size: 15px;
+              color: #ffffff;
+              font-weight: 600;
+              padding: 18px 20px;
+              text-align: center;
+              border-radius: 4px 4px 0 0;
+              font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+
+            .alert a {
+              color: #ffffff !important;
+              text-decoration: none;
+            }
+
+            .alert.alert-warning {
+              background-color: #b7791f;
+            }
+
+            .alert.alert-bad {
+              background-color: #9b2c2c;
+            }
+
+            .alert.alert-good {
+              background-color: #2f855a;
+            }
+
+            .invoice {
+              margin: 32px auto;
+              text-align: left;
+              width: 100%;
+            }
+
+            .order {
+              text-align: left;
+              width: 100%;
+            }
+
+            .invoice td, .order td {
+              padding: 8px 0;
+              font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+              font-size: 14px;
+            }
+
+            .invoice .invoice-items, .order .order-items {
+              width: 100%;
+            }
+
+            .invoice .invoice-items td, .order .order-items td {
+              border-top: 1px solid #ececec;
+            }
+
+            .invoice .invoice-items .total td, .order .order-items .total td {
+              border-top: 2px solid #111111;
+              border-bottom: 2px solid #111111;
+              font-weight: 600;
+              font-size: 15px;
+              color: #111111;
+            }
+
+            .email-footer {
+              padding-top: 8px !important;
+            }
+
+            .email-footer__thanks {
+              font-size: 14px;
+              color: #5c5c62;
+              margin-bottom: 6px !important;
+            }
+
+            .email-footer__signoff {
+              font-family: "Playfair Display", Georgia, serif;
+              font-size: 15px;
+              color: #111111;
+              margin-bottom: 0 !important;
+              line-height: 1.55;
+            }
+
+            @media only screen and (max-width: 640px) {
+              .body-wrap {
+                padding: 12px 8px !important;
+              }
+
+              .content-wrap {
+                padding: 20px 18px 16px !important;
+              }
+
+              h1 {
+                font-size: 22px !important;
+              }
+
+              h2 {
+                font-size: 19px !important;
+              }
+
+              h3 {
+                font-size: 17px !important;
+              }
+
+              .email-masthead__name {
+                font-size: 18px !important;
+              }
+
+              .btn-primary {
+                display: block !important;
+                width: 100% !important;
+              }
+            }
+        </style>
+    </head>
+
+    <body itemscope itemtype="http://schema.org/EmailMessage">
+
+    <table class="body-wrap" role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center">
+                <table class="container" width="600" cellpadding="0" cellspacing="0" role="presentation">
+                    <tr>
+                        <td>
+                <div class="content">
+                    <table class="main" width="100%" cellpadding="0" cellspacing="0" role="presentation" itemprop="action" itemscope itemtype="http://schema.org/ConfirmAction">
+                        <tr>
+                            <td class="content-wrap">
+                                <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                                    {% block header %}
+                                    <tr>
+                                        <td class="content-block email-masthead first">
+                                            <p class="email-masthead__name">{{ site.name }}</p>
+                                            <div class="email-masthead__rule"></div>
+                                        </td>
+                                    </tr>
+                                    {% endblock %}
+                                    {% block tbody %}
+                                    <tr>
+                                        <td class="content-block">
+                                            {% block body %}{% endblock %}
+                                        </td>
+                                    </tr>
+                                    {% endblock %}
+                                    {% block footer %}
+                                        <tr>
+                                            <td class="content-block email-footer last">
+                                                <p class="email-footer__thanks">{% trans "Thank you for shopping with us." %}</p>
+                                                <p class="email-footer__signoff">{% blocktrans with name=site.name %}With appreciation,<br />The {{ name }} team{% endblocktrans %}</p>
+                                            </td>
+                                        </tr>
+                                    {% endblock %}
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    </body>
+</html>

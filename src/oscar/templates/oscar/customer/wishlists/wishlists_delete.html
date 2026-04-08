@@ -1,0 +1,29 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block extra_breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:wishlists-list' %}">{% trans 'Wish Lists' %}</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:wishlists-detail' key=wishlist.key %}">{{ wishlist.name }}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+<div class="account-confirm">
+    <h2 class="account-section-title">{% trans "Delete wish list" %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p class="account-confirm-lead">
+            {% blocktrans with name=wishlist.name %}
+                Are you sure you want to delete {{ name }}?
+            {% endblocktrans %}
+        </p>
+        <div class="account-actions border-0 pt-2 mt-3">
+            <button type="submit" class="btn btn-danger" data-loading-text="{% trans 'Deleting...' %}">{% trans 'Delete' %}</button>
+            <a href="{% url 'customer:wishlists-list' %}" class="btn btn-outline-black">{% trans 'Cancel' %}</a>
+        </div>
+    </form>
+</div>
+{% endblock tabcontent %}

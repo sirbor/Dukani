@@ -1,0 +1,350 @@
+{% extends "oscar/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load category_tags %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static "oscar/css/styles.css" %}" />
+{% endblock %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin>
+{% endblock %}
+
+{% block layout %}
+    <header class="luxury-header fixed-top bg-white shadow-sm border-bottom border-gold-low">
+        {# Live announcement ticker #}
+        <div class="site-announcement" role="region" aria-label="{% trans 'Promotions and service updates' %}">
+            <span class="site-announcement__shine" aria-hidden="true"></span>
+            <div class="site-announcement__frame">
+                <div class="site-announcement__badge" title="{% trans 'Latest updates' %}">
+                    <span class="site-announcement__pulse" aria-hidden="true"></span>
+                    <span class="site-announcement__badge-text">{{ announcement_badge_label }}</span>
+                </div>
+                <div class="site-announcement__ornaments site-announcement__ornaments--left" aria-hidden="true">
+                    <span class="site-announcement__diamond"></span>
+                    <span class="site-announcement__rule"></span>
+                </div>
+                <div class="site-announcement__viewport">
+                <div class="site-announcement__track">
+                    <div class="site-announcement__set">
+                        {% for item in announcement_items %}
+                        <span class="site-announcement__item">
+                            <i class="{{ item.icon }}" aria-hidden="true"></i>
+                            {{ item.text }}
+                        </span>
+                        {% if not forloop.last %}<span class="site-announcement__dot" aria-hidden="true"></span>{% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="site-announcement__set site-announcement__set--duplicate" aria-hidden="true">
+                        {% for item in announcement_items %}
+                        <span class="site-announcement__item">
+                            <i class="{{ item.icon }}" aria-hidden="true"></i>
+                            {{ item.text }}
+                        </span>
+                        {% if not forloop.last %}<span class="site-announcement__dot" aria-hidden="true"></span>{% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
+                <div class="site-announcement__ornaments site-announcement__ornaments--right" aria-hidden="true">
+                    <span class="site-announcement__rule"></span>
+                    <span class="site-announcement__diamond"></span>
+                </div>
+            </div>
+        </div>
+
+        {# Quick Links Bar #}
+        <div class="bg-white border-bottom border-gold-ultra-low py-1 d-none d-md-block">
+            <div class="container d-flex justify-content-end align-items-center">
+                <div class="top-bar-right d-flex align-items-center">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'customer:summary' %}" class="small text-muted text-uppercase tracking-wider mr-4" title="{% trans "Account" %}">
+                            <i class="far fa-user text-gold" style="font-size: 0.9rem;"></i>
+                        </a>
+                        {% if user.is_staff or perms.partner.dashboard_access %}
+                            <a href="{% url 'dashboard:index' %}" class="small text-muted text-uppercase tracking-wider mr-4" title="{% trans "Management" %}">
+                                <i class="fas fa-cog text-gold" style="font-size: 0.9rem;"></i>
+                            </a>
+                        {% endif %}
+                        <form method="post" action="{% url 'customer:logout' %}" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link p-0 small text-muted text-uppercase tracking-wider border-0" title="{% trans "Logout" %}">
+                                <i class="fas fa-sign-out-alt text-gold" style="font-size: 0.9rem;"></i>
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'customer:login' %}" class="small text-muted text-uppercase tracking-wider" title="{% trans "Sign In" %}">
+                            <i class="fas fa-sign-in-alt text-gold" style="font-size: 0.9rem;"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {# Main Brand & Nav Navigation #}
+        <nav class="navbar navbar-expand-lg navbar-light py-4 luxury-main-navbar">
+            <div class="container">
+                <button class="navbar-toggler border-0 p-0" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse order-2 order-lg-1" id="mainNav">
+                    <ul class="navbar-nav align-items-center">
+                        <li class="nav-item px-2 px-sm-3" title="{% trans "Books" %}">
+                            <a class="nav-link luxury-nav-icon-link" href="{% category_url 'books' %}" aria-label="{% trans "Books" %}">
+                                <i class="fas fa-book-open text-gold fa-lg" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item px-2 px-sm-3" title="{% trans "Catalogue" %}">
+                            <a class="nav-link luxury-nav-icon-link" href="{% catalogue_browse_url %}" aria-label="{% trans "Catalogue" %}">
+                                <i class="fas fa-th-large text-gold fa-lg" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="navbar-brand-wrapper order-1 order-lg-2 mx-auto">
+                    <a class="navbar-brand mx-0 d-flex align-items-center justify-content-center text-uppercase tracking-ultra font-serif h2 mb-0" href="{% url 'home' %}" style="font-size: 1.8rem;">
+                        {% if storefront_logo_url %}
+                        <img src="{{ storefront_logo_url }}" alt="{{ shop_name }}" class="mr-3" style="height: 50px; width: auto; object-fit: contain;">
+                        {% else %}
+                        <img src="{% static "img/logo.png" %}" alt="{{ shop_name }}" class="mr-3" style="height: 50px; width: auto; object-fit: contain;">
+                        {% endif %}
+                        <span class="d-none d-sm-inline">{{ shop_name }}</span>
+                    </a>
+                </div>
+
+                <div class="nav-tools order-3 d-flex align-items-center justify-content-end">
+                    <div class="d-none d-md-block mr-4">
+                        {% include "oscar/partials/search.html" %}
+                    </div>
+                    <a href="{% url 'basket:summary' %}" class="d-flex align-items-center text-dark position-relative">
+                        <i class="fas fa-shopping-bag text-gold fa-lg"></i>
+                        {% if not request.basket.is_empty %}
+                            <span class="basket-badge">{{ request.basket.num_items }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <style>
+        :root {
+            --cartier-gold: #F2DFCE;
+            --cartier-gold-deep: #5c4b3d;
+            --cartier-black: #111111;
+            --cartier-white: #ffffff;
+            --cartier-gray: #fcfcfc;
+            --cartier-text: #1a1a1a;
+            --cartier-border: #f0f0f0;
+            --cartier-gold-low: rgba(242, 223, 206, 0.1);
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--cartier-white);
+            color: var(--cartier-text);
+            padding-top: 180px; /* Increased offset for sticky header to prevent overlap */
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .tracking-ultra { letter-spacing: 0.5em; margin-right: -0.5em; }
+        .tracking-widest { letter-spacing: 0.2em; }
+        
+        .luxury-header {
+            z-index: 1050;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.98) !important;
+        }
+
+        .luxury-header.scrolled {
+            padding-top: 5px !important;
+            padding-bottom: 5px !important;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05) !important;
+        }
+
+        .luxury-header.scrolled .navbar {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+        }
+
+        .luxury-header.scrolled .site-announcement,
+        .luxury-header.scrolled .bg-white.border-bottom.border-gold-ultra-low {
+            display: none !important;
+        }
+
+        .luxury-header.scrolled .navbar-brand {
+            font-size: 1.4rem !important;
+        }
+
+        /* Main storefront nav: subtle photo backdrop from static assets */
+        .luxury-main-navbar {
+            background-color: rgba(252, 252, 252, 0.92) !important;
+            background-image:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.86) 50%, rgba(252, 252, 252, 0.9) 100%),
+                url("{{ storefront_nav_background_url }}");
+            background-size: cover;
+            background-position: center 35%;
+            background-repeat: no-repeat;
+        }
+        .top-bar-left span, .top-bar-right a, .top-bar-right button {
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            font-weight: 600;
+        }
+        .navbar-brand {
+            color: var(--cartier-black) !important;
+            font-weight: 400;
+        }
+        .nav-link {
+            color: var(--cartier-black) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--cartier-gold-deep) !important;
+        }
+
+        /* Icon-only category shortcuts: reliable tap targets + full-card navigation */
+        .luxury-nav-icon-link {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.75rem;
+            min-height: 2.75rem;
+            padding: 0.35rem !important;
+            box-sizing: border-box;
+        }
+        
+        .basket-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: var(--cartier-black);
+            color: white;
+            font-size: 0.6rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .dropdown-menu {
+            margin-top: 15px !important;
+        }
+        .dropdown-item {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+        .dropdown-item:hover {
+            background: var(--cartier-gray);
+            color: var(--cartier-gold-deep);
+            padding-left: 2rem;
+        }
+
+        /* Global UI Improvements */
+        .btn-primary, .btn-black {
+            background-color: var(--cartier-black) !important;
+            border: 1px solid var(--cartier-black) !important;
+            color: var(--cartier-white) !important;
+            border-radius: 0 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            font-size: 0.7rem;
+            padding: 18px 45px;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            font-weight: 600;
+            overflow: hidden;
+            position: relative;
+        }
+        .btn-primary:hover, .btn-black:hover {
+            background-color: var(--cartier-gold-deep) !important;
+            border-color: var(--cartier-gold-deep) !important;
+            color: white !important;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .page-header {
+            border: none;
+            margin-bottom: 5rem;
+            text-align: center;
+            padding-top: 3rem;
+        }
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 400;
+            color: var(--cartier-black);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 2.2rem;
+            margin-bottom: 0;
+        }
+
+        /* Forms */
+        .form-control {
+            border-radius: 0;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: var(--cartier-gold-deep);
+            background-color: #fcfcfc;
+        }
+
+        /* Product cards + icon colours: see storefront-modern.scss */
+    </style>
+
+    {% block content_wrapper %}
+        <div class="container-fluid px-0">
+            {% include "oscar/partials/alert_messages.html" %}
+            <div id="content_inner">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    {% endblock %}
+
+    {% include "oscar/partials/footer.html" %}
+{% endblock %}
+
+{# Local scripts #}
+{% block scripts %}
+    {{ block.super }}
+    <!-- Twitter Bootstrap -->
+    <script src="{% static "oscar/js/bootstrap4/bootstrap.bundle.min.js" %}"></script>
+    <!-- Oscar -->
+    <script src="{% static "oscar/js/oscar/ui.js" %}"></script>
+{% endblock %}
+
+{% block extrascripts %}
+    {% include "oscar/partials/extrascripts.html" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.init();
+
+    // Modern Header Scroll Handling
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('.luxury-header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+{% endblock %}

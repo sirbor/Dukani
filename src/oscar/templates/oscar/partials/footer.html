@@ -1,0 +1,45 @@
+{% load i18n %}
+{% load category_tags %}
+<footer class="luxury-footer border-top border-gold-low py-5 mt-5">
+    <div class="container">
+        {% block footer %}
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-gold text-uppercase tracking-widest small font-weight-bold mb-3">{{ shop_name }}</h5>
+                    <p class="text-muted small font-weight-light">{{ shop_tagline }}</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h6 class="text-charcoal text-uppercase tracking-wider small font-weight-bold mb-3">{% trans "Collection" %}</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="{% catalogue_browse_url %}" class="text-muted">{% trans "View All" %}</a></li>
+                        <li><a href="{% url 'offer:list' %}" class="text-muted">{% trans "Special Offers" %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4 text-md-right">
+                    <div class="social-links mb-3">
+                        <a href="#" class="text-gold mx-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gold mx-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gold mx-2"><i class="fab fa-twitter"></i></a>
+                    </div>
+                    <p class="text-muted x-small text-uppercase tracking-wider">&copy; {% now "Y" %} {{ shop_name }}. {% trans "All Rights Reserved." %}</p>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+    
+    <style>
+        .luxury-footer {
+            background-color: #fff;
+        }
+        .luxury-footer a {
+            transition: color 0.3s ease;
+            text-decoration: none;
+        }
+        .luxury-footer a:hover {
+            color: var(--gold) !important;
+        }
+        .x-small {
+            font-size: 0.65rem;
+        }
+    </style>
+</footer>

@@ -1,0 +1,17 @@
+# CI runs `make lint` (Black + Pylint). This hook runs Black with --force-exclude so
+# migration paths are skipped even when pre-commit passes explicit filenames.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        args: [--force-exclude]
+        # Match `make lint`: only these trees, skip migrations.
+        files: ^(src/oscar|tests)/.*\.pyi?$
+        exclude: (^|/)(migrations)(/|$)

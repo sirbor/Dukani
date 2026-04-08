@@ -1,0 +1,728 @@
+// Basket page & mini-basket — Dukani (matches checkout_flow tokens)
+
+$bk-gold: $dukani-accent;
+$bk-gold-deep: $dukani-accent-deep;
+$bk-ink: #111111;
+$bk-line: #e8e8ea;
+$bk-surface: #f7f7f8;
+$bk-muted: #5c5c62;
+
+// Reset legacy checkout.scss .basket-items zebra for this page
+.basket-page .basket-items {
+  border-bottom: none;
+  padding: 0;
+  margin-bottom: 0;
+  background: transparent !important;
+
+  &:nth-child(even) {
+    background: transparent !important;
+  }
+}
+
+.basket-page {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 3rem;
+}
+
+.basket-page__header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid $bk-line;
+}
+
+.basket-page__eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: $bk-gold-deep;
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+}
+
+.basket-page__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $bk-ink;
+  margin-bottom: 0;
+}
+
+.basket-page .gold-divider {
+  width: 64px;
+  height: 2px;
+  background: $bk-gold;
+  margin: 1rem auto 0;
+}
+
+.basket-line-list__intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid $bk-line;
+  background: linear-gradient(135deg, #fff 0%, $bk-surface 100%);
+
+  @media (max-width: 767.98px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.basket-line-list__count {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: $bk-gold-deep;
+  margin: 0;
+}
+
+.basket-line-list__hint {
+  font-size: 0.8rem;
+  color: $bk-muted;
+  margin: 0;
+}
+
+// Callouts (warnings, offers)
+.basket-callout {
+  border-radius: 0.5rem;
+  border: 1px solid $bk-line;
+  background: #fff;
+  box-shadow: 0 4px 18px rgba(17, 17, 17, 0.04);
+}
+
+.basket-callout__title {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $bk-gold-deep;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+// Line item card
+.basket-line-card {
+  position: relative;
+  border-radius: 0.625rem;
+  border: 1px solid $bk-line;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(17, 17, 17, 0.04),
+    0 8px 28px rgba(17, 17, 17, 0.06);
+  overflow: hidden;
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    border-color: dukani-accent-a(0.35);
+    box-shadow:
+      0 2px 4px rgba(17, 17, 17, 0.05),
+      0 14px 40px rgba(17, 17, 17, 0.09);
+    transform: translateY(-2px);
+  }
+}
+
+.basket-line-card__accent {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    dukani-accent-a(0.15) 0%,
+    $bk-gold 45%,
+    dukani-accent-a(0.15) 100%
+  );
+  opacity: 0.95;
+}
+
+.basket-line-card-inner {
+  position: relative;
+}
+
+.basket-line-card__columns {
+  background: linear-gradient(180deg, $bk-surface 0%, #f3f3f5 100%);
+  border-bottom: 1px solid $bk-line;
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+.basket-line-card__body {
+  background: #fff;
+}
+
+.basket-line-card__media {
+  background: radial-gradient(
+    ellipse at center,
+    #fff 0%,
+    $bk-surface 72%
+  );
+  border-radius: 0.5rem;
+  border: 1px solid rgba(232, 232, 234, 0.95);
+  padding: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 128px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+
+  .basket-line-card:hover & {
+    border-color: dukani-accent-a(0.22);
+  }
+}
+
+.basket-line-card__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.32;
+  margin-bottom: 0.4rem;
+
+  a {
+    color: $bk-ink;
+    text-decoration: none;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: $bk-gold-deep;
+    }
+  }
+}
+
+.basket-line-card__availability {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
+  color: $bk-muted;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.basket-line-card__price-label {
+  display: block;
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $bk-muted;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.basket-line-card__price-col--unit .price_color {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.basket-line-card__price-col--line .price_color {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: $bk-ink;
+}
+
+.basket-line-card__thumb {
+  display: inline-block;
+  border: none;
+  border-radius: 0.35rem;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  line-height: 0;
+
+  img {
+    max-height: 120px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 0.25rem;
+    transition: transform 0.45s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  &:hover img,
+  &:focus img {
+    transform: scale(1.06);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .basket-line-card__body > .row > .basket-line-card__price-col {
+    margin-top: 0.85rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(232, 232, 234, 0.95);
+  }
+
+  .basket-line-card__price-col--unit {
+    border-right: 1px solid rgba(232, 232, 234, 0.8);
+  }
+
+  .basket-line-card__price-col--line .price_color {
+    font-size: 1.15rem;
+  }
+}
+
+.basket-qty {
+  .input-group {
+    max-width: 11rem;
+  }
+
+  .form-control {
+    border-radius: 0.375rem 0 0 0.375rem;
+    border: 1px solid $bk-line;
+    font-weight: 500;
+    text-align: center;
+
+    &:focus {
+      border-color: $bk-gold;
+      box-shadow: 0 0 0 3px dukani-accent-a(0.15);
+    }
+  }
+
+  .btn {
+    border-radius: 0 0.375rem 0.375rem 0;
+    border: 1px solid $bk-ink;
+    background: $bk-ink;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+    &:hover {
+      background: $bk-gold-deep;
+      border-color: $bk-gold-deep;
+      color: #fff;
+    }
+  }
+}
+
+.basket-line-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+}
+
+.basket-line-actions__link {
+  color: $bk-muted !important;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid dukani-accent-a(0.45);
+  padding-bottom: 0.1rem;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    color: $bk-ink !important;
+    border-bottom-color: $bk-gold-deep;
+  }
+}
+
+.basket-panel {
+  border-radius: 0.5rem !important;
+  border: 1px solid $bk-line !important;
+  background: #fff !important;
+  box-shadow: 0 6px 24px rgba(17, 17, 17, 0.05);
+  height: 100%;
+}
+
+.basket-panel__title {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $bk-gold-deep;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.basket-panel--sticky {
+  @media (min-width: 992px) {
+    position: sticky;
+    top: 7rem;
+  }
+}
+
+#basket_totals.basket-totals-modern {
+  .table {
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.9rem;
+    color: #374151;
+  }
+
+  th,
+  td {
+    padding: 0.45rem 0;
+    vertical-align: top;
+    border: none;
+  }
+
+  .total {
+    background-color: transparent !important;
+    font-weight: 600;
+    color: $bk-ink;
+  }
+
+  .price_color {
+    color: $bk-ink;
+    font-weight: 600;
+  }
+
+  .basket-totals-grand {
+    border-top: 2px solid $bk-line !important;
+
+    th {
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: $bk-muted;
+      padding-top: 1.25rem !important;
+    }
+
+    td .price_color,
+    td span.price_color {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 1.5rem !important;
+      font-weight: 600;
+      color: $bk-ink !important;
+    }
+  }
+}
+
+.basket-discount-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $bk-gold-deep;
+  font-weight: 700;
+}
+
+.btn-basket-primary.btn-sm {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+}
+
+.btn-basket-primary {
+  border-radius: 0.25rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: $bk-ink !important;
+  border: 1px solid $bk-ink !important;
+  color: #fff !important;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+
+  &:hover,
+  &:focus {
+    background: $bk-gold-deep !important;
+    border-color: $bk-gold-deep !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(17, 17, 17, 0.12);
+  }
+
+  .fa-arrow-right {
+    font-size: 0.85em;
+    opacity: 0.9;
+  }
+}
+
+.btn-basket-ghost {
+  border-radius: 0.25rem;
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid $bk-line !important;
+  background: #fff !important;
+  color: $bk-ink !important;
+
+  &:hover {
+    border-color: $bk-gold !important;
+    color: $bk-ink !important;
+  }
+}
+
+.basket-page__note {
+  font-size: 0.8125rem;
+  color: $bk-muted;
+  font-style: italic;
+}
+
+.basket-empty {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid $bk-line;
+  background: $bk-surface;
+  box-shadow: 0 6px 24px rgba(17, 17, 17, 0.04);
+}
+
+.basket-empty__icon {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  background: dukani-accent-a(0.12);
+  color: $bk-gold-deep;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+}
+
+.basket-empty__title {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $bk-gold-deep;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.basket-empty__lede {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: $bk-muted;
+  margin-bottom: 1rem;
+}
+
+.basket-empty__hint {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: $bk-muted;
+  max-width: 26rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.75rem !important;
+}
+
+.basket-empty__actions {
+  max-width: 22rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.basket-empty__cta-primary .fa-th-large {
+  font-size: 0.9em;
+  opacity: 0.95;
+}
+
+.basket-empty__cta-secondary .fa-home {
+  font-size: 0.88em;
+  opacity: 0.85;
+}
+
+.basket-page__browse-more {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.basket-browse-catalogue-link {
+  color: $bk-gold-deep;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid dukani-accent-a(0.45);
+  padding-bottom: 2px;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+
+  .fa-th-large {
+    font-size: 0.92em;
+    opacity: 0.9;
+  }
+
+  &:hover,
+  &:focus {
+    color: $bk-ink;
+    border-bottom-color: $bk-ink;
+    text-decoration: none;
+  }
+}
+
+.basket-form-actions {
+  border-top: 1px solid $bk-line;
+  padding-top: 2rem;
+  margin-top: 2rem;
+}
+
+// Mini basket dropdown
+.basket-mini-dropdown {
+  min-width: 18rem;
+  max-width: 22rem;
+  border-radius: 0.5rem !important;
+  border: 1px solid $bk-line !important;
+  background: #fff !important;
+  box-shadow: 0 12px 40px rgba(17, 17, 17, 0.12) !important;
+  padding: 0.5rem 0;
+}
+
+.basket-mini-dropdown__head {
+  padding: 0.75rem 1rem 0.5rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $bk-gold-deep;
+  font-weight: 700;
+}
+
+.basket-mini-dropdown__line {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid $bk-line;
+}
+
+.basket-mini-dropdown__thumb {
+  border: 1px solid $bk-line;
+  border-radius: 0.25rem;
+  padding: 0.125rem;
+  background: #fff;
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.basket-mini-dropdown__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 0.25rem;
+
+  a {
+    color: $bk-ink;
+    text-decoration: none;
+
+    &:hover {
+      color: $bk-gold-deep;
+    }
+  }
+}
+
+.basket-mini-dropdown__qty {
+  font-size: 0.75rem;
+  color: $bk-muted;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 0;
+}
+
+.basket-mini-dropdown__price {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $bk-ink;
+}
+
+.basket-mini-dropdown__footer {
+  padding: 1rem;
+}
+
+.basket-mini-dropdown__total-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $bk-muted;
+  font-weight: 700;
+}
+
+.basket-mini-dropdown__total-value {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: $bk-ink;
+}
+
+.basket-mini-dropdown__actions .btn {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.5rem 0.65rem;
+}
+
+.basket-mini-dropdown__actions .btn-outline-basket {
+  border: 1px solid $bk-line;
+  color: $bk-ink;
+  background: #fff;
+
+  &:hover {
+    border-color: $bk-gold;
+    background: #fff;
+    color: $bk-ink;
+  }
+}
+
+.basket-mini-dropdown__actions .btn-basket-solid {
+  background: $bk-ink;
+  border: 1px solid $bk-ink;
+  color: #fff;
+
+  &:hover {
+    background: $bk-gold-deep;
+    border-color: $bk-gold-deep;
+    color: #fff;
+  }
+}
+
+.basket-mini-dropdown__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: $bk-muted;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-basket-primary:hover,
+  .btn-basket-primary:focus {
+    transform: none;
+  }
+
+  .basket-line-card:hover {
+    transform: none;
+  }
+
+  .basket-line-card__thumb img {
+    transition: none;
+  }
+
+  .basket-line-card__thumb:hover img,
+  .basket-line-card__thumb:focus img {
+    transform: none;
+  }
+}

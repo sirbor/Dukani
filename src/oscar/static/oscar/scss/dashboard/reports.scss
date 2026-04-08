@@ -1,0 +1,47 @@
+// Reports dashboard — Dukani
+
+.reports-page {
+  .reports-lede {
+    max-width: 36rem;
+    line-height: 1.55;
+  }
+
+  .reports-form-card {
+    .form-group label,
+    label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #6c6c6c;
+      margin-bottom: 0.35rem;
+    }
+
+    // Date picker + select height alignment
+    .form-control {
+      border-radius: 2px;
+    }
+  }
+
+  .reports-generate-form .reports-field-errors {
+    font-size: 0.8rem;
+    color: #b44;
+    margin-top: 0.25rem;
+  }
+
+  .reports-output {
+    .card-header h2 {
+      line-height: 1.35;
+    }
+
+    .table-responsive {
+      border-radius: 0 0 0.25rem 0.25rem;
+    }
+
+    nav {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+  }
+}

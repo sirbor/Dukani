@@ -1,0 +1,34 @@
+{% load i18n %}
+
+<form class="form-inline luxury-search-form" method="GET" action="{% url 'search:search' %}">
+    <div class="input-group luxury-search-group">
+        <input class="form-control luxury-search-input" name="q" id="id_q" placeholder="{% trans 'Search' %}" aria-label="{% trans 'Search' %}">
+        <div class="input-group-append">
+            <button class="btn btn-link text-gold p-0" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+    </div>
+</form>
+
+<style>
+    .luxury-search-group {
+        border-bottom: 1px solid rgba(242, 223, 206, 0.3);
+        transition: border-color 0.3s ease;
+    }
+    .luxury-search-group:focus-within {
+        border-bottom-color: var(--cartier-gold-deep);
+    }
+    .luxury-search-input {
+        background: transparent !important;
+        border: none !important;
+        font-size: 0.75rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #333 !important;
+        padding: 5px 0 !important;
+        width: 150px !important;
+        height: auto !important;
+    }
+    .luxury-search-input::placeholder {
+        color: #999;
+    }
+</style>

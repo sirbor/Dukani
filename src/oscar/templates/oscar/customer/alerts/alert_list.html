@@ -1,0 +1,49 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-alerts">
+    <h2 class="account-section-title">{% trans "Stock alerts" %}</h2>
+    <p class="text-muted small mb-4">{% trans "We’ll email you when an out-of-stock title you care about is available again." %}</p>
+
+    {% if not alerts %}
+        <div class="account-empty">
+            <p class="account-empty__title mb-2">{% trans "No active alerts" %}</p>
+            <p class="mb-0">{% trans "You do not have any active alerts for out-of-stock products." %}</p>
+        </div>
+    {% else %}
+        <form method="post" id="alerts_form">
+            {% csrf_token %}
+            {% for alert in alerts %}
+                <div class="account-alert-card">
+                    <div class="account-alert-card__product">
+                        {% with product=alert.product %}
+                            {% if product.is_public %}
+                                <a href="{{ product.get_absolute_url }}">{{ product.get_title }}</a>
+                            {% else %}
+                                {{ product.get_title }}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <div class="account-alert-card__meta">
+                        <span class="account-alert-card__label">{% trans "Status" %}</span>
+                        {{ alert.status }}
+                    </div>
+                    <div class="account-alert-card__meta">
+                        <span class="account-alert-card__label">{% trans "Date created" %}</span>
+                        {{ alert.date_created }}
+                    </div>
+                    <div>
+                        {% if alert.can_be_cancelled %}
+                            <a href="{% url 'customer:alerts-cancel-by-pk' pk=alert.pk %}?next={% url 'customer:alerts-list' %}" class="btn btn-outline-danger btn-sm">{% trans "Cancel" %}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="account-orders__pagination">
+                {% include "oscar/partials/pagination.html" %}
+            </div>
+        </form>
+    {% endif %}
+</div>
+{% endblock tabcontent %}

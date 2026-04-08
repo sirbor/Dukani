@@ -1,0 +1,86 @@
+{% extends "oscar/checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Payment details" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'oscar/checkout/nav.html' with step=4 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Choose how to pay" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+
+{% block payment_details %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        {% block payment_details_content %}
+            <p class="checkout-payment-intro text-muted text-center mx-auto mb-4 mb-md-5">
+                {% trans "Select a payment method. You already reviewed your order on the previous step; funds are taken when you complete M-Pesa, PayPal, or manual confirmation." %}
+            </p>
+
+            <div class="checkout-payment-methods" role="list">
+                <a href="{% url 'gateway_payments:mpesa_start' %}"
+                   class="checkout-pay-card checkout-pay-card--mpesa"
+                   role="listitem">
+                    <div class="checkout-pay-card__icon" aria-hidden="true">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="checkout-pay-card__body">
+                        <span class="checkout-pay-card__eyebrow">{% trans "Safaricom" %}</span>
+                        <span class="checkout-pay-card__title">{% trans "Lipa na M-Pesa" %}</span>
+                        <span class="checkout-pay-card__hint">{% trans "STK push — complete payment on your phone in seconds." %}</span>
+                    </div>
+                    <span class="checkout-pay-card__action" aria-hidden="true">
+                        <span class="checkout-pay-card__action-label">{% trans "Continue" %}</span>
+                        <i class="fas fa-arrow-right checkout-pay-card__arrow"></i>
+                    </span>
+                </a>
+
+                <a href="{% url 'gateway_payments:paypal_start' %}"
+                   class="checkout-pay-card checkout-pay-card--paypal"
+                   role="listitem">
+                    <div class="checkout-pay-card__icon checkout-pay-card__icon--paypal" aria-hidden="true">
+                        <i class="fab fa-paypal"></i>
+                    </div>
+                    <div class="checkout-pay-card__body">
+                        <span class="checkout-pay-card__eyebrow">{% trans "PayPal" %}</span>
+                        <span class="checkout-pay-card__title">{% trans "Pay with PayPal" %}</span>
+                        <span class="checkout-pay-card__hint">{% trans "Balance or card — you will be redirected to PayPal to approve payment." %}</span>
+                    </div>
+                    <span class="checkout-pay-card__action" aria-hidden="true">
+                        <span class="checkout-pay-card__action-label">{% trans "Continue" %}</span>
+                        <i class="fas fa-arrow-right checkout-pay-card__arrow"></i>
+                    </span>
+                </a>
+
+                <a href="{% url 'gateway_payments:manual_pay_start' %}"
+                   class="checkout-pay-card checkout-pay-card--manual"
+                   role="listitem">
+                    <div class="checkout-pay-card__icon checkout-pay-card__icon--manual" aria-hidden="true">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="checkout-pay-card__body">
+                        <span class="checkout-pay-card__eyebrow">{% trans "M-Pesa" %}</span>
+                        <span class="checkout-pay-card__title">{% trans "Pay manually (Paybill)" %}</span>
+                        <span class="checkout-pay-card__hint">{% trans "Use Paybill on your phone, then enter your M-Pesa confirmation code to finish checkout." %}</span>
+                    </div>
+                    <span class="checkout-pay-card__action" aria-hidden="true">
+                        <span class="checkout-pay-card__action-label">{% trans "Continue" %}</span>
+                        <i class="fas fa-arrow-right checkout-pay-card__arrow"></i>
+                    </span>
+                </a>
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row align-items-stretch justify-content-between mt-5 pt-4 checkout-payment-footer">
+                <a href="{% url 'checkout:shipping-method' %}" class="btn checkout-btn-ghost order-sm-0">{% trans "Back" %}</a>
+            </div>
+        {% endblock payment_details_content %}
+    </div>
+</div>
+{% endblock %}

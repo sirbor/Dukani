@@ -1,0 +1,174 @@
+{% extends "oscar/layout.html" %}
+
+{% load basket_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load i18n %}
+
+{% block extrastyles %}
+    {{ block.super }}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{ category.get_meta_title }} |
+    {% elif summary %}
+        {{ summary }} |
+    {% endif %}
+    {{ block.super }}
+{% endblock %}
+
+{% block description %}
+    {% if category %}
+        {{ category.get_meta_description }}
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
+{% block content_wrapper %}
+    {% trans "Books" as archive_label %}
+<div class="container py-5 catalogue-browse{% if category %} catalogue-browse--category catalogue-browse--{{ category.slug }}{% endif %}">
+    {% block browse_breadcrumbs %}
+        <nav aria-label="{% trans 'Breadcrumb' %}">
+            <ol class="breadcrumb browse-breadcrumbs bg-transparent px-0 mb-4 flex-wrap{% if not category %} justify-content-center text-center{% endif %}">
+                <li class="breadcrumb-item">
+                    <a href="{{ homepage_url }}" class="text-uppercase small tracking-wider">{% trans "Home" %}</a>
+                </li>
+                <li class="breadcrumb-item active text-uppercase small tracking-wider" aria-current="page">{{ summary|default:archive_label }}</li>
+            </ol>
+        </nav>
+    {% endblock browse_breadcrumbs %}
+
+    {% block browse_intro %}
+        {% if not category %}
+            <div class="text-center mb-5 browse-page-title">
+                <h1 class="font-serif display-4 mb-3 text-black text-uppercase tracking-widest">{{ summary }}</h1>
+                <div class="gold-divider mx-auto mb-4"></div>
+                <div class="text-muted small text-uppercase tracking-wider">
+                    {% if paginator.count %}
+                        {% blocktrans count num_results=paginator.count %}
+                            <strong>{{ num_results }}</strong> title
+                        {% plural %}
+                            <strong>{{ num_results }}</strong> titles
+                        {% endblocktrans %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    {% endblock browse_intro %}
+
+    <form method="get" class="browse-toolbar mb-4 py-3">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                {% for value in selected_facets %}
+                    <input type="hidden" name="selected_facets" value="{{ value }}" />
+                {% endfor %}
+                <input type="hidden" name="q" value="{{ search_form.q.value|default_if_none:"" }}" />
+
+                {% if search_form.q.value %}
+                    <span class="text-muted small text-uppercase tracking-wider">{% trans "Curating for" %} "<strong>{{ search_form.q.value }}</strong>"</span>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                {% if form %}
+                    <div class="d-flex flex-wrap align-items-center justify-content-md-end mt-3 mt-md-0 browse-toolbar__filters">
+                        {% if form.department %}
+                            <div class="d-flex align-items-center flex-wrap">
+                                <label class="small text-uppercase tracking-wider text-muted mb-0 mr-3" for="id_department">{% trans "Browse by department" %}:</label>
+                                <div class="luxury-sort-select">
+                                    {% include "oscar/partials/form_field.html" with field=form.department nolabel=True %}
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-outline-gold text-uppercase tracking-wider ml-2 mt-2 mt-md-0">{% trans "Show" %}</button>
+                            </div>
+                        {% elif form.sort_by %}
+                            <div class="d-flex align-items-center flex-wrap">
+                                <label class="small text-uppercase tracking-wider text-muted mb-0 mr-3" for="id_sort_by">{% trans "Sort by" %}:</label>
+                                <div class="luxury-sort-select">
+                                    {% include "oscar/partials/form_field.html" with field=form.sort_by nolabel=True %}
+                                </div>
+                                <button type="submit" class="btn btn-sm btn-outline-gold text-uppercase tracking-wider ml-2 mt-2 mt-md-0">{% trans "Show" %}</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+    {% if not category and offers %}
+        <section class="curations-section mb-5 pb-5 border-bottom border-gold-subtle">
+            <div class="text-center mb-5">
+                <h2 class="font-serif text-uppercase tracking-widest text-gold mb-3">{% trans "Curations" %}</h2>
+                <p class="text-muted small text-uppercase tracking-wider">{% trans "Specially selected pieces from our collections" %}</p>
+            </div>
+            <div class="row">
+                {% for offer in offers %}
+                    <div class="col-md-4 mb-4">
+                        <div class="curation-card p-4 border text-center transition-all h-100 d-flex flex-column justify-content-center">
+                            <h3 class="font-serif h4 mb-3">{{ offer.name }}</h3>
+                            {% if offer.description %}
+                                <div class="small text-muted mb-4">{{ offer.description|safe }}</div>
+                            {% endif %}
+                            <a href="{% url 'offer:detail' slug=offer.slug %}" class="btn btn-outline-gold btn-sm text-uppercase tracking-wider mt-auto">
+                                {% trans "Discover" %}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    {% if products %}
+        <section class="archive-section">
+            {% block archive_section_header %}
+                {% if category %}
+                    <div class="mb-4 {% if category.slug == 'books' %}text-center text-md-left{% else %}text-center{% endif %}">
+                        {% if category.slug == 'books' %}
+                            <h2 class="archive-section-heading mb-0">{% trans "In this collection" %}</h2>
+                            <p class="archive-section-sub mb-0">{% trans "Every volume ships with the care it deserves" %}</p>
+                        {% else %}
+                            <h2 class="font-serif text-uppercase tracking-widest mb-3">{% trans "The Archive" %}</h2>
+                            <div class="gold-divider mx-auto mb-4"></div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="text-center mb-5 {% if not category and offers %}mt-5 pt-5{% endif %}">
+                        <h2 class="font-serif text-uppercase tracking-widest mb-3">{{ summary }}</h2>
+                        <div class="gold-divider mx-auto mb-4"></div>
+                    </div>
+                {% endif %}
+            {% endblock archive_section_header %}
+
+            <div class="catalogue-grid">
+                <ol class="row list-unstyled ml-0 pl-0">
+                    {% block products %}
+                        {% for product in products %}
+                            <li class="col-sm-6 col-md-4 col-lg-3 mb-5">{% render_product product.object %}</li>
+                        {% endfor %}
+                    {% endblock %}
+                </ol>
+                <div class="luxury-pagination d-flex justify-content-center mt-5 pt-5 border-top border-gold-subtle">
+                    {% include "oscar/partials/pagination.html" %}
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <div class="text-center py-5">
+            <p class="lead font-serif text-muted">{% trans "No pieces found in this collection." %}</p>
+            <a href="{{ homepage_url }}" class="btn btn-outline-black text-uppercase mt-3">{% trans "Return to bookstore" %}</a>
+        </div>
+    {% endif %}
+
+    {% block browse_footer %}{% endblock %}
+</div>
+{% endblock content_wrapper %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.search.init();
+{% endblock %}

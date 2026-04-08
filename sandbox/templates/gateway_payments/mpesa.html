@@ -1,0 +1,44 @@
+{% extends "oscar/checkout/checkout.html" %}
+{% load i18n %}
+{% load currency_filters %}
+
+{% block title %}
+    {% trans "Lipa na M-Pesa" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'oscar/checkout/nav.html' with step=4 %}
+{% endblock %}
+
+{% block checkout_title %}{% trans "Lipa na M-Pesa" %}{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+
+{% block payment_details %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        {% if order_total and order_total.is_tax_known %}
+            <p class="lead mb-4">
+                {% trans "Amount due:" %}
+                <strong>{{ order_total.incl_tax|currency:order_total.currency }}</strong>
+            </p>
+        {% elif order_total %}
+            <p class="lead mb-4">
+                {% trans "Amount due (excl. tax):" %}
+                <strong>{{ order_total.excl_tax|currency:order_total.currency }}</strong>
+            </p>
+        {% endif %}
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            {% include "oscar/partials/form_fields.html" %}
+            <button type="submit" class="btn btn-checkout-primary btn-lg text-uppercase tracking-wider px-5">
+                {% trans "Send STK push" %}
+            </button>
+        </form>
+        <a href="{% url 'checkout:payment-details' %}" class="btn checkout-btn-ghost">{% trans "Back" %}</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load image_tags %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block extra_breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:wishlists-list' %}">{% trans 'Wish Lists' %}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+<div class="account-wishlist-detail">
+    {% if form.total_form_count %}
+        <form method="post">
+            {{ form.management_form }}
+            {% csrf_token %}
+            <div class="wishlist-lines">
+                {% for subform in form %}
+                    {% with line=subform.instance product=subform.instance.product %}
+                        <div class="wishlist-line-row">
+                            <div class="wishlist-line-row__img">
+                                {% if product %}
+                                    {% with image=product.primary_image %}
+                                        {% oscar_thumbnail image.original "100x100" upscale=False as thumb %}
+                                        {% if product.is_public %}
+                                            <a href="{{ product.get_absolute_url }}">
+                                                <img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+                                            </a>
+                                        {% else %}
+                                            <img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+                                        {% endif %}
+                                    {% endwith %}
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if product and product.is_public %}
+                                    <a href="{{ line.product.get_absolute_url }}">{{ line.get_title }}</a>
+                                {% else %}
+                                    <em>{{ line.get_title }} ({% trans 'Not available anymore' %})</em>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% for field in subform %}
+                                    {% render_field field class+="form-control" %}
+                                    {% for error in field.errors %}
+                                        <ul class="error-block list-unstyled mb-0">
+                                            <li>{{ error }}</li>
+                                        </ul>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                            <div class="account-address-actions">
+                                {% if product %}
+                                    <a class="btn btn-outline-black btn-sm" href="{{ line.product.get_absolute_url }}">{% trans 'View product' %}</a>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-black btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% trans 'Actions' %}</button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li>
+                                                <a href="{% url 'customer:wishlists-remove-product' key=wishlist.key line_pk=line.pk %}" class="dropdown-item">
+                                                    {% trans 'Remove' %}
+                                                </a>
+                                            </li>
+                                            {% for other_wishlist in other_wishlists %}
+                                                <li>
+                                                    <a href="{% url 'customer:wishlists-move-product-to-another' key=wishlist.key line_pk=line.pk to_key=other_wishlist.key %}" class="dropdown-item">
+                                                        {% blocktrans with name=other_wishlist.name %}
+                                                            Move to '{{ name }}' wish list
+                                                        {% endblocktrans %}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% else %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-black btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            {% trans 'Actions' %}
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right">
+                                            <li>
+                                                <a href="{% url 'customer:wishlists-remove-product' key=wishlist.key line_pk=line.pk %}" class="dropdown-item">
+                                                    {% trans 'Remove' %}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+            <div class="account-actions border-0 pt-3 mt-2">
+                <button class="btn btn-primary" type="submit" data-loading-text="{% trans 'Updating...' %}">{% trans "Update quantities" %}</button>
+            </div>
+        </form>
+    {% else %}
+        <div class="account-empty">
+            <p class="account-empty__title mb-2">{% trans "This list is empty" %}</p>
+            <p class="mb-0">{% trans "Your wish list is empty." %}</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock tabcontent %}

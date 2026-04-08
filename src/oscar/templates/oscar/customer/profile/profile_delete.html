@@ -1,0 +1,25 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-confirm">
+    <h2 class="account-section-title">{% trans "Delete your profile" %}</h2>
+    <p class="account-confirm-lead">{% trans "Please confirm your password to delete your profile." %}</p>
+    <form id="delete_profile_form" method="post">
+        {% csrf_token %}
+        {% include "oscar/partials/form_fields.html" with style='horizontal' %}
+        <div class="account-warning-panel">
+            <h3>{% trans "Warning" %}</h3>
+            <p class="mb-0">
+                {% blocktrans trimmed %}
+                    This will delete all information about you from the site. Deleting your profile cannot be undone.
+                {% endblocktrans %}
+            </p>
+        </div>
+        <div class="account-actions border-0 pt-0 mt-0">
+            <button class="btn btn-danger" type="submit" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete profile" %}</button>
+            <a href="{% url 'customer:profile-view' %}" class="btn btn-outline-black">{% trans "Cancel" %}</a>
+        </div>
+    </form>
+</div>
+{% endblock tabcontent %}

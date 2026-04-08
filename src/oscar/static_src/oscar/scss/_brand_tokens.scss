@@ -1,0 +1,13 @@
+// Dukani brand accent (replaces former gold #b3995d / rgb(179, 153, 93))
+$dukani-accent: #f2dfce !default;
+$dukani-accent-r: 242 !default;
+$dukani-accent-g: 223 !default;
+$dukani-accent-b: 206 !default;
+// Stronger tone for type, icons on white, and filled controls
+$dukani-accent-deep: #5c4b3d !default;
+// Bridge for gradients between accent and deep
+$dukani-accent-mid: #a8947c !default;
+
+@function dukani-accent-a($opacity) {
+  @return rgba($dukani-accent-r, $dukani-accent-g, $dukani-accent-b, $opacity);
+}

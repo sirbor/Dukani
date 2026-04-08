@@ -1,0 +1,122 @@
+{% extends 'oscar/dashboard/layout.html' %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+
+{% block body_class %}{{ block.super }} catalogue{% endblock %}
+
+{% block title %}
+    {% trans "Products" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'dashboard:index' %}">{% trans "Dashboard" %}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {% trans "Products" %}
+            </li>
+        </ol>
+    </nav>
+{% endblock %}
+
+{% block headertext %}{% trans "Products" %}{% endblock %}
+
+{% block header_actions %}
+    <a href="{% url 'dashboard:catalogue-category-list' %}" class="btn-dashboard-header-ghost">
+        <i class="fas fa-folder-tree" aria-hidden="true"></i> {% trans "Categories" %}
+    </a>
+{% endblock %}
+
+{% block dashboard_content %}
+    {% block create_product %}
+        <section class="dashboard-panel dashboard-panel--catalogue">
+            <div class="dashboard-panel__head">
+                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                {% trans "Create new product" %}
+            </div>
+            <div class="dashboard-panel__body">
+                <form id="create_product_with_class_form" action="{% url 'dashboard:catalogue-product-create' %}" method="get" class="dashboard-panel-form form-inline flex-wrap align-items-end">
+                    {% include "oscar/dashboard/partials/form_fields_inline.html" with form=productclass_form %}
+                    <button class="btn-dashboard-chart-submit btn-dashboard-chart-submit--sm mt-2 mt-md-0 ml-md-2" type="submit" data-loading-text="{% trans 'Submitting...' %}">
+                        <i class="fas fa-arrow-right" aria-hidden="true"></i> {% trans "Continue" %}
+                    </button>
+                </form>
+            </div>
+        </section>
+    {% endblock %}
+
+    {% block search_products %}
+        <section class="dashboard-panel dashboard-panel--catalogue">
+            <div class="dashboard-panel__head">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                {% trans "Search products" %}
+            </div>
+            <div class="dashboard-panel__body">
+                <form id="search_product_form" method="get" class="dashboard-panel-form form-inline flex-wrap align-items-end">
+                    {% comment %}
+                        Add the current query string to the search form so that the
+                        sort order is not reset when searching.
+                    {% endcomment %}
+                    {% for name, value in request.GET.items %}
+                        {% if name not in form.fields %}
+                            <input type="hidden" name="{{ name }}" value="{{ value }}"/>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% include "oscar/dashboard/partials/form_fields_inline.html" with form=form %}
+                    <div class="dashboard-panel-form__actions mt-2 mt-md-0 ml-md-2">
+                        <button type="submit" class="btn-dashboard-chart-submit btn-dashboard-chart-submit--sm" data-loading-text="{% trans 'Searching...' %}">
+                            <i class="fas fa-search" aria-hidden="true"></i> {% trans "Search" %}
+                        </button>
+                        <a href="{% url 'dashboard:catalogue-product-list' %}" class="btn-dashboard-link-muted ml-3">{% trans "Reset" %}</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    {% endblock %}
+
+    {% if has_products %}
+        {% block product_list %}
+            <div class="dashboard-data-table-wrap">
+            <form method="post">
+                {% csrf_token %}
+                {% block bulk_action %}
+                    {% trans "Products" as module_label %}
+                    {% include "oscar/dashboard/partials/bulk_actions.html" with page_objects_count=products.page.object_list.data.count num_pages=products.paginator.num_pages total_count=products.paginator.count module=module_label %}
+                {% endblock bulk_action %}
+                {% block product_table %}
+                    {% render_table products %}
+                {% endblock product_table %}
+            </form>
+            </div>
+            <div class="modal fade dashboard-modal" id="product-image-modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body text-center">
+                            <img class="img-fluid mx-auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock product_list %}
+    {% else %}
+        <div class="dashboard-empty-state">
+            <div class="dashboard-empty-state__icon" aria-hidden="true"><i class="fas fa-box-open"></i></div>
+            <p class="dashboard-empty-state__title">{% trans "No products found" %}</p>
+            <p class="dashboard-empty-state__hint text-muted small">{% trans "Try another search or create a new product above." %}</p>
+        </div>
+    {% endif %}
+
+{% endblock dashboard_content %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.dashboard.product_lists.init();
+    oscar.dashboard.bulk_actions.init();
+{% endblock onbodyload %}

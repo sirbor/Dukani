@@ -1,0 +1,186 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load currency_filters %}
+{% load display_tags %}
+{% load i18n %}
+{% load reviews_tags %}
+
+{% block extra_breadcrumbs %}
+    <li class="breadcrumb-item">
+        <a href="{% url 'customer:order-list' %}">{% trans 'Order history' %}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+<div class="order-detail">
+    {% if order.status %}
+        <div class="order-detail__status">
+            <p class="order-detail__status-label">{% trans 'Status' %}</p>
+            <p class="order-detail__status-value mb-0">{{ order.status }}</p>
+        </div>
+    {% endif %}
+
+    <h2 class="account-section-title">{% trans "Items" %}</h2>
+
+    {% for line in order.lines.all %}
+        {% with product=line.product %}
+            <article class="order-detail-line">
+                <div class="order-detail-line__title">
+                    {% if product %}
+                        {% if product.is_public %}
+                            <a href="{{ product.get_absolute_url }}">{{ line.description }}</a>
+                        {% else %}
+                            {{ line.description }}
+                        {% endif %}
+                        {% iffeature "reviews" %}
+                            {% if product|is_review_permitted:user %}
+                                <div class="mt-2">
+                                    <a class="btn btn-outline-black btn-sm" href="{% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id %}#addreview">{% trans 'Write a review' %}</a>
+                                </div>
+                            {% endif %}
+                        {% endiffeature %}
+                    {% else %}
+                        {{ line.description }}
+                    {% endif %}
+                </div>
+                <div class="order-detail-line__grid">
+                    <div>
+                        <p class="order-detail-line__label">{% trans 'Qty' %}</p>
+                        <p class="mb-0">{{ line.quantity }}</p>
+                    </div>
+                    <div>
+                        <p class="order-detail-line__label">{% trans 'Line price excl. tax' %}</p>
+                        <p class="mb-0">{{ line.line_price_before_discounts_excl_tax|currency:order.currency }}</p>
+                    </div>
+                    <div>
+                        <p class="order-detail-line__label">{% trans 'Line price incl. tax' %}</p>
+                        <p class="mb-0">{{ line.line_price_before_discounts_incl_tax|currency:order.currency }}</p>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    {% if product and product.is_public %}
+                        <form id="line_form_{{ line.id }}" action="{% url 'customer:order-line' order_number=order.number line_id=line.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="reorder" />
+                            <button id="reorder_line_{{ line.id }}" class="btn btn-black btn-sm" type="submit" data-loading-text="{% trans 'Re-ordering...' context 'Buy again' %}">{% trans 'Re-order' context 'Buy again' %}</button>
+                        </form>
+                    {% else %}
+                        <span class="text-muted small">{% trans 'Not available anymore' %}</span>
+                    {% endif %}
+                </div>
+            </article>
+        {% endwith %}
+    {% endfor %}
+
+    <div class="order-detail-totals">
+        {% with discounts=order.basket_discounts %}
+            {% block discount_totals %}
+                {% if discounts %}
+                    <div class="order-detail-totals__row">
+                        <span class="order-detail-totals__key">{% trans "Basket total (excl. discounts)" %}</span>
+                        <span class="order-detail-totals__val">{{ order.basket_total_before_discounts_incl_tax|currency:order.currency }}</span>
+                    </div>
+                    {% for discount in discounts %}
+                        <div class="order-detail-totals__row order-detail-totals__row--discount">
+                            <span class="order-detail-totals__key">
+                                <span class="badge badge-success">{% trans "Discount" %}</span>
+                                {{ discount.offer_name }}
+                            </span>
+                            <span class="order-detail-totals__val">- {{ discount.amount|currency:order.currency }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endblock discount_totals %}
+
+            {% block basket_total %}
+                {% if discounts %}
+                    <div class="order-detail-totals__row order-detail-totals__row--strong">
+                        <span class="order-detail-totals__key">{% trans "Basket total (inc. discounts)" %}</span>
+                        <span class="order-detail-totals__val">{{ order.basket_total_incl_tax|currency:order.currency }}</span>
+                    </div>
+                {% else %}
+                    <div class="order-detail-totals__row order-detail-totals__row--strong">
+                        <span class="order-detail-totals__key">{% trans "Basket total" %}</span>
+                        <span class="order-detail-totals__val">{{ order.basket_total_incl_tax|currency:order.currency }}</span>
+                    </div>
+                {% endif %}
+            {% endblock basket_total %}
+        {% endwith %}
+
+        {% block shipping_totals %}
+            {% if order.has_shipping_discounts %}
+                <div class="order-detail-totals__row">
+                    <span class="order-detail-totals__key">{% trans "Shipping total (excl. discounts)" %}</span>
+                    <span class="order-detail-totals__val">{{ order.shipping_before_discounts_incl_tax|currency:order.currency }}</span>
+                </div>
+                {% for discount in order.shipping_discounts %}
+                    <div class="order-detail-totals__row order-detail-totals__row--discount">
+                        <span class="order-detail-totals__key">
+                            <span class="badge badge-success">{% trans "Discount" %}</span>
+                            {{ discount.offer_name }}
+                        </span>
+                        <span class="order-detail-totals__val">- {{ discount.amount|currency:order.currency }}</span>
+                    </div>
+                {% endfor %}
+                <div class="order-detail-totals__row">
+                    <span class="order-detail-totals__key">{% trans "Shipping total (inc. discounts)" %}</span>
+                    <span class="order-detail-totals__val">{{ order.shipping_incl_tax|currency:order.currency }}</span>
+                </div>
+            {% else %}
+                <div class="order-detail-totals__row">
+                    <span class="order-detail-totals__key">{% trans "Shipping total" %}</span>
+                    <span class="order-detail-totals__val">{{ order.shipping_incl_tax|currency:order.currency }}</span>
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        {% block order_total %}
+            <div class="order-detail-totals__row order-detail-totals__row--strong">
+                <span class="order-detail-totals__key">{% trans 'Order total' %}</span>
+                <span class="order-detail-totals__val">{{ order.total_incl_tax|currency:order.currency }}</span>
+            </div>
+        {% endblock order_total %}
+    </div>
+
+    {% block order_actions %}
+        <div class="account-actions">
+            <form id="order_form_{{ order.id }}" action="{% url 'customer:order' order_number=order.number %}" method="post" class="m-0">
+                {% csrf_token %}
+                <input type="hidden" name="order_id" value="{{ order.id }}" />
+                <input type="hidden" name="action" value="reorder" />
+                <button type="submit" class="btn btn-black" data-loading-text="{% trans 'Re-ordering...' context 'Buy again' %}">{% trans 'Re-order all items' context 'Buy again' %}</button>
+            </form>
+        </div>
+    {% endblock order_actions %}
+
+    <section class="order-detail-ship">
+        <h3>{% trans 'Shipping method' %}</h3>
+        <p class="mb-4">{{ order.shipping_method }}</p>
+
+        <h3>{% trans 'Shipping address' %}</h3>
+        <dl class="account-dl">
+            <div class="account-dl__row">
+                <dt>{% trans 'Address' %}</dt>
+                <dd>
+                    {% for field in order.shipping_address.active_address_fields %}
+                        {{ field }}<br/>
+                    {% endfor %}
+                </dd>
+            </div>
+            <div class="account-dl__row">
+                <dt>{% trans 'Contact Number' %}</dt>
+                <dd>{{ order.shipping_address.phone_number|default:"-" }}</dd>
+            </div>
+            <div class="account-dl__row">
+                <dt>{% trans 'Shipping Notes' %}</dt>
+                <dd>
+                    {% if order.shipping_address.notes %}
+                        {{ order.shipping_address.notes|linebreaks }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </dd>
+            </div>
+        </dl>
+    </section>
+</div>
+{% endblock tabcontent %}

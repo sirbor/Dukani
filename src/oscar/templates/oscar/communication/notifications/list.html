@@ -1,0 +1,76 @@
+{% extends "oscar/customer/baseaccountpage.html" %}
+{% load i18n %}
+
+{% block tabcontent %}
+<div class="account-notifications">
+    <h2 class="account-section-title">{% trans "Notifications" %}</h2>
+
+    <ul class="nav nav-tabs account-tabs-modern border-0">
+        <li class="nav-item">
+            <a href="{% url 'customer:notifications-inbox' %}" class="nav-link{% if list_type == 'inbox' %} active{% endif %}">{% trans 'Inbox' %}</a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'customer:notifications-archive' %}" class="nav-link{% if list_type == 'archive' %} active{% endif %}">{% trans 'Archive' context 'noun' %}</a>
+        </li>
+    </ul>
+
+    {% if notifications %}
+        {% include "oscar/partials/pagination.html" %}
+
+        <form action="{% url 'customer:notifications-update' %}" method="post">
+            {% csrf_token %}
+            {% for notification in notifications %}
+                <div class="account-notif-row">
+                    <div class="account-notif-row__leading">
+                        <div class="account-notif-row__check">
+                            <input type="checkbox" name="selected_notification" value="{{ notification.id }}" aria-label="{% trans 'Select notification' %}"/>
+                        </div>
+                        <div class="account-notif-row__icon" aria-hidden="true">
+                            {% if notification.is_read %}
+                                <i class="fas fa-inbox"></i>
+                            {% else %}
+                                <i class="fas fa-envelope"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="account-notif-row__body">
+                        {% if notification.is_read %}
+                            {{ notification.subject|safe }}
+                        {% else %}
+                            <strong>{{ notification.subject|safe }}</strong>
+                        {% endif %}
+                        <em>{{ notification.date_sent }}</em>
+                    </div>
+                    <div class="account-notif-row__actions text-md-right">
+                        <a href="{% url 'customer:notifications-detail' pk=notification.pk %}" class="btn btn-outline-black btn-sm">{% trans 'View' %}</a>
+                        {% if list_type == 'inbox' %}
+                            <a class="btn btn-outline-black btn-sm" href="#" data-behaviours="archive">{% trans 'Archive' context 'verb' %}</a>
+                        {% endif %}
+                        <a class="btn btn-outline-danger btn-sm" href="#" data-behaviours="delete">{% trans 'Delete' %}</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="account-toolbar">
+                <span>{% trans "With selected items:" %}</span>
+                {% if list_type == 'inbox' %}
+                    <button type="submit" class="btn btn-black btn-sm" name="action" value="archive" data-loading-text="{% trans 'Archiving...' %}">{% trans "Archive" context 'verb' %}</button>
+                {% endif %}
+                <button type="submit" class="btn btn-outline-danger btn-sm" name="action" value="delete" data-loading-text="{% trans 'Deleting...' %}">{% trans "Delete" %}</button>
+            </div>
+        </form>
+
+        {% include "oscar/partials/pagination.html" %}
+
+    {% else %}
+        <div class="account-empty mt-3">
+            <p class="account-empty__title mb-2">{% trans "All clear" %}</p>
+            <p class="mb-0">{% trans "There are no notifications to display." %}</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock tabcontent %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    oscar.notifications.init();
+{% endblock %}
