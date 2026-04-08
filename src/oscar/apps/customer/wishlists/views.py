@@ -115,12 +115,12 @@ class WishListCreateUpdateViewMixin(PageTitleMixin):
             if wishlist.visibility == WishList.PRIVATE:
                 msg = _(
                     "The shared accounts won't be able to access your wishlist "
-                    "because the visiblity is set to private."
+                    "because the visibility is set to private."
                 )
                 messages.warning(self.request, msg)
             elif wishlist.visibility == WishList.PUBLIC:
                 msg = _(
-                    "You have added shared accounts to your wishlist but the visiblity "
+                    "You have added shared accounts to your wishlist but the visibility "
                     "is public, this means everyone with a link has access to it."
                 )
                 messages.warning(self.request, msg)

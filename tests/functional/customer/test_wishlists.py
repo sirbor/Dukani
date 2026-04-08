@@ -176,7 +176,7 @@ class TestWishListCreateView(WishListTestMixin, WebTestCase):
 
         self.assertTrue(
             "The shared accounts won&#x27;t be able to access your wishlist "
-            "because the visiblity is set to private." in response
+            "because the visibility is set to private." in response
         )
 
     def test_create_public_wishlist_with_shared_emails(self):
@@ -191,7 +191,7 @@ class TestWishListCreateView(WishListTestMixin, WebTestCase):
         response = form.submit().follow()
 
         self.assertTrue(
-            "You have added shared accounts to your wishlist but the visiblity "
+            "You have added shared accounts to your wishlist but the visibility "
             "is public, this means everyone with a link has access to it." in response
         )
 

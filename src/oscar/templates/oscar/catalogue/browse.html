@@ -31,6 +31,9 @@
 
 {% block content_wrapper %}
     {% trans "Books" as archive_label %}
+<div class="container-fluid px-0">
+    {% include "oscar/partials/alert_messages.html" %}
+</div>
 <div class="container py-5 catalogue-browse{% if category %} catalogue-browse--category catalogue-browse--{{ category.slug }}{% endif %}">
     {% block browse_breadcrumbs %}
         <nav aria-label="{% trans 'Breadcrumb' %}">
