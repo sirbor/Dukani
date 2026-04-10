@@ -13,6 +13,7 @@ class StorefrontBrandingForm(forms.ModelForm):
 
     field_order = [
         "shop_name",
+        "store_type",
         "shop_tagline",
         "logo",
         "clear_logo",
@@ -38,6 +39,7 @@ class StorefrontBrandingForm(forms.ModelForm):
         model = StorefrontBranding
         fields = [
             "shop_name",
+            "store_type",
             "shop_tagline",
             "logo",
             "home_hero_eyebrow",

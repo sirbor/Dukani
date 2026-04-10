@@ -23,6 +23,8 @@ def storefront_branding(request):
 
     shop_name = (b.shop_name or "").strip() or settings.OSCAR_SHOP_NAME
     shop_tagline = (b.shop_tagline or "").strip() or settings.OSCAR_SHOP_TAGLINE
+    store_type = b.store_type
+    store_type_display = b.get_store_type_display()
 
     storefront_logo_url = b.logo.name and b.logo.url or ""
 
@@ -58,6 +60,8 @@ def storefront_branding(request):
     return {
         "shop_name": shop_name,
         "shop_tagline": shop_tagline,
+        "store_type": store_type,
+        "store_type_display": store_type_display,
         "storefront_logo_url": storefront_logo_url,
         "storefront_home_hero_eyebrow": storefront_home_hero_eyebrow,
         "storefront_home_hero_title": storefront_home_hero_title,

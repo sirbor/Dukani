@@ -287,6 +287,7 @@ class IndexView(TemplateView):
         closed_alerts = alerts.filter(status=StockAlert.CLOSED)
 
         total_lines_last_day = lines.filter(order__in=orders_last_day).count()
+        recent_orders_qs = orders.select_related("user").order_by("-date_placed")[:8]
         stats = {
             "total_orders_last_day": orders_last_day.count(),
             "total_lines_last_day": total_lines_last_day,
@@ -321,6 +322,7 @@ class IndexView(TemplateView):
             "order_status_breakdown": orders.order_by("status")
             .values("status")
             .annotate(freq=Count("id")),
+            "recent_orders": list(recent_orders_qs),
         }
         if user.is_staff:
             stats.update(

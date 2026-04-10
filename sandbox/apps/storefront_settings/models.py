@@ -8,6 +8,12 @@ class StorefrontBranding(models.Model):
     Empty fields fall back to Django settings / template defaults.
     """
 
+    class StoreType(models.TextChoices):
+        BOOKSTORE = "bookstore", _("Bookstore")
+        GENERAL = "general", _("General retail")
+        GIFT_SHOP = "gift_shop", _("Gift shop")
+        SPECIALTY = "specialty", _("Specialty / other")
+
     id = models.PositiveSmallIntegerField(primary_key=True, editable=False, default=1)
 
     shop_name = models.CharField(
@@ -15,6 +21,13 @@ class StorefrontBranding(models.Model):
         max_length=255,
         blank=True,
         help_text=_("Shown in the header and footer. Leave blank to use Oscar settings."),
+    )
+    store_type = models.CharField(
+        _("Type of store"),
+        max_length=32,
+        choices=StoreType.choices,
+        default=StoreType.BOOKSTORE,
+        help_text=_("Describes your shop (e.g. Bookstore). Used in the public layout where shown."),
     )
     shop_tagline = models.CharField(
         _("Tagline"),

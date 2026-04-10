@@ -15,7 +15,7 @@
     {{ block.super }}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="{% static "oscar/js/select2/select2.min.css" %}" />
     <link rel="stylesheet" href="{% static "oscar/css/select2-bootstrap.min.css" %}" />
     <link rel="stylesheet" href="{% static "oscar/js/bootstrap4-datetimepicker/tempusdominus-bootstrap-4.min.css" %}" />
@@ -67,7 +67,7 @@
                                     <ul class="nav flex-column ml-3 py-2 border-left mb-2">
                                         {% for subitem in item.children %}
                                             <li class="nav-item">
-                                                <a class="nav-link py-2 small {% if subitem.active %}text-gold font-weight-bold{% else %}text-muted{% endif %}" href="{{ subitem.url }}">
+                                                <a class="nav-link py-2 small {% if subitem.active %}text-dashboard-accent font-weight-bold{% else %}text-muted{% endif %}" href="{{ subitem.url }}">
                                                     {{ subitem.label }}
                                                 </a>
                                             </li>
@@ -96,13 +96,13 @@
 
     <div class="dashboard-body">
         {% block navbar %}
-            <nav class="dashboard-topbar navbar navbar-expand-md navbar-light align-items-center">
+            <nav class="dashboard-topbar dashboard-topbar--modern navbar navbar-expand-md navbar-light align-items-center flex-nowrap">
                 <button class="navbar-toggler dashboard-sidebar-toggle d-md-none" type="button"
                         data-dashboard-sidebar-toggle
                         aria-controls="dashboard-sidebar" aria-expanded="false" aria-label="{% trans 'Toggle navigation' %}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand d-flex align-items-center mr-auto" href="{% url 'dashboard:index' %}">
+                <a class="navbar-brand dashboard-topbar__brand d-flex align-items-center flex-shrink-0" href="{% url 'dashboard:index' %}">
                     {% if storefront_logo_url %}
                     <img src="{{ storefront_logo_url }}" alt="{{ shop_name }}" class="mr-2" width="30" height="30" style="object-fit: contain;" />
                     {% else %}
@@ -111,15 +111,34 @@
                     <span class="text-uppercase d-none d-sm-inline">{{ shop_name }}</span>
                 </a>
 
+                <form class="dashboard-global-search d-none d-md-flex" action="{% url 'dashboard:order-list' %}" method="get" role="search">
+                    <label class="sr-only" for="dashboard-global-search-input">{% trans "Search orders" %}</label>
+                    <span class="dashboard-global-search__icon" aria-hidden="true"><i class="fas fa-search"></i></span>
+                    <input type="search" name="order_number" id="dashboard-global-search-input" class="dashboard-global-search__input"
+                           placeholder="{% trans 'Search order number…' %}" autocomplete="off" />
+                    <kbd class="dashboard-global-search__kbd" title="{% trans 'Keyboard shortcut' %}">⌘K</kbd>
+                </form>
+
                 <button class="navbar-toggler border-0 ml-2 d-md-none" type="button" data-toggle="collapse" data-target="#top_nav_bar"
                         aria-controls="top_nav_bar" aria-expanded="false" aria-label="{% trans 'Account menu' %}">
                     <i class="fas fa-ellipsis-h text-muted" aria-hidden="true"></i>
                 </button>
 
-                <div class="collapse navbar-collapse justify-content-end" id="top_nav_bar">
+                <div class="collapse navbar-collapse justify-content-end dashboard-topbar__actions" id="top_nav_bar">
+                    <form class="dashboard-global-search dashboard-global-search--mobile d-md-none w-100 px-2 pt-3 border-bottom border-light" action="{% url 'dashboard:order-list' %}" method="get" role="search">
+                        <label class="sr-only" for="dashboard-global-search-input-m">{% trans "Search orders" %}</label>
+                        <span class="dashboard-global-search__icon" aria-hidden="true"><i class="fas fa-search"></i></span>
+                        <input type="search" name="order_number" id="dashboard-global-search-input-m" class="dashboard-global-search__input"
+                               placeholder="{% trans 'Search orders…' %}" autocomplete="off" />
+                    </form>
                     <ul class="navbar-nav align-items-md-center">
+                        <li class="nav-item d-none d-md-block">
+                            <a class="nav-link dashboard-topbar__icon-link px-2" href="{% url 'dashboard:order-list' %}" title="{% trans 'Orders' %}">
+                                <i class="far fa-bell" aria-hidden="true"></i><span class="sr-only">{% trans "Orders" %}</span>
+                            </a>
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-muted small text-uppercase px-2" href="{{ homepage_url }}">{% trans "Bookstore" %}</a>
+                            <a class="nav-link text-muted small text-uppercase px-2" href="{{ homepage_url }}">{% trans "Store" %}</a>
                         </li>
                         <li class="nav-item dropdown ml-md-3">
                             <a class="nav-link dropdown-toggle d-flex align-items-center py-2" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -246,6 +265,21 @@
                 trigger.classList.toggle('collapsed', !nowOpen);
                 trigger.setAttribute('aria-expanded', nowOpen ? 'true' : 'false');
             });
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if ((e.metaKey || e.ctrlKey) && String(e.key).toLowerCase() === 'k') {
+                var desk = document.getElementById('dashboard-global-search-input');
+                var mob = document.getElementById('dashboard-global-search-input-m');
+                var target = desk;
+                if (!desk || window.getComputedStyle(desk).display === 'none') {
+                    target = mob;
+                }
+                if (target) {
+                    e.preventDefault();
+                    target.focus();
+                }
+            }
         });
     })();
     </script>

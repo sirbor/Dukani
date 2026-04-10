@@ -8,6 +8,12 @@
 {% trans "Storefront appearance" %} | {{ block.super }}
 {% endblock %}
 
+{% block header_actions %}
+<a href="{{ homepage_url }}" class="btn btn-outline-secondary btn-sm text-uppercase" target="_blank" rel="noopener noreferrer">
+    {% trans "View storefront" %}<i class="fas fa-external-link-alt ml-2 small" aria-hidden="true"></i>
+</a>
+{% endblock %}
+
 {% block breadcrumbs %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -22,44 +28,110 @@
 {% endblock %}
 
 {% block dashboard_content %}
-<div class="table-header">
-    <h2>{% trans "Branding & home page" %}</h2>
-    <p class="text-muted">{% trans "Changes apply to the public shop immediately after saving." %}</p>
-</div>
-
-<form method="post" class="card card-body form-stacked" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-        <div class="alert alert-danger">
-            {% for error in form.non_field_errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
-        </div>
-    {% endif %}
-    {% for field in form %}
-        {% if field.name == 'shop_name' %}
-            <h3 class="h4 mt-0">{% trans "Shop identity" %}</h3>
-        {% elif field.name == 'home_hero_eyebrow' %}
-            <h3 class="h4 mt-4 pt-2 border-top">{% trans "Homepage hero text" %}</h3>
-            <p class="text-muted small mb-3">
-                {% blocktrans trimmed %}
-                    The large headline area on the home page (left column on desktop). Leave fields blank to keep the original wording.
-                {% endblocktrans %}
-            </p>
-        {% elif field.name == 'announcement_badge_label' %}
-            <h3 class="h4 mt-4 pt-2 border-top">{% trans "Announcement ticker" %}</h3>
-        {% elif field.name == 'nav_background' %}
-            <h3 class="h4 mt-4 pt-2 border-top">{% trans "Homepage & navigation photos" %}</h3>
-            <p class="text-muted small mb-3">
-                {% blocktrans trimmed %}
-                    Replace the main navigation backdrop, the large “book room” hero, and the four department tiles.
-                    Leave a field empty (or tick “Clear” on an existing upload) to use the default images from the theme.
-                {% endblocktrans %}
-            </p>
-        {% endif %}
-        {% include 'oscar/dashboard/partials/form_field.html' with field=field %}
-    {% endfor %}
-    <div class="form-actions">
-        <button class="btn btn-primary" type="submit" data-loading-text="{% trans 'Saving...' %}">{% trans "Save" %}</button>
+<div class="storefront-branding-page">
+    <div class="storefront-branding-page__intro d-flex flex-wrap align-items-start justify-content-between mb-4 pb-1">
+        <p class="text-muted small mb-2 mb-md-0 pr-md-3 storefront-branding-page__lede">
+            {% blocktrans trimmed %}
+                Tune your public shop name, type, home hero copy, announcement bar, and imagery. Updates apply as soon as you save.
+            {% endblocktrans %}
+        </p>
+        <span class="badge badge-success storefront-branding-page__badge align-self-md-center text-uppercase flex-shrink-0">{% trans "Live on site" %}</span>
     </div>
-</form>
 
+    <form method="post" class="storefront-branding-form pb-5" id="storefront-branding-form" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger border-0 shadow-sm mb-4" role="alert">
+                {% for error in form.non_field_errors %}<p class="mb-0">{{ error }}</p>{% endfor %}
+            </div>
+        {% endif %}
+        {% for field in form %}
+            {% if field.name == 'shop_name' %}
+            <section class="storefront-branding-section card border-0 shadow-sm mb-4">
+                <header class="storefront-branding-section__head card-header bg-white border-0 pb-0">
+                    <div class="d-flex align-items-start">
+                        <span class="storefront-branding-section__icon" aria-hidden="true"><i class="fas fa-signature"></i></span>
+                        <div class="storefront-branding-section__titles">
+                            <h2 class="h5 mb-1 text-uppercase font-weight-light text-charcoal storefront-branding-section__title">{% trans "Store name & type" %}</h2>
+                            <p class="text-muted small mb-0">
+                                {% blocktrans trimmed %}
+                                    Shown in the header, footer, and browser title fallbacks. Choose the label that best describes your business (for example Bookstore).
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body pt-4">
+            {% elif field.name == 'home_hero_eyebrow' %}
+                </div>
+            </section>
+            <section class="storefront-branding-section card border-0 shadow-sm mb-4">
+                <header class="storefront-branding-section__head card-header bg-white border-0 pb-0">
+                    <div class="d-flex align-items-start">
+                        <span class="storefront-branding-section__icon" aria-hidden="true"><i class="fas fa-bolt"></i></span>
+                        <div class="storefront-branding-section__titles">
+                            <h2 class="h5 mb-1 text-uppercase font-weight-light text-charcoal storefront-branding-section__title">{% trans "Homepage hero" %}</h2>
+                            <p class="text-muted small mb-0">
+                                {% blocktrans trimmed %}
+                                    The large headline block on your home page. Leave fields empty to keep the default English copy from the theme.
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body pt-4">
+            {% elif field.name == 'announcement_badge_label' %}
+                </div>
+            </section>
+            <section class="storefront-branding-section storefront-branding-section--ticker card border-0 shadow-sm mb-4">
+                <header class="storefront-branding-section__head card-header bg-white border-0 pb-0">
+                    <div class="d-flex align-items-start">
+                        <span class="storefront-branding-section__icon" aria-hidden="true"><i class="fas fa-bullhorn"></i></span>
+                        <div class="storefront-branding-section__titles">
+                            <h2 class="h5 mb-1 text-uppercase font-weight-light text-charcoal storefront-branding-section__title">{% trans "Announcement ticker" %}</h2>
+                            <p class="text-muted small mb-0">
+                                {% blocktrans trimmed %}
+                                    Short rotating messages under the main navigation. Pair each line with a Font Awesome icon class (for example fas fa-truck).
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body pt-4">
+            {% elif field.name == 'nav_background' %}
+                </div>
+            </section>
+            <section class="storefront-branding-section storefront-branding-section--media card border-0 shadow-sm mb-4">
+                <header class="storefront-branding-section__head card-header bg-white border-0 pb-0">
+                    <div class="d-flex align-items-start">
+                        <span class="storefront-branding-section__icon" aria-hidden="true"><i class="fas fa-image"></i></span>
+                        <div class="storefront-branding-section__titles">
+                            <h2 class="h5 mb-1 text-uppercase font-weight-light text-charcoal storefront-branding-section__title">{% trans "Photos & backgrounds" %}</h2>
+                            <p class="text-muted small mb-0">
+                                {% blocktrans trimmed %}
+                                    Optional JPEG or PNG uploads. Leave blank (or clear an upload) to use the theme’s bundled photography.
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    </div>
+                </header>
+                <div class="card-body pt-4 storefront-branding-media-grid">
+            {% endif %}
+            {% include 'oscar/dashboard/partials/form_field.html' with field=field %}
+        {% endfor %}
+                </div>
+            </section>
+
+        <div class="storefront-branding-actions card border-0 shadow-sm">
+            <div class="card-body py-3 px-4 d-flex flex-wrap align-items-center justify-content-between">
+                <p class="text-muted small mb-2 mb-md-0 mr-md-3 pr-md-2 flex-grow-1">
+                    {% trans "Saving publishes changes to customers immediately." %}
+                </p>
+                <button type="submit" class="btn btn-primary px-4 text-uppercase font-weight-bold storefront-branding-actions__submit" data-loading-text="{% trans 'Saving…' %}">
+                    {% trans "Save changes" %}
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock dashboard_content %}
