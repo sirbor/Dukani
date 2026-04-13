@@ -184,3 +184,6 @@ THUMBNAIL_DEFAULT_STORAGE_ALIAS = "default"
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 FIXTURE_DIRS = [location("unit/fixtures")]
+
+# Silence the thumbnail conflict warning because we test both backends.
+SILENCED_SYSTEM_CHECKS = ["templates.W003", "templates.E003"]
