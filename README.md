@@ -16,44 +16,51 @@ A premium landing page designed for high-end retail, featuring seamless
 navigation and editorial merchandising.
 
 - ![Dukani homepage](docs/screenshots/homepage.png)
-- ![Client profile](docs/screenshots/clientprofile.png)
+- ![User profile](docs/screenshots/user-profile.png)
 
-### Catalogue & Archive
+### Catalogue & Merchandising
 
-Browse curated categories with editorial grids. The "archive" style
-listing is optimized for books, fashion, and artisanal footwear.
+Browse curated categories with editorial grids optimized for luxury
+retail.
 
-- ![Catalogue grid](docs/screenshots/catalogue.png)
-- ![Archive listing](docs/screenshots/archive.png)
+- ![Catalogue grid](docs/screenshots/book-catalogue.png)
 
-### Product Detail
+### Frictionless Shopping Bag
 
-Rich, immersive product pages featuring high-resolution imagery,
-detailed attributes (editions, sizes), and intelligent related-items
-suggestions.
-
-- ![Product page](docs/screenshots/bookitem.png)
-- ![Product details](docs/screenshots/bookdetails.png)
-- ![Related products](docs/screenshots/bookotheritems.png)
-
-### Seamless Shopping
-
-A modern, card-based shopping bag and a frictionless multi-step checkout
-process.
+A modern, card-based shopping bag and a streamlined checkout flow.
 
 - ![Shopping bag](docs/screenshots/cart.png)
-- ![Shopping bag details](docs/screenshots/cart2.png)
-- ![Shipping address step](docs/screenshots/shippingaddress.png)
-- ![Shipping address follow-up](docs/screenshots/shippingaddress2.png)
+- ![Shopping bag details](docs/screenshots/cart-2.png)
 
-### Order Confirmation & Accounts
+### Secure Checkout Pipeline
 
-Full transparency with order previews, instant confirmation, and a
-dedicated customer account area for order history.
+A multi-step checkout process designed for high conversion and security.
 
-- ![Order preview](docs/screenshots/previeworder.png)
-- ![Order preview details](docs/screenshots/previeworder2.png)
-- ![Order confirmation](docs/screenshots/confirmorder.png)
+- ![Shipping address](docs/screenshots/shipping-address.png)
+- ![Payment details](docs/screenshots/payment.png)
+- ![Payment receipt](docs/screenshots/payment-receipt.png)
+
+### Order Transparency & Account History
+
+Comprehensive order tracking, receipt confirmation, and a dedicated
+customer dashboard for order and communication history.
+
+- ![Order confirmation](docs/screenshots/confirmed-order.png)
+- ![Order confirmation details](docs/screenshots/confirmed-order-2.png)
+- ![Order history](docs/screenshots/order-history.png)
+- ![Order status history](docs/screenshots/order-history-2.png)
+- ![Email communication history](docs/screenshots/email-history.png)
+
+---
+
+## Dashboard & Management
+
+Dukani includes a sophisticated administrative interface for managing the
+entire commerce operation.
+
+- ![Dashboard summary](docs/screenshots/dashboard-summary.png)
+- ![Catalogue management](docs/screenshots/dashboard-catalogue.png)
+- ![Order management](docs/screenshots/dashboard-orders.png)
 
 ---
 
