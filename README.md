@@ -121,4 +121,4 @@ The docs/screenshots/ directory contains the high-resolution imagery used to doc
 
 ## License
 
-Dukani is released under the BSD License. See LICENSE for details.
+Dukani is released under the BSD license by Tangent Communications PLC. See LICENSE for details.
