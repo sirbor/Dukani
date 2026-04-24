@@ -117,8 +117,3 @@ The sandbox/ directory contains local development settings, assets, and fixtures
 **Visual Assets**
 The docs/screenshots/ directory contains the high-resolution imagery used to document the storefront and administrative dashboard features.
 
-<br>
-
-## License
-
-Dukani is released under the BSD license by Tangent Communications PLC. See LICENSE for details.
