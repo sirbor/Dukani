@@ -58,9 +58,10 @@ customer dashboard for order and communication history.
 Dukani includes a sophisticated administrative interface for managing the
 entire commerce operation.
 
-- ![Dashboard summary](docs/screenshots/dashboard-summary.png)
-- ![Catalogue management](docs/screenshots/dashboard-catalogue.png)
-- ![Order management](docs/screenshots/dashboard-orders.png)
+- ![Dashboard overview](docs/screenshots/dashboard-main.png)
+- ![Product management](docs/screenshots/dashboard-products-list.png)
+- ![Order management](docs/screenshots/dashboard-orders-list.png)
+- ![Reporting & Analytics](docs/screenshots/dashboard-reports.png)
 
 ---
 
