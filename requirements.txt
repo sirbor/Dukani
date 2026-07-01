@@ -22,7 +22,7 @@ Whoosh>=2.7,<2.8
 gunicorn
 psycopg2-binary>=2.8,<2.10  # For PostgreSQL support
 whitenoise>=6.7.0,<6.12     # For serving static files in production
-django-environ>=0.4,<0.13   # For environment variable management
+django-environ>=0.4,<0.15   # For environment variable management
 dj-database-url             # For parsing DATABASE_URL from hosting providers
 
 # Payment gateways (Daraja / PayPal REST)
